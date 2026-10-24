@@ -37,6 +37,16 @@ def quote_problems(q):
     out += money_problems(q["deposit"]["amount"], "deposit.amount", c)
     if out and any("fraction digits" in p or "differs" in p for p in out):
         return out
+    # §2.1: negatives only where a field says so. In a Quote that is discount and
+    # channel_adjustment lines; deposits, instalments, refunds and other lines are >= 0.
+    for i, l in enumerate(q["lines"]):
+        if l["kind"] not in ("discount", "channel_adjustment") and D(l["amount"]) < 0:
+            out.append(f"lines[{i}] ({l['kind']}) must not be negative")
+    for i, p in enumerate(q["payment_schedule"]):
+        if D(p["amount"]) < 0:
+            out.append(f"payment_schedule[{i}] must not be negative")
+    if D(q["deposit"]["amount"]) < 0:
+        out.append("deposit.amount must not be negative")
     total = D(q["total"])
     s = sum((D(l["amount"]) for l in q["lines"] if l["in_total"]), Decimal(0))
     if s != total:
@@ -73,7 +83,7 @@ def booking_terms_problems(t, quote):
             out += money_problems(t[k], f"terms.livstay.{k}", quote["currency"])
     if out:
         return out
-    for k in ("check_in", "check_out", "party", "total"):
+    for k in ("home_id", "check_in", "check_out", "party", "total"):
         if t.get(k) != quote.get(k):
             out.append(f"terms.livstay.{k} differs from the Quote")
     due = sum((D(p["amount"]) for p in quote["payment_schedule"] if p["at_booking"]), Decimal(0))

@@ -150,6 +150,23 @@
       "expect": "quote_binding"
     },
     {
+      "file": "invalid/quote-negative-deposit.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/quote-negative-instalment.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/booking-other-home.json",
+      "def": "BookingOperation",
+      "expect": "quote_binding"
+    },
+    {
       "file": "valid/counter-request.json",
       "def": "CounterRequest",
       "expect": "valid"

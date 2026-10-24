@@ -102,7 +102,9 @@ def main(origin):
     for i, d in enumerate(days):
         n = max(d["min_nights"], home["terms"]["min_nights"])
         run = days[i:i + n]
-        if len(run) == n and all(x["available"] for x in run) and not d["closed_to_arrival"]:
+        dep = days[i + n] if i + n < len(days) else None
+        if (len(run) == n and all(x["available"] for x in run) and not d["closed_to_arrival"]
+                and dep is not None and not dep["closed_to_departure"]):
             stay = (d["date"], str(dt.date.fromisoformat(d["date"]) + dt.timedelta(days=n)))
             break
     if not check("L1.4", "an available stay exists in the next 90 days", stay):

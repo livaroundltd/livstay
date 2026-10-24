@@ -162,6 +162,13 @@ bad["cancellation"][0]["until"], bad["cancellation"][1]["until"] = bad["cancella
 put("invalid", "quote-cancellation-out-of-order", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
 bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["due_now"] = {"amount": "38850.00", "currency": "USD"}
 put("invalid", "booking-due-now-wrong-currency", bad_op, "BookingOperation", "quote_binding")
+bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad4"; bad["deposit"]["amount"] = M("-15000.00")
+put("invalid", "quote-negative-deposit", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
+bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad5"
+bad["payment_schedule"][0]["amount"], bad["payment_schedule"][1]["amount"] = M("-1.00"), M("129501.00")
+put("invalid", "quote-negative-instalment", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
+bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["home_id"] = "home_other"
+put("invalid", "booking-other-home", bad_op, "BookingOperation", "quote_binding")
 put("valid", "counter-request", {"total": M("120000.00"), "note": "Could you do 1,20,000 for the week?"}, "CounterRequest")
 put("valid", "change-request", {"check_out": "2027-01-04"}, "ChangeRequest")
 put("valid", "mismatch-report", {"facts_version": 9, "field": "facts.parking", "description": "Page says one car; facts say two."}, "MismatchReport")
