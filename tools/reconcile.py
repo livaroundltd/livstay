@@ -1,5 +1,11 @@
 """Money precision and reconciliation checks (spec §2.1)."""
+from datetime import datetime
 from decimal import Decimal
+
+
+def ts(s):
+    """Parse an RFC 3339 UTC timestamp (spec §2.1), fractional seconds allowed."""
+    return datetime.fromisoformat(s.replace("Z", "+00:00"))
 
 # ISO 4217 (List One) minor units. Every active currency has 2 except those listed here;
 # funds codes and metals without a minor unit (XAU, XDR, ...) are not used for stays.
@@ -63,7 +69,7 @@ def quote_problems(q):
     deadlines = [x["until"] for x in q["cancellation"][:-1]]
     if None in deadlines:
         out.append("only the last cancellation entry may have until null")
-    elif deadlines != sorted(deadlines) or len(set(deadlines)) != len(deadlines):
+    elif any(ts(a) >= ts(b) for a, b in zip(deadlines, deadlines[1:])):
         out.append("cancellation deadlines must be strictly earliest first")
     prev = None
     for i, x in enumerate(q["cancellation"]):

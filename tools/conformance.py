@@ -58,10 +58,10 @@ def find_stay(days, terms):
         if d["closed_to_arrival"] or not d["available"]:
             continue
         lo = max(d["min_nights"], terms["min_nights"])
-        for n in range(lo, terms["max_nights"] + 1):
+        for n in range(1, terms["max_nights"] + 1):
             if i + n >= len(days) or not days[i + n - 1]["available"]:
-                break
-            if not days[i + n]["closed_to_departure"]:
+                break  # every night i..i+n-1 is checked before any length is accepted
+            if n >= lo and not days[i + n]["closed_to_departure"]:
                 return d["date"], days[i + n]["date"]
     return None
 
