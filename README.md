@@ -26,15 +26,16 @@ LivStay is an extension of the [Personal Agent Protocol](https://personalagentpr
 | --- | --- |
 | `spec/` | The normative specification, one file per draft |
 | `site/` | Sources for livstay.org: the home page, styles and docs content |
-| `tools/build_site.py` | Renders `site/` and `spec/` into `_site/` |
-| `.github/workflows/pages.yml` | Builds and deploys livstay.org on every push to `main` |
+| `tools/build_site.py` | Renders `site/` and `spec/` into `docs/` |
+| `docs/` | The built site, served by GitHub Pages from `main` → `/docs`. Generated: edit `site/` or `spec/` and rebuild, never edit `docs/` by hand |
+| `.github/workflows/pages.yml` | Checks that `docs/` matches its sources |
 
 Build locally:
 
 ```sh
-pip install markdown
-python3 tools/build_site.py   # writes _site/
-python3 -m http.server -d _site 8000
+pip install markdown==3.10.3
+python3 tools/build_site.py   # writes docs/; commit it with your change
+python3 -m http.server -d docs 8000
 ```
 
 ## Implementations

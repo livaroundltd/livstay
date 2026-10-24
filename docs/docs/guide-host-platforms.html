@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Host platforms · LivStay</title><meta name="description" content="How a host platform goes from listed to bookable under LivStay.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="canonical" href="https://livstay.org/docs/guide-host-platforms.html">
+<link rel="stylesheet" href="../style.css"></head><body>
+<header class="bar"><div class="in">
+<a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
+<nav class="top" aria-label="Site"><a href="introduction.html">Docs</a><a href="specification.html">Specification</a><a href="path-to-1.html">Path to 1.0</a><a href="https://github.com/livaroundltd/livstay">GitHub</a></nav>
+<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
+<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.1</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html" aria-current="page">Host platforms</a></li><li><a href="guide-agents.html">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
+<main id="main"><h1 id="guide-for-host-platforms">Guide for host platforms</h1>
+<p>This guide takes a host platform from nothing to Level 3. Each level is useful on its own; stop wherever it makes sense.</p>
+<h2 id="before-you-start">Before you start</h2>
+<ul>
+<li>You need a domain you serve over HTTPS, and one calendar per home.</li>
+<li>Read the <a href="specification.html">specification</a> sections listed at each step. Field tables there are normative; this guide is not.</li>
+</ul>
+<h2 id="level-0-listed">Level 0: Listed</h2>
+<p>The goal: an assistant reading your site or your files can describe each home accurately and say why it fits a traveller.</p>
+<ol>
+<li><strong>Write each home's facts with its host.</strong> Who it suits, who it does not, check-in and check-out, what is and isn't included, parking, pets, noise, backup power, house rules, cancellation in one sentence, and what the host does when something breaks. See <a href="specification.html#62-facts">§6.2</a>. Do not generate facts the host has not reviewed.</li>
+<li><strong>Publish the home's public page</strong> with those facts as HTML and schema.org <code>Accommodation</code> markup (<a href="specification.html#65-the-same-facts-on-the-web">§6.5</a>).</li>
+<li><strong>Serve the same data as JSON</strong> at <code>GET {endpoint}/homes</code> and <code>GET {endpoint}/homes/{home_id}</code>. This can be a static file.</li>
+<li><strong>Declare protection</strong> for every home: who carries the risk, how claims are decided, and how fast (<a href="specification.html#64-protection">§6.4</a>). A home without it is not published.</li>
+<li><strong>Publish <code>poppy.json</code></strong> at <code>/.well-known/poppy.json</code> with the <code>livstay.org/stays</code> entry and <code>"level": 0</code>.</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;protocol_version&quot;: &quot;0.2&quot;,
+  &quot;organization&quot;: { &quot;name&quot;: &quot;Example Stays&quot;, &quot;domain&quot;: &quot;stays.example&quot; },
+  &quot;web&quot;: {},
+  &quot;extensions&quot;: {
+    &quot;livstay.org/stays&quot;: {
+      &quot;version&quot;: &quot;0&quot;,
+      &quot;endpoint&quot;: &quot;https://stays.example/livstay/v0&quot;,
+      &quot;level&quot;: 0
+    }
+  }
+}
+</code></pre>
+<p><strong>Check:</strong> the facts in your JSON and on your page match, field by field. Run that check on every edit.</p>
+<h2 id="level-1-priced">Level 1: Priced</h2>
+<ol>
+<li><strong>Availability.</strong> <code>GET {endpoint}/homes/{home_id}/availability</code> from your calendar, with per-night price and stay rules (<a href="specification.html#71-availability">§7.1</a>).</li>
+<li><strong>Signing keys.</strong> Generate a signing key pair, publish the public key as a JWK Set and list it in <code>keys</code>.</li>
+<li><strong>Quotes.</strong> <code>POST {endpoint}/homes/{home_id}/quotes</code> returns a signed quote with every fee as its own line, valid for up to 24 hours (<a href="specification.html#72-quotes">§7.2</a>).</li>
+<li><strong>Honour quotes.</strong> Store every quote. A booking proposed from an unexpired quote is charged its <code>total</code> or fails with <code>dates_unavailable</code>. It is never repriced.</li>
+</ol>
+<p><strong>Check:</strong> change a rate after issuing a quote, then book from the quote. The old price must hold.</p>
+<h2 id="level-2-reachable">Level 2: Reachable</h2>
+<ol>
+<li><strong>Poppy basics.</strong> Implement Poppy Sessions: an OAuth server at <code>auth.issuer</code>, client assertions, session tokens and DPoP. Signed-out sessions are enough for enquiries.</li>
+<li><strong>Conversations.</strong> Implement Poppy conversations and route each enquiry to the host as a person (<a href="specification.html#8-enquiries">§8</a>). Host replies have <code>sender: "human"</code>.</li>
+<li><strong>Scope.</strong> Add <code>livstay:enquire</code> to <code>auth.custom_scopes</code> with a plain description.</li>
+<li><strong>Reply times.</strong> Tell agents when to expect an answer, from the host's real median reply time.</li>
+</ol>
+<p><strong>Check:</strong> send an enquiry, answer it from the host's phone, and confirm the agent sees <code>responder: "human"</code>.</p>
+<h2 id="level-3-bookable">Level 3: Bookable</h2>
+<ol>
+<li><strong>Sign-in.</strong> Add Poppy Direct Sign-In. Bookings need a signed-in session.</li>
+<li><strong>Operations.</strong> Implement the Poppy <code>operations</code> extension version <code>"1"</code>: proposed, confirmed, tracked and cancelled operations, executed at most once.</li>
+<li><strong>Bookings.</strong> <code>POST {endpoint}/bookings</code> turns a quote into a proposed booking operation and holds the calendar for up to 15 minutes (<a href="specification.html#9-bookings">§9</a>). Set <code>user_approval_required: true</code> whenever money moves, and write a <code>summary</code> a traveller can decide from.</li>
+<li><strong>Requests and counters</strong>, if any home is not instant-book (<a href="specification.html#10-requests-and-counter-offers">§10</a>). A host counter can only be kinder than the published terms.</li>
+<li><strong>Payment.</strong> On confirmation, send the traveller to your own payment page in their browser session (<a href="specification.html#11-payment">§11</a>).</li>
+<li><strong>After booking.</strong> Open one conversation per booking for updates, and return a signed receipt for every write (<a href="specification.html#12-after-booking">§12</a>, <a href="specification.html#131-receipts">§13.1</a>).</li>
+<li><strong>Limits.</strong> Cap open holds per traveller and per agent (<a href="specification.html#153-calendar-denial-of-service">§15.3</a>).</li>
+</ol>
+<p><strong>Check:</strong> confirm the same operation twice and see one booking; let a hold expire and see the dates released and nothing charged.</p>
+<h2 id="what-hosts-should-see">What hosts should see</h2>
+<p>Every action an agent takes appears on the booking as the host would describe it: who booked, through which agent, what was approved, and the receipt. Hosts should never have to read JSON to know what happened.</p><nav class="pager" aria-label="Pages"><a href="specification.html"><small>Previous</small>Specification 0.1</a><a href="guide-agents.html" style="text-align:right"><small>Next</small>Agent builders</a></nav></main></div>
+<footer class="foot"><div class="in"><span>LivStay · an open protocol started by LivAround Ltd</span><span><a href="license.html">Apache License 2.0</a> · <a href="https://github.com/livaroundltd/livstay">GitHub</a> · Examples are fictional</span></div></footer>
+</body></html>

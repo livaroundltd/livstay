@@ -1,14 +1,15 @@
-"""Build the livstay.org static site into _site/.
+"""Build the livstay.org static site into docs/ (served by GitHub Pages from main /docs).
 
 Usage: python3 tools/build_site.py   (needs: pip install markdown)
 Sources: site/index.html, site/style.css, site/CNAME, site/content/*.md, spec/livstay-0.1.md
 """
 import re, markdown, html, os, shutil
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT=os.path.join(ROOT,'_site'); O=os.path.join(OUT,'docs')
+OUT=os.path.join(ROOT,'docs'); O=os.path.join(OUT,'docs')
 shutil.rmtree(OUT,ignore_errors=True); os.makedirs(O)
 for f in ('index.html','style.css','CNAME'):
     shutil.copy(os.path.join(ROOT,'site',f),os.path.join(OUT,f))
+open(os.path.join(OUT,'.nojekyll'),'w').close()
 SRC={'specification':os.path.join(ROOT,'spec','livstay-0.1.md')}
 def source(slug): return SRC.get(slug,os.path.join(ROOT,'site','content',slug+'.md'))
 REPO='https://github.com/livaroundltd/livstay'

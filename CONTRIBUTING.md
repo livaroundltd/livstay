@@ -22,7 +22,7 @@ Name the section (for example `§9.3`) and, where you can, say what you would ch
 
 ## The website
 
-Docs content lives in `site/content/` and the specification in `spec/`. Run `python3 tools/build_site.py` to check the site builds.
+Docs content lives in `site/content/` and the specification in `spec/`. Run `python3 tools/build_site.py` and commit the regenerated `docs/` with your change.
 
 ## License
 
