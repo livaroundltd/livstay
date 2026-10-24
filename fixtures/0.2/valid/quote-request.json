@@ -1,0 +1,16 @@
+{
+  "check_in": "2026-12-27",
+  "check_out": "2027-01-03",
+  "party": {
+    "adults": 4,
+    "children": [
+      {
+        "age": 7
+      },
+      {
+        "age": 1
+      }
+    ],
+    "pets": 0
+  }
+}

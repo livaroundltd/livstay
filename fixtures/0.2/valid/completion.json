@@ -1,0 +1,20 @@
+{
+  "operation_id": "bk_4Hn9",
+  "complete_by": "2026-10-24T10:21:00Z",
+  "requirements": [
+    {
+      "type": "payment",
+      "status": "pending",
+      "url": "https://stays.example/pay/bk_4Hn9",
+      "amount": {
+        "amount": "38850.00",
+        "currency": "INR"
+      }
+    },
+    {
+      "type": "identity_verification",
+      "status": "done",
+      "url": null
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "revision": "0.2",
+  "booking_id": "bkg_4Hn9",
+  "home_id": "home_7Qp2",
+  "check_in": "2026-12-27",
+  "check_out": "2027-01-03",
+  "party": {
+    "adults": 4,
+    "children": [
+      {
+        "age": 7
+      },
+      {
+        "age": 1
+      }
+    ],
+    "pets": 0
+  },
+  "location": {
+    "address": "House 14, Mapusa Road, Assagao, Goa 403507",
+    "lat": 15.5931,
+    "lng": 73.7902
+  },
+  "check_in_instructions": "Sent on 26 Dec.",
+  "receipt": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3QtMjAyNi0xMCIsInR5cCI6ImxpdnN0YXktcmVjZWlwdCtqd3MifQ.eyJhY3Rpb24iOiJjb25maXJtIiwiYXBwcm92ZWRfYnkiOiJ1c2VyIiwiY2xpZW50X2lkIjoiaHR0cHM6Ly9hZ2VudC5leGFtcGxlL2NsaWVudC5qc29uIiwiY29uZmlybWVkIjp0cnVlLCJpYXQiOjE3OTI3NjA0NjEsImluaXRpYXRlZF9ieSI6InRyYXZlbGxlcl9hZ2VudCIsImlzcyI6Imh0dHBzOi8vc3RheS5leGFtcGxlIiwib3BlcmF0aW9uX2lkIjoiYmtfNEhuOSIsInJlY2VpcHRfaWQiOiJyY3BfOVRxMSIsInJldmlzaW9uIjoiMC4yIiwicmV2aXNpb25fbm8iOjEsInNjb3BlcyI6WyJsaXZzdGF5OmJvb2siLCJwb3BweTpyZWFkIl0sInN1YiI6InVzcl84M2pkIiwidGVybXNfaGFzaCI6IkhteXR0aGhqMkZuZk1GczhMcWpOdnNLYnhaU3ByUG1od3F1Q0sxWDV4WFkifQ.tNLi2uiXrRB7W_O0jCAVvPkNJ3_53KD2y-CEo-5Kg7DRjMvYRvS5gz_QSp4y72C7GXJezOP6Jn_GdjrmpVPB_A"
+}

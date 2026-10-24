@@ -1,7 +1,7 @@
 """Build the livstay.org static site into docs/ (served by GitHub Pages from main /docs).
 
 Usage: python3 tools/build_site.py   (needs: pip install markdown)
-Sources: site/index.html, site/style.css, site/CNAME, site/content/*.md, spec/livstay-0.1.md
+Sources: site/index.html, site/style.css, site/CNAME, site/content/*.md, spec/livstay-0.2.md
 """
 import re, markdown, html, os, shutil
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -10,14 +10,14 @@ shutil.rmtree(OUT,ignore_errors=True); os.makedirs(O)
 for f in ('index.html','style.css','CNAME'):
     shutil.copy(os.path.join(ROOT,'site',f),os.path.join(OUT,f))
 open(os.path.join(OUT,'.nojekyll'),'w').close()
-SRC={'specification':os.path.join(ROOT,'spec','livstay-0.1.md')}
+SRC={'specification':os.path.join(ROOT,'spec','livstay-0.2.md')}
 def source(slug): return SRC.get(slug,os.path.join(ROOT,'site','content',slug+'.md'))
 REPO='https://github.com/livaroundltd/livstay'
-pages=[('introduction','Introduction','Overview'),('specification','Specification 0.1','Overview'),
+pages=[('introduction','Introduction','Overview'),('specification','Specification 0.2','Overview'),
  ('guide-host-platforms','Host platforms','Guides'),('guide-agents','Agent builders','Guides'),
  ('path-to-1','Path to 1.0','Project'),('license','License','Project')]
 desc={'introduction':'What LivStay is, how it extends the Personal Agent Protocol, and its four levels.',
- 'specification':'LivStay draft 0.1: the normative specification of the livstay.org/stays extension.',
+ 'specification':'LivStay draft 0.2: the normative specification of the livstay.org/stays extension.',
  'guide-host-platforms':'How a host platform goes from listed to bookable under LivStay.',
  'guide-agents':'How a personal agent finds, quotes, asks about and books a LivStay home.',
  'path-to-1':'How LivStay becomes stable, the feedback requested and the open topics.',
@@ -54,7 +54,7 @@ for i,(slug,title,grp) in enumerate(pages):
 <header class="bar"><div class="in">
 <a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
 <nav class="top" aria-label="Site"><a href="introduction.html"{topcur('introduction')}>Docs</a><a href="specification.html"{topcur('specification')}>Specification</a><a href="path-to-1.html"{topcur('path-to-1')}>Path to 1.0</a><a href="{REPO}">GitHub</a></nav>
-<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
+<span class="status">Draft 0.2 · Poppy 0.2</span></div></header>
 <div class="layout"><aside class="rail"><nav aria-label="Documentation">{''.join(rail)}</nav></aside>
 <main id="main">{body}{pager}</main></div>
 <footer class="foot"><div class="in"><span>LivStay · an open protocol started by LivAround Ltd</span><span><a href="license.html">Apache License 2.0</a> · <a href="{REPO}">GitHub</a> · Examples are fictional</span></div></footer>

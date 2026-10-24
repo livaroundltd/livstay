@@ -1,0 +1,152 @@
+{
+  "home_id": "home_7Qp2",
+  "name": "Casa Mira",
+  "url": "https://stays.example/homes/casa-mira",
+  "time_zone": "Asia/Kolkata",
+  "description": {
+    "@type": "House",
+    "numberOfBedrooms": 3,
+    "numberOfBathroomsTotal": 3,
+    "occupancy": {
+      "maxValue": 6
+    }
+  },
+  "location": {
+    "area": "Assagao, North Goa",
+    "country": "IN",
+    "lat": 15.59,
+    "lng": 73.79,
+    "precision_m": 1000
+  },
+  "host": {
+    "display_name": "Rhea",
+    "host_since": 2017,
+    "languages": [
+      "en",
+      "hi",
+      "kok"
+    ],
+    "response_time_p50_minutes": 25
+  },
+  "facts": {
+    "facts_version": 9,
+    "summary": "A three-bedroom Portuguese-era house with a fenced pool, ten minutes from Assagao's cafes. Suits families and small groups who want quiet.",
+    "ideal_for": [
+      "families with small children",
+      "remote work"
+    ],
+    "not_for": [
+      "parties",
+      "guests who need step-free access"
+    ],
+    "accessibility": [],
+    "check_in": {
+      "from": "14:00",
+      "until": "22:00",
+      "how": "the host meets you"
+    },
+    "check_out": {
+      "by": "11:00"
+    },
+    "included": [
+      "daily cleaning",
+      "breakfast"
+    ],
+    "not_included": [
+      "airport pickup"
+    ],
+    "power_backup": "Full-house inverter, 6 hours.",
+    "internet": "Fibre, 200 Mbps.",
+    "parking": "Two cars in the drive.",
+    "pets": "No pets.",
+    "smoking": "Outdoors only.",
+    "noise": "Quiet after 22:00.",
+    "children": "Cot and high chair on request.",
+    "house_rules": [
+      "No parties",
+      "Quiet after 22:00"
+    ],
+    "cancellation": "Full refund until 14 days before check-in, half until 7 days, then none.",
+    "when_things_go_wrong": "Message Rhea through the booking conversation; the caretaker lives next door."
+  },
+  "terms": {
+    "terms_version": 12,
+    "decision_mode": "instant",
+    "instant_min_tier": "verified",
+    "id_required": true,
+    "min_nights": 3,
+    "max_nights": 28,
+    "max_guests": 6,
+    "infant_max_age": 2,
+    "infants_count": false,
+    "max_infants": 1,
+    "pets": {
+      "allowed": false,
+      "max": 0,
+      "note": "No pets: the garden is shared."
+    },
+    "discounts": [
+      {
+        "kind": "weekly",
+        "percent": 10
+      }
+    ],
+    "channel_adjustment_percent": 0,
+    "cancellation": [
+      {
+        "until_days_before": 14,
+        "refund_percent": 100
+      },
+      {
+        "until_days_before": 7,
+        "refund_percent": 50
+      },
+      {
+        "until_days_before": 0,
+        "refund_percent": 0
+      }
+    ],
+    "deposit": {
+      "amount": {
+        "amount": "15000.00",
+        "currency": "INR"
+      },
+      "mode": "authorise"
+    },
+    "payment_schedule": [
+      {
+        "due": "at_booking",
+        "percent": 30
+      },
+      {
+        "due": "days_before_check_in",
+        "days": 14,
+        "percent": 70
+      }
+    ],
+    "taxes": [
+      {
+        "name": "GST",
+        "percent": 12,
+        "included": false
+      }
+    ]
+  },
+  "protection": {
+    "underwriter": "host",
+    "evidence": "Photos at check-in and check-out, kept by the caretaker.",
+    "rules_url": "https://stays.example/claims",
+    "claim_response_hours": 72,
+    "appeal": "To the Host Platform within 5 days; decided by someone other than the host."
+  },
+  "photos": [
+    {
+      "url": "https://stays.example/p/casa-mira-pool.jpg",
+      "caption": "The fenced pool",
+      "taken_on": "2026-08-02"
+    }
+  ],
+  "photos_updated_at": "2026-08-02T09:00:00Z",
+  "currency": "INR",
+  "updated_at": "2026-10-20T12:00:00Z"
+}

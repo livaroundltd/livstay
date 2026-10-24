@@ -1,0 +1,19 @@
+{
+  "iss": "https://stay.example",
+  "revision": "0.2",
+  "receipt_id": "rcp_9Tq1",
+  "action": "confirm",
+  "initiated_by": "traveller_agent",
+  "sub": "usr_83jd",
+  "client_id": "https://agent.example/client.json",
+  "scopes": [
+    "livstay:book",
+    "poppy:read"
+  ],
+  "operation_id": "bk_4Hn9",
+  "revision_no": 1,
+  "terms_hash": "Hmytthhj2FnfMFs8LqjNvsKbxZSprPmhwquCK1X5xXY",
+  "confirmed": true,
+  "approved_by": "user",
+  "iat": 1792760461
+}

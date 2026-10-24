@@ -1,0 +1,20 @@
+{
+  "home_id": "home_7Qp2",
+  "time_zone": "Asia/Kolkata",
+  "currency": "INR",
+  "days": [
+    {
+      "date": "2026-12-27",
+      "available": true,
+      "min_nights": 3,
+      "closed_to_arrival": false,
+      "closed_to_departure": false,
+      "nightly": {
+        "amount": "18000.00",
+        "currency": "INR"
+      }
+    }
+  ],
+  "generated_at": "2026-10-24T09:00:00Z",
+  "ttl_seconds": 300
+}
