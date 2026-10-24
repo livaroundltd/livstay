@@ -169,6 +169,18 @@ bad["payment_schedule"][0]["amount"], bad["payment_schedule"][1]["amount"] = M("
 put("invalid", "quote-negative-instalment", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
 bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["home_id"] = "home_other"
 put("invalid", "booking-other-home", bad_op, "BookingOperation", "quote_binding")
+cancel_op = copy.deepcopy(op); cl = cancel_op["terms"]["livstay"]
+for k in ("quote_id", "quote_signature", "total", "due_now", "deposit", "tier", "requirements"):
+    cl.pop(k)
+cl.update(action="cancel", refund=M("64750.00")); cancel_op.update(operation_id="bk_7Cx2", summary="Cancel Casa Mira, 27 Dec to 3 Jan. Refund INR 64,750.00 to your card within 5 days.")
+put("valid", "booking-operation-cancel", cancel_op, "BookingOperation")
+bad = copy.deepcopy(q); bad["quote_id"] = "qt_Sek1"; bad["currency"] = "SEK"
+for l in bad["lines"]: l["amount"]["currency"] = "SEK"
+for x in ("total",): bad[x]["currency"] = "SEK"
+for p in bad["payment_schedule"]: p["amount"]["currency"] = "SEK"
+for c in bad["cancellation"]: c["refund"]["currency"] = "SEK"
+bad["deposit"]["amount"]["currency"] = "SEK"
+put("valid", "quote-sek", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", typ="livstay-quote+jws")
 put("valid", "counter-request", {"total": M("120000.00"), "note": "Could you do 1,20,000 for the week?"}, "CounterRequest")
 put("valid", "change-request", {"check_out": "2027-01-04"}, "ChangeRequest")
 put("valid", "mismatch-report", {"facts_version": 9, "field": "facts.parking", "description": "Page says one car; facts say two."}, "MismatchReport")

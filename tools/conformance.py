@@ -101,6 +101,8 @@ def main(origin):
     days, stay = av["days"], None
     for i, d in enumerate(days):
         n = max(d["min_nights"], home["terms"]["min_nights"])
+        if n > home["terms"]["max_nights"]:
+            continue
         run = days[i:i + n]
         dep = days[i + n] if i + n < len(days) else None
         if (len(run) == n and all(x["available"] for x in run) and not d["closed_to_arrival"]

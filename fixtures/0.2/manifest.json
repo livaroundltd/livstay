@@ -167,6 +167,17 @@
       "expect": "quote_binding"
     },
     {
+      "file": "valid/booking-operation-cancel.json",
+      "def": "BookingOperation",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/quote-sek.json",
+      "def": "Quote",
+      "expect": "valid",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
       "file": "valid/counter-request.json",
       "def": "CounterRequest",
       "expect": "valid"
