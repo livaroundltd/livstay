@@ -698,7 +698,10 @@ it has not already released.
   Platform answers with a new operation (`action: "change"`) whose terms state the price difference
   and the new cancellation dates.
 - **Cancel:** `POST {endpoint}/bookings/{booking_id}/cancellation`. The Host Platform answers with an
-  operation (`action: "cancel"`) whose terms state the refund under the published Terms on that date.
+  operation (`action: "cancel"`) whose terms state the refund under the cancellation terms the
+  traveller approved: those of the Quote bound to the booking's confirmed revision, or of a later
+  approved change. A Host Platform **MUST NOT** apply a stricter policy published after booking. It
+  **MAY** apply a more generous one.
 - Both need the traveller's approval like a booking. A Host-initiated cancellation is not an
   operation the agent confirms: it arrives as a `cancelled` event with the refund stated.
 
@@ -706,7 +709,7 @@ it has not already released.
 
 ### 13.1 Receipts
 
-Every write a Host Platform performs for an agent (booking, change, cancel, counter, contact grant)
+Every write a Host Platform performs for an agent (booking, change, cancel, counter, contact grant or revocation)
 **MUST** produce a Receipt: a compact JWS [RFC7515] signed with a key from `keys`, whose payload is:
 
 | Claim | Description |
@@ -714,12 +717,16 @@ Every write a Host Platform performs for an agent (booking, change, cancel, coun
 | `iss` | The Host Platform's `auth.issuer`. |
 | `sub` | The traveller's Poppy `sub`. |
 | `client_id` | The agent. |
-| `operation_id`, `revision` | The operation performed. |
-| `action` | `book`, `change`, `cancel`, `counter`, `share_contact`. |
-| `approved_by` | From the confirmation. |
+| `action` | `book`, `change`, `cancel`, `counter`, `share_contact`, `revoke_contact`. |
+| `booking_id` | The booking concerned, once one exists. Omitted before a booking succeeds. |
+| `operation_id`, `revision` | For `book`, `change`, `cancel` and `counter`: the operation and the revision the write produced or confirmed. Omitted for contact actions. |
+| `confirmed` | `true` when the write is the confirmation of a revision; `false` when it only created or revised one (a proposal or a counter). |
+| `approved_by` | When `confirmed` is `true`, the value from the confirmation. Otherwise `null`: no approval is claimed. |
 | `scopes` | Scopes the token carried. |
-| `terms_hash` | SHA-256 of the canonical JSON [RFC8785] of `terms.livstay`. |
+| `terms_hash` | For operation actions: SHA-256 of the canonical JSON [RFC8785] of that revision's `terms.livstay`. Omitted for contact actions. |
 | `iat` | When performed. |
+
+A Host Platform **MUST NOT** put a value in `approved_by` for a write that confirmed nothing.
 
 The Host sees the same record on the booking. A Receipt proves what the Host Platform did and on
 whose stated approval; like a Poppy confirmation, it does not prove what the traveller saw.
