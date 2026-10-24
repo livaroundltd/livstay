@@ -623,8 +623,9 @@ Rules:
 - **Only kinder.** A counter from `host` or `host_agent` **MUST NOT** be worse for the traveller than
   the Home's published Terms for the same Stay: no higher total, no stricter cancellation, no larger
   deposit.
-- **At most three counters** per operation. After the third, the operation can only be confirmed or
-  cancelled.
+- **At most three counters** per operation, from either side. After the third, no party may counter
+  again: a revision awaiting the Host can still be accepted or declined as in §10.1, and a revision
+  awaiting the traveller can be confirmed or cancelled. An acceptance is not a counter.
 - A traveller's agent proposes a counter with `POST {endpoint}/bookings/{operation_id}/counter`
   carrying the changed `check_in`, `check_out`, `guests` or a requested `total`, and a `note`. The
   Host Platform answers with the operation, unchanged or as a new revision with `proposed_by:
