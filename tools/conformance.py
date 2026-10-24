@@ -26,13 +26,13 @@ def http(method, url, body=None, rev=REV):
         req.add_header("LivStay-Revision", rev)
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
-            return r.status, dict(r.headers), json.loads(r.read() or b"null")
+            return r.status, {k.lower(): v for k, v in r.headers.items()}, json.loads(r.read() or b"null")
     except urllib.error.HTTPError as e:
         raw = e.read()
         try:
-            return e.code, dict(e.headers), json.loads(raw or b"null")
+            return e.code, {k.lower(): v for k, v in e.headers.items()}, json.loads(raw or b"null")
         except ValueError:
-            return e.code, dict(e.headers), None
+            return e.code, {k.lower(): v for k, v in e.headers.items()}, None
 
 
 def check(cid, title, ok, detail=""):
@@ -70,7 +70,7 @@ def main(origin):
     s, h, page = http("GET", ep + "/homes")
     if not check("L0.7", "GET /homes works with no token", s == 200, f"status {s}"):
         return
-    check("L0.8", "LivStay-Revision is echoed", h.get("LivStay-Revision") == REV, str(h.get("LivStay-Revision")))
+    check("L0.8", "LivStay-Revision is echoed", h.get("livstay-revision") == REV, str(h.get("livstay-revision")))
     if not schema("L0.9", "homes page matches HomesPage", "HomesPage", page) or not page["homes"]:
         check("L0.10", "at least one Home is published", bool(page and page.get("homes")))
         return
@@ -107,7 +107,7 @@ def main(origin):
             break
     if not check("L1.4", "an available stay exists in the next 90 days", stay):
         return
-    body = {"check_in": stay[0], "check_out": stay[1], "party": {"adults": 2, "children": [], "pets": 0}}
+    body = {"check_in": stay[0], "check_out": stay[1], "party": {"adults": 1, "children": [], "pets": 0}}  # 1 adult fits every Home (max_guests >= 1)
     s, h, q = http("POST", f"{ep}/homes/{home['home_id']}/quotes", body)
     if not check("L1.5", "POST quotes works with no token and returns 201", s == 201, f"status {s}, body {q}"):
         return

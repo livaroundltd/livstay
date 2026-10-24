@@ -157,6 +157,14 @@ put("invalid", "party-without-adults", {"check_in": "2026-12-27", "check_out": "
 put("invalid", "money-event-without-receipt", {k: v for k, v in ev.items() if k != "receipt"}, "Event", "schema")
 bad = copy.deepcopy(home); del bad["time_zone"]
 put("invalid", "home-without-time-zone", bad, "Home", "schema")
+bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad3"
+bad["cancellation"][0]["until"], bad["cancellation"][1]["until"] = bad["cancellation"][1]["until"], bad["cancellation"][0]["until"]
+put("invalid", "quote-cancellation-out-of-order", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
+bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["due_now"] = {"amount": "38850.00", "currency": "USD"}
+put("invalid", "booking-due-now-wrong-currency", bad_op, "BookingOperation", "quote_binding")
+put("valid", "counter-request", {"total": M("120000.00"), "note": "Could you do 1,20,000 for the week?"}, "CounterRequest")
+put("valid", "change-request", {"check_out": "2027-01-04"}, "ChangeRequest")
+put("valid", "mismatch-report", {"facts_version": 9, "field": "facts.parking", "description": "Page says one car; facts say two."}, "MismatchReport")
 bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["total"] = M("119500.00")
 put("invalid", "booking-terms-differ-from-quote", bad_op, "BookingOperation", "quote_binding")
 

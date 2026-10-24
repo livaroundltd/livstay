@@ -44,6 +44,11 @@ def quote_problems(q):
     ps = sum((D(p["amount"]) for p in q["payment_schedule"]), Decimal(0))
     if ps != total:
         out.append(f"payment_schedule sums to {ps}, total is {total}")
+    deadlines = [x["until"] for x in q["cancellation"][:-1]]
+    if None in deadlines:
+        out.append("only the last cancellation entry may have until null")
+    elif deadlines != sorted(deadlines) or len(set(deadlines)) != len(deadlines):
+        out.append("cancellation deadlines must be strictly earliest first")
     prev = None
     for i, x in enumerate(q["cancellation"]):
         r = D(x["refund"])
@@ -63,6 +68,11 @@ def quote_problems(q):
 def booking_terms_problems(t, quote):
     """§9.3: a book/change revision must restate its bound Quote."""
     out = []
+    for k in ("total", "due_now", "price_difference", "refund"):
+        if k in t:
+            out += money_problems(t[k], f"terms.livstay.{k}", quote["currency"])
+    if out:
+        return out
     for k in ("check_in", "check_out", "party", "total"):
         if t.get(k) != quote.get(k):
             out.append(f"terms.livstay.{k} differs from the Quote")

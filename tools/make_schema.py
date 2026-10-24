@@ -166,6 +166,12 @@ D["ReceiptClaims"]["allOf"] = [
     {"if": {"properties": {"initiated_by": {"const": "traveller_agent"}}},
      "then": {"required": ["client_id", "scopes"]}},
     {"if": {"properties": {"action": {"enum": MONEY_EVENTS}}}, "then": {"required": ["amount", "reference", "event_id"]}}]
+D["CounterRequest"] = obj({"check_in": DATE, "check_out": DATE, "party": R("Party"), "total": R("Money"), "note": S}, ["note"], extra=False)
+D["ChangeRequest"] = obj({"check_in": DATE, "check_out": DATE, "party": R("Party")}, [], extra=False)
+D["ChangeRequest"]["minProperties"] = 1
+D["MismatchReport"] = obj({"facts_version": I0, "quote_id": S, "field": S,
+    "description": {"type": "string", "maxLength": 2000}}, ["field", "description"], extra=False)
+D["MismatchReport"]["oneOf"] = [{"required": ["facts_version"]}, {"required": ["quote_id"]}]
 D["Error"] = obj({"error": S}, ["error"])
 schema = {"$schema": "https://json-schema.org/draft/2020-12/schema",
           "$id": "https://livstay.org/schemas/livstay-0.2.schema.json",

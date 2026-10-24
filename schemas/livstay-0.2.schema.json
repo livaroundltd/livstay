@@ -1897,6 +1897,91 @@
         }
       ]
     },
+    "CounterRequest": {
+      "type": "object",
+      "properties": {
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "total": {
+          "$ref": "#/$defs/Money"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "ChangeRequest": {
+      "type": "object",
+      "properties": {
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "MismatchReport": {
+      "type": "object",
+      "properties": {
+        "facts_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "quote_id": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "field",
+        "description"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "facts_version"
+          ]
+        },
+        {
+          "required": [
+            "quote_id"
+          ]
+        }
+      ]
+    },
     "Error": {
       "type": "object",
       "properties": {

@@ -139,6 +139,32 @@
       "expect": "schema"
     },
     {
+      "file": "invalid/quote-cancellation-out-of-order.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/booking-due-now-wrong-currency.json",
+      "def": "BookingOperation",
+      "expect": "quote_binding"
+    },
+    {
+      "file": "valid/counter-request.json",
+      "def": "CounterRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/change-request.json",
+      "def": "ChangeRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/mismatch-report.json",
+      "def": "MismatchReport",
+      "expect": "valid"
+    },
+    {
       "file": "invalid/booking-terms-differ-from-quote.json",
       "def": "BookingOperation",
       "expect": "quote_binding"
