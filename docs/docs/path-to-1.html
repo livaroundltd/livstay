@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Path to 1.0 · LivStay</title><meta name="description" content="How LivStay becomes stable, the feedback requested and the open topics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="canonical" href="https://livstay.org/docs/path-to-1.html">
+<link rel="stylesheet" href="../style.css"></head><body>
+<header class="bar"><div class="in">
+<a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
+<nav class="top" aria-label="Site"><a href="introduction.html">Docs</a><a href="specification.html">Specification</a><a href="path-to-1.html" aria-current="page">Path to 1.0</a><a href="https://github.com/livaroundltd/livstay">GitHub</a></nav>
+<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
+<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.1</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html" aria-current="page">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
+<main id="main"><h1 id="path-to-10">Path to 1.0</h1>
+<p>LivStay is a draft. This page says how it becomes stable and what is deliberately unfinished.</p>
+<h2 id="how-we-get-there">How we get there</h2>
+<ul>
+<li>Anyone can build against the draft and send feedback.</li>
+<li>LivAround is implementing it as the reference host platform, with a pilot in North Goa.</li>
+<li>We are looking for a second, independent host platform implementation and for agent builders to test against it.</li>
+<li>The spec changes based on what implementers learn. Until 1.0, a revision can break compatibility with earlier drafts.</li>
+<li>LivStay tracks the Personal Agent Protocol. When Poppy changes, LivStay follows.</li>
+</ul>
+<h2 id="feedback-requested">Feedback requested</h2>
+<ul>
+<li><strong>Money:</strong> whether quotes, holds and the approval rules are enough to make a stay price trustworthy.</li>
+<li><strong>Hosts:</strong> whether the facts and terms objects capture how hosts actually describe and rent their homes.</li>
+<li><strong>Agents:</strong> what an assistant needs that the draft does not give it.</li>
+<li><strong>Privacy and security:</strong> traveller data, location, tier credentials, abuse of holds.</li>
+<li><strong>Simplification:</strong> anything that could be removed.</li>
+</ul>
+<h2 id="how-to-give-feedback">How to give feedback</h2>
+<ul>
+<li><a href="https://github.com/livaroundltd/livstay/issues">Open an issue</a> in the spec repository. Contributions are made under the Apache License 2.0.</li>
+<li>Or write to the address on the <a href="../index.html">home page</a>.</li>
+</ul>
+<h2 id="open-topics">Open topics</h2>
+<p>These are left out on purpose and are not complete:</p>
+<ul>
+<li><strong>Payments.</strong> LivStay uses a hosted payment page until Poppy defines payments, then adopts that.</li>
+<li><strong>Push.</strong> Booking updates ride a conversation until Poppy defines push notifications.</li>
+<li><strong>Attachments.</strong> Receipts and check-in packs as attachments, when Poppy defines them.</li>
+<li><strong>Multi-home stays.</strong> One booking across linked homes, such as a villa and its cottage.</li>
+<li><strong>Search.</strong> Whether listing homes needs a shared query vocabulary across host platforms.</li>
+<li><strong>Directory.</strong> How agents find host platforms they do not already know.</li>
+<li><strong>Points and exchange.</strong> Whether home swaps and points belong in a separate, member-only extension.</li>
+</ul>
+<h2 id="governance">Governance</h2>
+<p>LivStay was started by LivAround Ltd. The intent is to move the specification to a neutral home once there are independent implementations, so that no single host platform controls it.</p><nav class="pager" aria-label="Pages"><a href="guide-agents.html"><small>Previous</small>Agent builders</a><a href="license.html" style="text-align:right"><small>Next</small>License</a></nav></main></div>
+<footer class="foot"><div class="in"><span>LivStay · an open protocol started by LivAround Ltd</span><span><a href="license.html">Apache License 2.0</a> · <a href="https://github.com/livaroundltd/livstay">GitHub</a> · Examples are fictional</span></div></footer>
+</body></html>

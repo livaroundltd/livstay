@@ -1,0 +1,1498 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Specification 0.1 · LivStay</title><meta name="description" content="LivStay draft 0.1: the normative specification of the livstay.org/stays extension.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="canonical" href="https://livstay.org/docs/specification.html">
+<link rel="stylesheet" href="../style.css"></head><body>
+<header class="bar"><div class="in">
+<a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
+<nav class="top" aria-label="Site"><a href="introduction.html">Docs</a><a href="specification.html" aria-current="page">Specification</a><a href="path-to-1.html">Path to 1.0</a><a href="https://github.com/livaroundltd/livstay">GitHub</a></nav>
+<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
+<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html" aria-current="page">Specification 0.1</a></li></ul><ul class="toc"><li><a href="#1-introduction">1. Introduction</a></li><li><a href="#2-conventions-and-terms">2. Conventions and terms</a></li><li><a href="#3-overview">3. Overview</a></li><li><a href="#4-advertising-support">4. Advertising support</a></li><li><a href="#5-scopes">5. Scopes</a></li><li><a href="#6-the-home">6. The Home</a></li><li><a href="#7-availability-and-quotes">7. Availability and quotes</a></li><li><a href="#8-enquiries">8. Enquiries</a></li><li><a href="#9-bookings">9. Bookings</a></li><li><a href="#10-requests-and-counter-offers">10. Requests and counter-offers</a></li><li><a href="#11-payment">11. Payment</a></li><li><a href="#12-after-booking">12. After booking</a></li><li><a href="#13-receipts-and-attestations">13. Receipts and attestations</a></li><li><a href="#14-errors">14. Errors</a></li><li><a href="#15-security-and-privacy-considerations">15. Security and privacy considerations</a></li><li><a href="#16-references">16. References</a></li><li><a href="#appendix-a-a-complete-booking-end-to-end">Appendix A. A complete booking, end to end</a></li><li><a href="#appendix-b-how-livaround-implements-this-draft">Appendix B. How LivAround implements this draft</a></li><li><a href="#appendix-c-open-topics-on-the-path-to-10">Appendix C. Open topics on the path to 1.0</a></li></ul><ul></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
+<main id="main"><h1 id="livstay">LivStay</h1>
+<p><strong>An open protocol for personal agents to find, ask about and book independent homes.</strong></p>
+<p>Draft 0.1 · 23 October 2026 · Extension <code>livstay.org/stays</code>, version <code>"0"</code> · Builds on Personal
+Agent Protocol (Poppy) draft 0.2 · Licensed under the Apache License 2.0</p>
+<blockquote>
+<p><strong>Status: draft.</strong> This document is a working draft for implementers and reviewers. Until 1.0 a
+revision can break compatibility with earlier drafts. LivAround is the reference implementation;
+the protocol is not owned by it. Feedback: <a href="https://github.com/livaroundltd/livstay/issues">open an issue</a>.</p>
+</blockquote>
+<hr />
+<h2 id="1-introduction">1. Introduction</h2>
+<p>Travellers are starting to plan and book stays through personal agents: assistants that act for one
+person. Today those agents mostly reach homes through online travel agencies (OTAs), which own the
+listing, the guest relationship and the price. Independent hosts and the platforms that serve them
+have no standard way to be found by an agent, answer its questions or take its booking directly.</p>
+<p>LivStay is that standard. It is an extension of Poppy: Poppy defines how a personal agent discovers
+a company, signs a user in, holds a session and talks to the company; LivStay defines what a
+<em>stay</em> is on top of that: the home, its facts, its availability, its terms, how an agent asks the
+host a question and how a booking is proposed, approved and confirmed.</p>
+<h3 id="11-goals">1.1 Goals</h3>
+<ul>
+<li><strong>Recommendation before booking.</strong> An agent can tell a traveller why a home fits, from facts the
+  host stands behind, before any booking call is made.</li>
+<li><strong>The traveller approves; the price is binding.</strong> No agent can commit a traveller's money to a
+  price the traveller has not seen, and the price shown is the price charged.</li>
+<li><strong>The host's rules hold on every channel.</strong> An agent sees the same terms the host publishes
+  everywhere else, and the host decides who can book instantly.</li>
+<li><strong>A human where it matters.</strong> An agent can put a question to the host, a person, before booking,
+  and get an answer it can cite.</li>
+<li><strong>Start with what you have.</strong> A host platform can publish facts alone and add availability,
+  enquiries and bookings later (§3.3).</li>
+<li><strong>Reuse, don't reinvent.</strong> Identity, sign-in, sessions, conversations and confirm-before-act are
+  Poppy's. LivStay adds only what is specific to stays.</li>
+</ul>
+<h3 id="12-non-goals">1.2 Non-goals</h3>
+<ul>
+<li><strong>Search ranking.</strong> LivStay does not say how agents rank homes.</li>
+<li><strong>Rate parity.</strong> LivStay takes no position on any contract between a host and an OTA.</li>
+<li><strong>Payment rails.</strong> LivStay does not define a payment protocol (§11).</li>
+<li><strong>Hotels.</strong> Nothing prevents a hotel from implementing LivStay, but the objects are shaped for
+  homes rented by their owners or managers: one calendar, one host, house rules, a deposit.</li>
+<li><strong>Member-only exchange.</strong> Home swaps, points and circles are out of scope for this draft.</li>
+</ul>
+<h3 id="13-relationship-to-poppy">1.3 Relationship to Poppy</h3>
+<p>LivStay is a third-party Poppy extension, named under a domain its authors control, as Poppy
+section 7 requires. It depends on:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Poppy feature</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Discovery (<code>/.well-known/poppy.json</code>)</td>
+<td>Finding a host platform and its LivStay endpoint</td>
+</tr>
+<tr>
+<td>Authorization and Sessions</td>
+<td>Signed-out browsing; sign-in before holds and bookings</td>
+</tr>
+<tr>
+<td>Custom scopes</td>
+<td>The <code>livstay:*</code> permissions the traveller grants (§5)</td>
+</tr>
+<tr>
+<td>OpenAPI and MCP</td>
+<td>The LivStay endpoints and tools</td>
+</tr>
+<tr>
+<td>Conversations</td>
+<td>Enquiries to the host (§8) and booking updates (§12)</td>
+</tr>
+<tr>
+<td><code>operations</code> extension</td>
+<td>Every booking, change and cancellation (§9, §10, §12)</td>
+</tr>
+<tr>
+<td><code>feedback</code></td>
+<td>Agents reporting stay tasks the Host Platform cannot do (§6.6)</td>
+</tr>
+<tr>
+<td>Web browsing (<code>web.browser_session_endpoint</code>)</td>
+<td>Identity checks and payment pages in the traveller's session (§9.5, §11)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A host platform that implements LivStay <strong>MUST</strong> also implement Poppy draft 0.2 and the
+<code>operations</code> extension version <code>"1"</code>. Where this document and Poppy disagree, Poppy governs
+everything Poppy defines.</p>
+<h2 id="2-conventions-and-terms">2. Conventions and terms</h2>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
+"RECOMMENDED", "NOT RECOMMENDED", "MAY" and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all capitals, as shown
+here.</p>
+<p>JSON examples are illustrative; field tables are normative. Amounts are decimal strings in the
+currency's major unit (<code>"18500.00"</code>) with an ISO 4217 <code>currency</code>. Dates are ISO 8601 calendar
+dates in the home's local time zone; timestamps are RFC 3339 in UTC.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Traveller</strong></td>
+<td>The person the stay is for. Poppy's <em>User</em>.</td>
+</tr>
+<tr>
+<td><strong>Personal Agent</strong></td>
+<td>Software acting for the traveller. As in Poppy.</td>
+</tr>
+<tr>
+<td><strong>Host</strong></td>
+<td>The person or business that rents the home and answers for it.</td>
+</tr>
+<tr>
+<td><strong>Host Platform</strong></td>
+<td>The service that publishes homes under LivStay for one or more hosts. Poppy's <em>Company</em>. A host with their own site and a host platform serving thousands of hosts are both Host Platforms.</td>
+</tr>
+<tr>
+<td><strong>Home</strong></td>
+<td>A unit with one calendar that is booked as a whole. A room rented separately is its own Home.</td>
+</tr>
+<tr>
+<td><strong>Stay</strong></td>
+<td>A Home, a check-in date, a check-out date and a party.</td>
+</tr>
+<tr>
+<td><strong>Facts</strong></td>
+<td>Plain-language statements about a Home that the host stands behind (§6.2).</td>
+</tr>
+<tr>
+<td><strong>Terms</strong></td>
+<td>The rules a stay is sold under: price adjustments, cancellation, deposit, who may book instantly (§6.3).</td>
+</tr>
+<tr>
+<td><strong>Quote</strong></td>
+<td>A priced Stay, binding until it expires (§7.2).</td>
+</tr>
+<tr>
+<td><strong>Booking operation</strong></td>
+<td>A Poppy <code>operations</code> operation whose action is reserving a Stay (§9).</td>
+</tr>
+<tr>
+<td><strong>Hold</strong></td>
+<td>The period in which a proposed booking operation blocks the calendar (§9.2).</td>
+</tr>
+<tr>
+<td><strong>Attestation</strong></td>
+<td>A signed claim about a Home, Host or Traveller by any issuer (§13.2).</td>
+</tr>
+<tr>
+<td><strong>Receipt</strong></td>
+<td>A signed record of a write the Host Platform performed (§13.1).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-overview">3. Overview</h2>
+<h3 id="31-the-parties">3.1 The parties</h3>
+<pre><code> Traveller ──▶ Personal Agent ──Poppy session──▶ Host Platform ──▶ Host
+                   │                                  │
+                   │  poppy.json + livstay.org/stays  │  facts, calendar, terms,
+                   │  enquiries (conversation)        │  answers to enquiries
+                   │  bookings (operations)           │
+</code></pre>
+<p>The Host Platform speaks for the Host. Conversations reach the Host as a person: the
+<code>responder</code> of an enquiry conversation is <code>human</code> (§8).</p>
+<h3 id="32-a-stay-in-five-steps">3.2 A stay, in five steps</h3>
+<ol>
+<li><strong>Find.</strong> The agent reads <code>poppy.json</code>, then lists Homes and reads their Facts. No sign-in.</li>
+<li><strong>Price.</strong> The agent asks for a Quote for exact dates and party. The Quote is binding until it
+   expires.</li>
+<li><strong>Ask</strong> (optional). The agent opens a conversation and puts the traveller's question to the Host.</li>
+<li><strong>Book.</strong> The agent proposes a booking from the Quote. The Host Platform answers with a Poppy
+   operation in state <code>proposed</code>, which holds the calendar. The agent shows the traveller the
+   operation's summary; the traveller approves; the agent confirms.</li>
+<li><strong>Stay.</strong> Updates, changes and cancellations arrive as operations and conversation messages.
+   Every write returns a Receipt.</li>
+</ol>
+<h3 id="33-levels">3.3 Levels</h3>
+<p>A Host Platform declares the highest level it supports. Each level includes the ones below.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Name</th>
+<th>What an agent can do</th>
+<th>Requires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><strong>Listed</strong></td>
+<td>Read Homes, Facts, Terms, Protection</td>
+<td>§6</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>Priced</strong></td>
+<td>Read availability; get binding Quotes</td>
+<td>§7</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Reachable</strong></td>
+<td>Ask the Host questions</td>
+<td>§8</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Bookable</strong></td>
+<td>Book, change and cancel</td>
+<td>§9–§12</td>
+</tr>
+</tbody>
+</table></div>
+<p>Level 0 needs no sign-in and can be served from static files. A Host Platform <strong>SHOULD</strong> publish
+Level 0 before anything else: it is what lets an agent recommend a home.</p>
+<h2 id="4-advertising-support">4. Advertising support</h2>
+<h3 id="41-host-platform">4.1 Host Platform</h3>
+<p>A Host Platform advertises LivStay in the <code>extensions</code> object of its <code>poppy.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;protocol_version&quot;: &quot;0.2&quot;,
+  &quot;organization&quot;: { &quot;name&quot;: &quot;LivAround&quot;, &quot;domain&quot;: &quot;stay.livaround.com&quot; },
+  &quot;auth&quot;: {
+    &quot;issuer&quot;: &quot;https://stay.livaround.com&quot;,
+    &quot;custom_scopes&quot;: {
+      &quot;livstay:enquire&quot;: &quot;Ask hosts questions about a stay&quot;,
+      &quot;livstay:book&quot;: &quot;Book stays you approve&quot;,
+      &quot;livstay:share_contact&quot;: &quot;Give the host your phone number and email&quot;,
+      &quot;livstay:share_trip_context&quot;: &quot;Tell the host the purpose of your trip and who is coming&quot;
+    }
+  },
+  &quot;apis&quot;: [
+    { &quot;type&quot;: &quot;openapi&quot;, &quot;url&quot;: &quot;https://stay.livaround.com/livstay/v0/openapi.json&quot; },
+    { &quot;type&quot;: &quot;mcp&quot;, &quot;url&quot;: &quot;https://stay.livaround.com/livstay/v0/mcp&quot; }
+  ],
+  &quot;extensions&quot;: {
+    &quot;operations&quot;: { &quot;version&quot;: &quot;1&quot;, &quot;endpoint&quot;: &quot;https://stay.livaround.com/poppy/operations&quot; },
+    &quot;livstay.org/stays&quot;: {
+      &quot;version&quot;: &quot;0&quot;,
+      &quot;endpoint&quot;: &quot;https://stay.livaround.com/livstay/v0&quot;,
+      &quot;level&quot;: 3,
+      &quot;keys&quot;: &quot;https://stay.livaround.com/.well-known/livstay-keys.json&quot;,
+      &quot;terms_of_service&quot;: &quot;https://livaround.com/terms&quot;,
+      &quot;facts_site&quot;: &quot;https://booking.livaround.com&quot;
+    }
+  }
+}
+</code></pre>
+<p><em>Example 1. A Host Platform's <code>poppy.json</code>, LivStay parts only.</em></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version</code></td>
+<td>Yes</td>
+<td><code>"0"</code> for this draft. The extension's major version, as Poppy section 7 defines.</td>
+</tr>
+<tr>
+<td><code>endpoint</code></td>
+<td>Yes</td>
+<td>Base URL of the LivStay endpoints (§6–§10). HTTPS.</td>
+</tr>
+<tr>
+<td><code>level</code></td>
+<td>Yes</td>
+<td>Highest level supported, <code>0</code>–<code>3</code> (§3.3).</td>
+</tr>
+<tr>
+<td><code>keys</code></td>
+<td>Yes at level ≥1</td>
+<td>A JWK Set [RFC7517] of the keys that sign Quotes, Receipts and Attestations.</td>
+</tr>
+<tr>
+<td><code>terms_of_service</code></td>
+<td>Yes at level 3</td>
+<td>The Host Platform's terms the traveller books under.</td>
+</tr>
+<tr>
+<td><code>facts_site</code></td>
+<td>No</td>
+<td>Origin where each Home's Facts are also published as HTML (§6.5).</td>
+</tr>
+</tbody>
+</table></div>
+<p>A Host Platform at level 3 <strong>MUST</strong> list <code>operations</code> with version <code>"1"</code>.</p>
+<h3 id="42-personal-agent">4.2 Personal Agent</h3>
+<p>A Personal Agent that supports LivStay lists it in its client metadata document:</p>
+<pre><code class="language-json">&quot;extensions&quot;: {
+  &quot;operations&quot;: { &quot;version&quot;: &quot;1&quot; },
+  &quot;livstay.org/stays&quot;: { &quot;version&quot;: &quot;0&quot; }
+}
+</code></pre>
+<p>A Host Platform <strong>MUST NOT</strong> return a Quote, booking operation or LivStay conversation data to an
+agent that does not list <code>livstay.org/stays</code>. It <strong>MAY</strong> serve Level 0 data to any client,
+including clients with no Poppy session, because Facts are public by design (§6.5). A request that
+needs the extension from a client that does not list it fails with <code>extension_required</code>.</p>
+<h2 id="5-scopes">5. Scopes</h2>
+<p>LivStay uses Poppy's <code>poppy:read</code> and four custom scopes. Every write is a named scope the traveller
+sees at sign-in; a Host Platform <strong>MUST NOT</strong> require <code>poppy:write</code> for any LivStay action.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Grants</th>
+<th>Session</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>poppy:read</code></td>
+<td>Homes, Facts, availability, Quotes; reading the traveller's own bookings once signed in</td>
+<td>Signed out or in</td>
+</tr>
+<tr>
+<td><code>livstay:enquire</code></td>
+<td>Opening enquiry conversations with Hosts (§8)</td>
+<td>Signed out or in</td>
+</tr>
+<tr>
+<td><code>livstay:book</code></td>
+<td>Proposing, confirming, changing and cancelling bookings (§9–§12)</td>
+<td>Signed in</td>
+</tr>
+<tr>
+<td><code>livstay:share_contact</code></td>
+<td>Releasing the traveller's direct phone and email to the Host (§12.3)</td>
+<td>Signed in</td>
+</tr>
+<tr>
+<td><code>livstay:share_trip_context</code></td>
+<td>Sending trip purpose, party and arrival notes to the Host (§9.4)</td>
+<td>Signed in</td>
+</tr>
+</tbody>
+</table></div>
+<p>Without <code>livstay:share_contact</code>, Host and traveller talk through the Host Platform's relay and
+neither sees the other's direct details.</p>
+<p>These scopes map onto the access scale Poppy describes for a hotel: <em>search rooms</em> is <code>poppy:read</code>;
+<em>see reservations</em> is <code>poppy:read</code> signed in; <em>book a room</em> is <code>livstay:book</code>. LivStay defines no
+"full access".</p>
+<h2 id="6-the-home">6. The Home</h2>
+<h3 id="61-listing-homes">6.1 Listing Homes</h3>
+<p><code>GET {endpoint}/homes</code></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>near</code></td>
+<td>No</td>
+<td><code>lat,lng</code></td>
+</tr>
+<tr>
+<td><code>radius_km</code></td>
+<td>No</td>
+<td>With <code>near</code>.</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td>No</td>
+<td>A place name the Host Platform publishes (e.g. <code>north-goa</code>).</td>
+</tr>
+<tr>
+<td><code>check_in</code>, <code>check_out</code></td>
+<td>No</td>
+<td>If both are given, only Homes with that range available.</td>
+</tr>
+<tr>
+<td><code>guests</code></td>
+<td>No</td>
+<td>Party size.</td>
+</tr>
+<tr>
+<td><code>cursor</code></td>
+<td>No</td>
+<td>From a previous page.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The response is <code>{ "homes": [Home summary], "next_cursor": string | null }</code>. A Home summary is the
+Home object (§6.1.1) without <code>facts.faq</code> and <code>attestations</code>.</p>
+<p><code>GET {endpoint}/homes/{home_id}</code> returns one Home.</p>
+<h4 id="611-home-object">6.1.1 Home object</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>home_id</code></td>
+<td>Yes</td>
+<td>URL-safe, prefixed <code>home_</code>. Stable for the Home's life.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Yes</td>
+<td>The Host's name for the Home.</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>Yes</td>
+<td>The Home's public page (§6.5).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Yes</td>
+<td>A schema.org <code>Accommodation</code> object [SCHEMA]: type, bedrooms, beds, bathrooms, occupancy, amenities.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>Yes</td>
+<td><code>{ "area", "country", "lat", "lng", "precision_m" }</code>. Coarse before booking: <code>precision_m</code> <strong>MUST</strong> be at least 500 until a booking for the traveller succeeds.</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td>Yes</td>
+<td>Host object (§6.1.2).</td>
+</tr>
+<tr>
+<td><code>facts</code></td>
+<td>Yes</td>
+<td>Facts object (§6.2).</td>
+</tr>
+<tr>
+<td><code>terms</code></td>
+<td>Yes</td>
+<td>Terms object (§6.3).</td>
+</tr>
+<tr>
+<td><code>protection</code></td>
+<td>Yes</td>
+<td>Protection object (§6.4).</td>
+</tr>
+<tr>
+<td><code>photos</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "url", "caption", "taken_on" }</code>. At least one.</td>
+</tr>
+<tr>
+<td><code>photos_updated_at</code></td>
+<td>Yes</td>
+<td>When the set last changed.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>Yes</td>
+<td>Currency the Home is priced in.</td>
+</tr>
+<tr>
+<td><code>attestations</code></td>
+<td>No</td>
+<td>Array of compact JWS Attestations (§13.2).</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td>Yes</td>
+<td>When any field last changed.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="612-host-object">6.1.2 Host object</h4>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display_name</code></td>
+<td>Yes</td>
+<td>A name a person would use. Not a company placeholder.</td>
+</tr>
+<tr>
+<td><code>host_since</code></td>
+<td>Yes</td>
+<td>Year the Host started hosting.</td>
+</tr>
+<tr>
+<td><code>languages</code></td>
+<td>Yes</td>
+<td>BCP 47 tags.</td>
+</tr>
+<tr>
+<td><code>response_time_p50_minutes</code></td>
+<td>No</td>
+<td>Median time to first human reply over the last 90 days.</td>
+</tr>
+<tr>
+<td><code>homes_count</code></td>
+<td>No</td>
+<td>Homes this Host publishes on this Host Platform.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="62-facts">6.2 Facts</h3>
+<p>Facts are what an agent quotes when it tells a traveller why a Home fits. Every Fact is a statement
+the Host stands behind; none is generated by the Host Platform without the Host's review.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>facts_version</code></td>
+<td>Yes</td>
+<td>Increments on any change.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Yes</td>
+<td>Two to four sentences: what the Home is and who it suits.</td>
+</tr>
+<tr>
+<td><code>ideal_for</code></td>
+<td>Yes</td>
+<td>Array of short phrases (<code>"families with small children"</code>).</td>
+</tr>
+<tr>
+<td><code>not_for</code></td>
+<td>Yes</td>
+<td>Array of short phrases (<code>"guests who need step-free access"</code>). May be empty only if the Host says so.</td>
+</tr>
+<tr>
+<td><code>accessibility</code></td>
+<td>Yes</td>
+<td>Array of statements; empty means not stated, never "accessible".</td>
+</tr>
+<tr>
+<td><code>check_in</code></td>
+<td>Yes</td>
+<td><code>{ "from", "until", "how" }</code>. <code>how</code> is plain language (<code>"the host meets you"</code>, <code>"smart lock, code sent on the day"</code>).</td>
+</tr>
+<tr>
+<td><code>check_out</code></td>
+<td>Yes</td>
+<td><code>{ "by" }</code>.</td>
+</tr>
+<tr>
+<td><code>included</code></td>
+<td>Yes</td>
+<td>Array (<code>"daily cleaning"</code>, <code>"airport pickup"</code>).</td>
+</tr>
+<tr>
+<td><code>not_included</code></td>
+<td>Yes</td>
+<td>Array.</td>
+</tr>
+<tr>
+<td><code>power_backup</code>, <code>water_backup</code>, <code>internet</code></td>
+<td>No</td>
+<td>Plain-language statements.</td>
+</tr>
+<tr>
+<td><code>parking</code>, <code>pets</code>, <code>smoking</code>, <code>noise</code></td>
+<td>Yes</td>
+<td>Plain-language statements.</td>
+</tr>
+<tr>
+<td><code>house_rules</code></td>
+<td>Yes</td>
+<td>Array of rules.</td>
+</tr>
+<tr>
+<td><code>cancellation</code></td>
+<td>Yes</td>
+<td>One sentence a traveller can rely on. <strong>MUST</strong> agree with <code>terms.cancellation</code>.</td>
+</tr>
+<tr>
+<td><code>when_things_go_wrong</code></td>
+<td>Yes</td>
+<td>What the Host does if something breaks, and how the traveller reaches them.</td>
+</tr>
+<tr>
+<td><code>faq</code></td>
+<td>No</td>
+<td>Array of <code>{ "q", "a" }</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Agents <strong>SHOULD</strong> cite Facts by <code>home_id</code> and <code>facts_version</code> when they rely on them.</p>
+<h3 id="63-terms">6.3 Terms</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>terms_version</code></td>
+<td>Yes</td>
+<td>Increments on any change. A Quote is bound to the version it was made under.</td>
+</tr>
+<tr>
+<td><code>decision_mode</code></td>
+<td>Yes</td>
+<td><code>instant</code> (a valid proposal is held and can be confirmed), <code>request</code> (the Host decides, §10) or <code>auto_counter</code> (the Host Platform may counter within bounds the Host set, §10.3).</td>
+</tr>
+<tr>
+<td><code>instant_min_tier</code></td>
+<td>No</td>
+<td>Lowest traveller tier that may book instantly (§13.3). Below it, <code>decision_mode</code> is treated as <code>request</code>.</td>
+</tr>
+<tr>
+<td><code>id_required</code></td>
+<td>Yes</td>
+<td>Whether the traveller must verify identity before the booking succeeds.</td>
+</tr>
+<tr>
+<td><code>min_nights</code>, <code>max_nights</code></td>
+<td>Yes</td>
+<td>Defaults; availability may override per date.</td>
+</tr>
+<tr>
+<td><code>max_guests</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>discounts</code></td>
+<td>No</td>
+<td>Array of <code>{ "kind": "weekly" \| "monthly" \| "early" \| "late", "percent" }</code>.</td>
+</tr>
+<tr>
+<td><code>channel_adjustment_percent</code></td>
+<td>Yes</td>
+<td>The same for every agent. May be <code>0</code>, may be negative. §9.3.</td>
+</tr>
+<tr>
+<td><code>cancellation</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "until_days_before", "refund_percent" }</code>, ordered by <code>until_days_before</code> descending.</td>
+</tr>
+<tr>
+<td><code>deposit</code></td>
+<td>Yes</td>
+<td><code>{ "amount", "currency", "mode": "none" \| "authorise" \| "hold" }</code>. A tier ladder <strong>MAY</strong> be given as <code>by_tier</code>.</td>
+</tr>
+<tr>
+<td><code>payment_schedule</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "due": "at_booking" \| "days_before_check_in", "days", "percent" }</code>.</td>
+</tr>
+<tr>
+<td><code>taxes</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "name", "percent" \| "amount", "included" }</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Terms are the same for every agent and the same as on the Host Platform's own site. A Host Platform
+<strong>MUST NOT</strong> publish different Terms for the same Home to different agents.</p>
+<h3 id="64-protection">6.4 Protection</h3>
+<p>Every Home declares who carries the risk of damage and how claims are decided. A Home without a
+Protection object <strong>MUST NOT</strong> be published.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>underwriter</code></td>
+<td>Yes</td>
+<td><code>host</code> or <code>insurer</code>.</td>
+</tr>
+<tr>
+<td><code>insurer</code></td>
+<td>If <code>insurer</code></td>
+<td><code>{ "name", "policy_ref" }</code>.</td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>Yes</td>
+<td>Whether check-in and check-out condition records are kept, and by whom.</td>
+</tr>
+<tr>
+<td><code>rules_url</code></td>
+<td>Yes</td>
+<td>Published rules for deciding claims.</td>
+</tr>
+<tr>
+<td><code>claim_response_hours</code></td>
+<td>Yes</td>
+<td>Time to a first decision on a claim.</td>
+</tr>
+<tr>
+<td><code>appeal</code></td>
+<td>Yes</td>
+<td>How a decision is appealed and who decides.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="65-the-same-facts-on-the-web">6.5 The same facts on the web</h3>
+<p>A Home's <code>url</code> <strong>MUST</strong> serve the same Facts, Terms and Protection as the endpoint, as crawlable HTML
+with schema.org markup, so an answer engine that never calls the API cites the same statements an
+agent reads. A Host Platform <strong>SHOULD</strong> check this on every change. Where they differ, the endpoint
+governs a booking and the difference is a defect.</p>
+<h3 id="66-reporting-a-mismatch">6.6 Reporting a mismatch</h3>
+<p>An agent that finds a Fact contradicted by the Home's page, photos or a Host answer <strong>SHOULD</strong> report
+it with <code>POST {endpoint}/homes/{home_id}/mismatch</code>, body <code>{ "facts_version", "field", "description" }</code>,
+with a Session Token, signed in or out. The rules for Poppy feedback (section 8) apply: no personal
+data, treated as data by the Host Platform, one report per finding.</p>
+<p>A stay task the Host Platform offers no way to do (a pet, a split payment, a long-stay discount it
+does not publish) is reported through Poppy's own <code>feedback</code> endpoint with <code>kind: "missing"</code>.</p>
+<h2 id="7-availability-and-quotes">7. Availability and quotes</h2>
+<h3 id="71-availability">7.1 Availability</h3>
+<p><code>GET {endpoint}/homes/{home_id}/availability?from={date}&amp;to={date}</code></p>
+<p>The range <strong>MUST NOT</strong> exceed 400 nights. The response:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>home_id</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>days</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "date", "available", "min_nights", "closed_to_arrival", "closed_to_departure", "nightly" }</code>. <code>nightly</code> is the pre-discount price for that night.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>generated_at</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ttl_seconds</code></td>
+<td>Yes</td>
+<td>How long the agent may rely on this without asking again.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Availability is indicative. Only a Quote is binding.</p>
+<h3 id="72-quotes">7.2 Quotes</h3>
+<p><code>POST {endpoint}/homes/{home_id}/quotes</code></p>
+<pre><code class="language-json">{ &quot;check_in&quot;: &quot;2026-12-27&quot;, &quot;check_out&quot;: &quot;2027-01-03&quot;, &quot;guests&quot;: { &quot;adults&quot;: 4, &quot;children&quot;: 2 } }
+</code></pre>
+<p>The response is a Quote. A Quote <strong>does not</strong> block the calendar; it fixes the price.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>quote_id</code></td>
+<td>Yes</td>
+<td>Prefixed <code>qt_</code>.</td>
+</tr>
+<tr>
+<td><code>home_id</code>, <code>check_in</code>, <code>check_out</code>, <code>guests</code></td>
+<td>Yes</td>
+<td>Echo of the Stay priced.</td>
+</tr>
+<tr>
+<td><code>terms_version</code></td>
+<td>Yes</td>
+<td>The Terms the Quote applies.</td>
+</tr>
+<tr>
+<td><code>lines</code></td>
+<td>Yes</td>
+<td>Array of <code>{ "kind", "label", "amount" }</code>. <code>kind</code> is one of <code>nights</code>, <code>discount</code>, <code>cleaning</code>, <code>channel_adjustment</code>, <code>tax</code>, <code>platform_fee</code>, <code>agent_fee</code>, <code>other</code>.</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>Yes</td>
+<td>What the traveller pays for the stay, all lines included.</td>
+</tr>
+<tr>
+<td><code>deposit</code></td>
+<td>Yes</td>
+<td>As in Terms, resolved for this traveller if signed in.</td>
+</tr>
+<tr>
+<td><code>payment_schedule</code></td>
+<td>Yes</td>
+<td>Resolved to dated amounts.</td>
+</tr>
+<tr>
+<td><code>cancellation</code></td>
+<td>Yes</td>
+<td>Resolved to dated refund amounts.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>instant</code></td>
+<td>Yes</td>
+<td>Whether a booking from this Quote can be confirmed without the Host deciding (§6.3).</td>
+</tr>
+<tr>
+<td><code>expires_at</code></td>
+<td>Yes</td>
+<td>At most 24 hours after creation.</td>
+</tr>
+<tr>
+<td><code>signature</code></td>
+<td>Yes</td>
+<td>Compact JWS over the other fields with a key from <code>keys</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Binding.</strong> A Host Platform <strong>MUST</strong> honour a Quote's <code>total</code> for any booking proposed before
+<code>expires_at</code>, if the dates are still available. If they are not, the proposal fails with
+<code>dates_unavailable</code>; the price never changes.</p>
+<p><strong>Fees are lines.</strong> Any fee the Host Platform or an agent charges <strong>MUST</strong> appear as its own line.
+The <code>agent_fee</code> line, if any, is set by the agent's agreement with the Host Platform and <strong>MUST</strong> be
+shown to the traveller before approval.</p>
+<p>A Quote is available to signed-out sessions. Tier-dependent fields (<code>deposit</code>, <code>instant</code>) assume the
+lowest tier until the traveller signs in.</p>
+<h2 id="8-enquiries">8. Enquiries</h2>
+<p>An enquiry is a Poppy conversation between the traveller's agent and the Host, about a Home, before
+any booking. It requires <code>livstay:enquire</code>.</p>
+<h3 id="81-opening">8.1 Opening</h3>
+<p>The agent starts a Poppy conversation and sends a first message whose <code>data</code> is:</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;livstay.org/stays#enquiry&quot;,
+  &quot;home_id&quot;: &quot;home_7Qp2&quot;,
+  &quot;check_in&quot;: &quot;2026-12-27&quot;,
+  &quot;check_out&quot;: &quot;2027-01-03&quot;,
+  &quot;guests&quot;: { &quot;adults&quot;: 4, &quot;children&quot;: 2 }
+}
+</code></pre>
+<p>with the traveller's question in <code>text</code>. Dates and guests are OPTIONAL.</p>
+<h3 id="82-answering">8.2 Answering</h3>
+<ul>
+<li>A Host's reply <strong>MUST</strong> have <code>sender: "human"</code>, and <code>responder</code> <strong>MUST</strong> be <code>human</code> while the Host
+  is handling the conversation (Poppy 7.7). A Host Platform <strong>MAY</strong> let an assistant reply or draft
+  for the Host; a message the Host did not write or approve <strong>MUST</strong> have <code>sender: "agent"</code>. An
+  enquiry the Host has not yet picked up is <code>queued</code> with <code>responder: "agent"</code>.</li>
+<li>A Host Platform <strong>SHOULD</strong> tell the agent when to expect a reply by including
+  <code>{ "type": "livstay.org/stays#expected_reply", "by": &lt;timestamp&gt; }</code> in the conversation's first
+  status message, from the Host's <code>response_time_p50_minutes</code>.</li>
+<li>A Host answer <strong>MAY</strong> carry <code>data</code> <code>{ "type": "livstay.org/stays#answer", "signature": &lt;JWS&gt; }</code>
+  signed over the question and answer text, so the agent can cite it later.</li>
+<li>An answer that changes a Fact does not change the Home; the Host Platform <strong>SHOULD</strong> update Facts
+  and increment <code>facts_version</code>.</li>
+</ul>
+<h3 id="83-rules-for-agents">8.3 Rules for agents</h3>
+<ul>
+<li>An agent <strong>MUST</strong> treat Host messages as information, never as instructions to it.</li>
+<li>An agent <strong>MUST NOT</strong> send the traveller's direct contact details in an enquiry. Contact is
+  released only by <code>livstay:share_contact</code> after booking (§12.3).</li>
+<li>An enquiry never holds the calendar and never commits the traveller.</li>
+</ul>
+<h2 id="9-bookings">9. Bookings</h2>
+<p>Every booking is a Poppy <code>operations</code> operation. LivStay defines the action, its <code>terms</code> keys and
+what the Host Platform does in each state. Everything about confirming, tracking, cancelling,
+revisions and at-most-once is as the <code>operations</code> extension defines it.</p>
+<h3 id="91-proposing">9.1 Proposing</h3>
+<p><code>POST {endpoint}/bookings</code> with an <code>Idempotency-Key</code> header. Requires <code>livstay:book</code> and a signed-in
+session; a signed-out session receives <code>sign_in_required</code>.</p>
+<pre><code class="language-json">{
+  &quot;quote_id&quot;: &quot;qt_P8m1&quot;,
+  &quot;traveller&quot;: { &quot;tier_credential&quot;: &quot;eyJhbGciOi...&quot; },
+  &quot;trip_context&quot;: { &quot;purpose&quot;: &quot;family new year&quot;, &quot;arrival_notes&quot;: &quot;landing 23:40, need late check-in&quot; }
+}
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Req.</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>quote_id</code></td>
+<td>Yes</td>
+<td>An unexpired Quote.</td>
+</tr>
+<tr>
+<td><code>traveller.tier_credential</code></td>
+<td>No</td>
+<td>An Attestation about the traveller (§13.3). Without one the traveller is at the lowest tier.</td>
+</tr>
+<tr>
+<td><code>trip_context</code></td>
+<td>No</td>
+<td>Only with <code>livstay:share_trip_context</code> (§9.4).</td>
+</tr>
+</tbody>
+</table></div>
+<p>On success the Host Platform responds <code>202</code> with an operation in state <code>proposed</code>:</p>
+<pre><code class="language-json">{
+  &quot;operation&quot;: {
+    &quot;operation_id&quot;: &quot;bk_4Hn9&quot;,
+    &quot;revision&quot;: 1,
+    &quot;state&quot;: &quot;proposed&quot;,
+    &quot;summary&quot;: &quot;Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults and 2 children. Total INR 1,29,500 including taxes and fees; INR 38,850 now, the rest by 13 Dec. Free cancellation until 13 Dec, 50% back until 20 Dec, then none. Deposit INR 15,000 authorised on your card, released 3 days after check-out. Booked with LivAround on behalf of host Rhea.&quot;,
+    &quot;terms&quot;: {
+      &quot;livstay&quot;: {
+        &quot;action&quot;: &quot;book&quot;,
+        &quot;quote_id&quot;: &quot;qt_P8m1&quot;,
+        &quot;quote_signature&quot;: &quot;eyJhbGciOi...&quot;,
+        &quot;home_id&quot;: &quot;home_7Qp2&quot;,
+        &quot;check_in&quot;: &quot;2026-12-27&quot;,
+        &quot;check_out&quot;: &quot;2027-01-03&quot;,
+        &quot;guests&quot;: { &quot;adults&quot;: 4, &quot;children&quot;: 2 },
+        &quot;total&quot;: { &quot;amount&quot;: &quot;129500.00&quot;, &quot;currency&quot;: &quot;INR&quot; },
+        &quot;due_now&quot;: { &quot;amount&quot;: &quot;38850.00&quot;, &quot;currency&quot;: &quot;INR&quot; },
+        &quot;deposit&quot;: { &quot;amount&quot;: &quot;15000.00&quot;, &quot;currency&quot;: &quot;INR&quot;, &quot;mode&quot;: &quot;authorise&quot; },
+        &quot;terms_version&quot;: 12,
+        &quot;proposed_by&quot;: &quot;traveller_agent&quot;
+      }
+    },
+    &quot;expires_at&quot;: &quot;2026-10-23T10:15:00Z&quot;,
+    &quot;user_approval_required&quot;: true,
+    &quot;url&quot;: &quot;https://stay.livaround.com/b/bk_4Hn9&quot;,
+    &quot;confirmation&quot;: null,
+    &quot;result&quot;: null
+  }
+}
+</code></pre>
+<p><em>Example 2. A proposed booking. The calendar is held until <code>expires_at</code>.</em></p>
+<h3 id="92-holds">9.2 Holds</h3>
+<p>While a booking operation is <code>proposed</code> and <code>instant</code>, the Host Platform <strong>MUST</strong> block the Stay's
+dates against every other channel it controls, until <code>expires_at</code>. That period is the <strong>hold</strong>.</p>
+<ul>
+<li><code>expires_at</code> <strong>MUST</strong> be at most 15 minutes after the proposal, for an instant booking.</li>
+<li>A Host Platform <strong>MAY</strong> extend a hold once, by issuing a new revision with unchanged terms and a
+  new <code>expires_at</code>, while the traveller completes identity verification (§9.5).</li>
+<li>When the operation becomes <code>expired</code> or <code>cancelled</code>, the hold ends and nothing is charged.</li>
+<li>A Host Platform <strong>MUST</strong> limit open holds per traveller and per <code>client_id</code> (§15.3).</li>
+</ul>
+<p>A traveller who wants time to decide uses a Quote (24 hours, binding price, no hold), not a hold.</p>
+<h3 id="93-approval">9.3 Approval</h3>
+<ul>
+<li>A Host Platform <strong>MUST</strong> set <code>user_approval_required: true</code> on any booking operation whose terms
+  move money or authorise a deposit. A standing permission is never enough to spend a traveller's
+  money on a stay.</li>
+<li>The <code>summary</code> <strong>MUST</strong> state the Home, dates, party, total, what is due now, the cancellation
+  terms in dated form, the deposit, and the Host Platform and Host names. A traveller who reads only
+  the <code>summary</code> <strong>MUST</strong> have everything needed to decide.</li>
+<li>Every revision is bound to exactly one Quote, named by <code>terms.livstay.quote_id</code> and
+  <code>terms.livstay.quote_signature</code>. For revision 1 it is the Quote the booking was proposed from; a
+  counter revision carries a new Quote for its own terms (§10.2). <code>terms.livstay.total</code>,
+  <code>check_in</code>, <code>check_out</code> and <code>guests</code> <strong>MUST</strong> equal that Quote's.</li>
+<li>Before confirming, an agent <strong>SHOULD</strong> verify the revision's <code>quote_signature</code>, and <strong>MUST NOT</strong>
+  confirm if the revision's terms differ from its Quote, or if the Quote differs from the one the
+  traveller was shown for this revision.</li>
+<li>The agent confirms with <code>approved_by: "user"</code> as the <code>operations</code> extension defines.</li>
+</ul>
+<h3 id="94-trip-context">9.4 Trip context</h3>
+<p><code>trip_context</code> lets the Host prepare (an airport pickup, a cot, a late arrival). It is OPTIONAL and
+<strong>MUST NOT</strong> be required to book.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>purpose</code></td>
+<td>Free text, e.g. <code>"anniversary"</code>.</td>
+</tr>
+<tr>
+<td><code>party</code></td>
+<td>Free text about who is coming. <strong>MUST NOT</strong> contain names unless the traveller typed them.</td>
+</tr>
+<tr>
+<td><code>arrival_notes</code></td>
+<td>Free text.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The Host Platform <strong>MUST</strong> share <code>trip_context</code> only with the Host of that booking, <strong>MUST NOT</strong> use it
+for advertising, and <strong>MUST</strong> delete it no later than 90 days after check-out.</p>
+<h3 id="95-identity-verification">9.5 Identity verification</h3>
+<p>If <code>terms.id_required</code> is <code>true</code>, the Host Platform responds to the confirm with an operation in
+state <code>in_progress</code> and a conversation message linking to its verification page. A Host Platform
+at level 3 <strong>SHOULD</strong> list <code>web.browser_session_endpoint</code> so that page opens in the traveller's
+Poppy Session (Poppy section 5). The booking succeeds only after verification. If verification
+is not completed within the hold, the operation ends <code>failed</code> with <code>result.summary</code> stating that
+nothing was charged.</p>
+<h3 id="96-states">9.6 States</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Operation state</th>
+<th>Calendar</th>
+<th>Money</th>
+<th>Meaning for the stay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proposed</code></td>
+<td>Held (instant) or not held (request)</td>
+<td>Nothing</td>
+<td>Awaiting the traveller (instant) or the Host (request, §10)</td>
+</tr>
+<tr>
+<td><code>in_progress</code></td>
+<td>Held</td>
+<td>Authorisation or payment underway</td>
+<td>Confirmed by the traveller; payment or verification pending</td>
+</tr>
+<tr>
+<td><code>succeeded</code></td>
+<td>Booked</td>
+<td>As <code>payment_schedule</code></td>
+<td>The stay is booked. <code>result.data.livstay</code> carries the booking (§12.1).</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Released</td>
+<td>Anything taken is returned; <code>result.summary</code> says what</td>
+<td>Not booked</td>
+</tr>
+<tr>
+<td><code>cancelled</code></td>
+<td>Released</td>
+<td>Nothing taken</td>
+<td>Declined or withdrawn before confirmation</td>
+</tr>
+<tr>
+<td><code>expired</code></td>
+<td>Released</td>
+<td>Nothing taken</td>
+<td>Not confirmed in time</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="10-requests-and-counter-offers">10. Requests and counter-offers</h2>
+<h3 id="101-requests">10.1 Requests</h3>
+<p>When the Quote's <code>instant</code> is <code>false</code>, proposing a booking makes a <strong>request</strong>: an operation in state
+<code>proposed</code> that does not hold the calendar and cannot yet be confirmed. Its <code>expires_at</code> is at most
+72 hours ahead, and it carries <code>terms.livstay.awaiting: "host"</code>. Confirming it fails with
+<code>awaiting_host</code> until the Host acts.</p>
+<p>The Host either:</p>
+<ul>
+<li><strong>accepts</strong>: the Host Platform issues a new revision with <code>awaiting: "traveller"</code>, holds the
+  calendar and sets <code>expires_at</code> at most 15 minutes ahead (or at most 24 hours ahead if it notifies
+  the traveller's agent through the booking conversation, §12.2); or</li>
+<li><strong>counters</strong>: a new revision with different terms (§10.2); or</li>
+<li><strong>declines</strong>: the operation becomes <code>cancelled</code>.</li>
+</ul>
+<h3 id="102-counter-offers">10.2 Counter-offers</h3>
+<p>A counter is a new revision of the same operation. Each counter revision <strong>MUST</strong> carry:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>terms.livstay.proposed_by</code></td>
+<td><code>host</code>, <code>host_agent</code> or <code>traveller_agent</code>.</td>
+</tr>
+<tr>
+<td><code>terms.livstay.reason</code></td>
+<td>Plain language. REQUIRED when <code>proposed_by</code> is <code>host_agent</code>: which of the Host's rules produced this counter.</td>
+</tr>
+<tr>
+<td><code>terms.livstay.counter_no</code></td>
+<td>1, 2 or 3.</td>
+</tr>
+<tr>
+<td><code>terms.livstay.quote_id</code>, <code>terms.livstay.quote_signature</code></td>
+<td>A new Quote (§7.2) the Host Platform issues for this revision's Stay and total. Its <code>expires_at</code> is no earlier than the revision's. It replaces the earlier Quote for this operation only.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rules:</p>
+<ul>
+<li><strong>Only kinder.</strong> A counter from <code>host</code> or <code>host_agent</code> <strong>MUST NOT</strong> be worse for the traveller than
+  the Home's published Terms for the same Stay: no higher total, no stricter cancellation, no larger
+  deposit.</li>
+<li><strong>At most three counters</strong> per operation, from either side. After the third, no party may counter
+  again: a revision awaiting the Host can still be accepted or declined as in §10.1, and a revision
+  awaiting the traveller can be confirmed or cancelled. An acceptance is not a counter.</li>
+<li>A traveller's agent proposes a counter with <code>POST {endpoint}/bookings/{operation_id}/counter</code>
+  carrying the changed <code>check_in</code>, <code>check_out</code>, <code>guests</code> or a requested <code>total</code>, and a <code>note</code>. The
+  Host Platform answers with the operation, unchanged or as a new revision with <code>proposed_by:
+  "traveller_agent"</code> and <code>awaiting: "host"</code>.</li>
+<li>Every revision needs the traveller's fresh approval before confirmation (§9.3), and is checked
+  against its own Quote, never the one the operation started from.</li>
+</ul>
+<h3 id="103-countering-within-bounds">10.3 Countering within bounds</h3>
+<p>If <code>decision_mode</code> is <code>auto_counter</code>, the Host Platform <strong>MAY</strong> issue counters as <code>host_agent</code> without
+the Host, only within bounds the Host set (for example a lowest acceptable total, shorter dates, a
+split stay). The bounds themselves are not published. Each such counter <strong>MUST</strong> carry a <code>reason</code>
+and <strong>MUST</strong> be visible to the Host in the same record.</p>
+<h2 id="11-payment">11. Payment</h2>
+<p>Poppy leaves payments as an open topic, so this draft defines only the hand-off.</p>
+<ul>
+<li><code>terms.livstay.due_now</code> says what is taken when the booking is confirmed. When it is non-zero, the
+  Host Platform collects it on its own page: on confirmation the operation goes <code>in_progress</code>, and a
+  conversation message carries <code>{ "type": "livstay.org/stays#payment_required", "url": &lt;payment page&gt;,
+  "by": &lt;timestamp&gt; }</code>. With <code>web.browser_session_endpoint</code> (Poppy section 5) the page opens in the
+  traveller's Session, so the traveller is already identified.</li>
+<li>An agent <strong>MUST NOT</strong> collect card or bank details from the traveller for the Host Platform.</li>
+<li>If payment is not completed by <code>by</code> (at most the end of the hold), the operation ends <code>failed</code> and
+  the hold is released.</li>
+<li>Later instalments follow <code>payment_schedule</code>; the Host Platform requests them through the booking
+  conversation (§12.2). A missed instalment is handled as the Terms say; it <strong>MUST NOT</strong> silently
+  cancel the booking without a message to the traveller.</li>
+</ul>
+<p>When Poppy defines payments, a later draft will adopt it and this section will become a fallback.</p>
+<h2 id="12-after-booking">12. After booking</h2>
+<h3 id="121-the-booking">12.1 The booking</h3>
+<p>When a booking operation succeeds, <code>result.data.livstay</code> carries:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>booking_id</code></td>
+<td>Prefixed <code>bkg_</code>. MAY equal <code>operation_id</code>.</td>
+</tr>
+<tr>
+<td><code>home_id</code>, <code>check_in</code>, <code>check_out</code>, <code>guests</code></td>
+<td>The Stay booked.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>Exact address and coordinates.</td>
+</tr>
+<tr>
+<td><code>check_in_instructions</code></td>
+<td>When they will be sent, or the instructions.</td>
+</tr>
+<tr>
+<td><code>conversation_id</code></td>
+<td>The booking conversation (§12.2).</td>
+</tr>
+<tr>
+<td><code>receipt</code></td>
+<td>A Receipt (§13.1).</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>GET {endpoint}/bookings</code> lists the signed-in traveller's bookings with this Host Platform.</p>
+<h3 id="122-the-booking-conversation">12.2 The booking conversation</h3>
+<p>Each booking has one Poppy conversation, opened by the Host Platform, in which the Host and the
+traveller's agent talk and the Host Platform posts updates. Updates carry <code>data</code>
+<code>{ "type": "livstay.org/stays#event", "event": &lt;event&gt;, "booking_id", "at" }</code>, where <code>event</code> is one of
+<code>booked</code>, <code>changed</code>, <code>payment_due</code>, <code>payment_received</code>, <code>check_in_details</code>, <code>checked_in</code>,
+<code>checked_out</code>, <code>deposit_released</code>, <code>claim_opened</code>, <code>claim_decided</code>, <code>cancelled</code>.</p>
+<p>Poppy has no push channel yet. Agents read the conversation with Poppy's <code>wait</code>/cursor or SSE.</p>
+<h3 id="123-contact">12.3 Contact</h3>
+<p>The Host and the traveller talk through the Host Platform's relay by default. If the traveller grants
+<code>livstay:share_contact</code>, the Host Platform <strong>MAY</strong> give each party the other's direct details. The
+traveller <strong>MAY</strong> revoke the grant; after revocation the Host Platform <strong>MUST</strong> stop releasing details
+it has not already released.</p>
+<h3 id="124-changes-and-cancellations">12.4 Changes and cancellations</h3>
+<ul>
+<li><strong>Change:</strong> <code>POST {endpoint}/bookings/{booking_id}/changes</code> with the new dates or party. The Host
+  Platform answers with a new operation (<code>action: "change"</code>) whose terms state the price difference
+  and the new cancellation dates.</li>
+<li><strong>Cancel:</strong> <code>POST {endpoint}/bookings/{booking_id}/cancellation</code>. The Host Platform answers with an
+  operation (<code>action: "cancel"</code>) whose terms state the refund under the cancellation terms the
+  traveller approved: those of the Quote bound to the booking's confirmed revision, or of a later
+  approved change. A Host Platform <strong>MUST NOT</strong> apply a stricter policy published after booking. It
+  <strong>MAY</strong> apply a more generous one.</li>
+<li>Both need the traveller's approval like a booking. A Host-initiated cancellation is not an
+  operation the agent confirms: it arrives as a <code>cancelled</code> event with the refund stated.</li>
+</ul>
+<h2 id="13-receipts-and-attestations">13. Receipts and attestations</h2>
+<h3 id="131-receipts">13.1 Receipts</h3>
+<p>Every write a Host Platform performs for an agent (booking, change, cancel, counter, contact grant or revocation)
+<strong>MUST</strong> produce a Receipt: a compact JWS [RFC7515] signed with a key from <code>keys</code>, whose payload is:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iss</code></td>
+<td>The Host Platform's <code>auth.issuer</code>.</td>
+</tr>
+<tr>
+<td><code>sub</code></td>
+<td>The traveller's Poppy <code>sub</code>.</td>
+</tr>
+<tr>
+<td><code>client_id</code></td>
+<td>The agent.</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td><code>book</code>, <code>change</code>, <code>cancel</code>, <code>counter</code>, <code>share_contact</code>, <code>revoke_contact</code>.</td>
+</tr>
+<tr>
+<td><code>booking_id</code></td>
+<td>The booking concerned, once one exists. Omitted before a booking succeeds.</td>
+</tr>
+<tr>
+<td><code>operation_id</code>, <code>revision</code></td>
+<td>For <code>book</code>, <code>change</code>, <code>cancel</code> and <code>counter</code>: the operation and the revision the write produced or confirmed. Omitted for contact actions.</td>
+</tr>
+<tr>
+<td><code>confirmed</code></td>
+<td><code>true</code> when the write is the confirmation of a revision; <code>false</code> when it only created or revised one (a proposal or a counter).</td>
+</tr>
+<tr>
+<td><code>approved_by</code></td>
+<td>When <code>confirmed</code> is <code>true</code>, the value from the confirmation. Otherwise <code>null</code>: no approval is claimed.</td>
+</tr>
+<tr>
+<td><code>scopes</code></td>
+<td>Scopes the token carried.</td>
+</tr>
+<tr>
+<td><code>terms_hash</code></td>
+<td>For operation actions: SHA-256 of the canonical JSON [RFC8785] of that revision's <code>terms.livstay</code>. Omitted for contact actions.</td>
+</tr>
+<tr>
+<td><code>iat</code></td>
+<td>When performed.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A Host Platform <strong>MUST NOT</strong> put a value in <code>approved_by</code> for a write that confirmed nothing.</p>
+<p>The Host sees the same record on the booking. A Receipt proves what the Host Platform did and on
+whose stated approval; like a Poppy confirmation, it does not prove what the traveller saw.</p>
+<h3 id="132-attestations">13.2 Attestations</h3>
+<p>An Attestation is a signed claim about a Home, Host or traveller, as a W3C Verifiable Credential
+[VC-DATA-MODEL] in JWT form. Anyone may issue one: a Host Platform, a review service, an insurer, an
+inspection company. Agents decide whose signatures they trust. A Host Platform <strong>MAY</strong> carry
+Attestations about its Homes in <code>attestations</code> and <strong>MUST NOT</strong> alter them.</p>
+<h3 id="133-traveller-tiers">13.3 Traveller tiers</h3>
+<p>A traveller tier is an Attestation about the traveller, presented by the agent in
+<code>traveller.tier_credential</code>, whose <code>credentialSubject</code> includes <code>tier</code> (one of <code>new</code>, <code>verified</code>,
+<code>trusted</code>, <code>established</code>) and is bound to the traveller's Poppy <code>sub</code> at this Host Platform or to a
+key the agent proves. A Host Platform decides which issuers it accepts and <strong>MUST</strong> publish that
+list at <code>{endpoint}/tier-issuers</code>. An unaccepted or absent credential means <code>new</code>.</p>
+<h2 id="14-errors">14. Errors</h2>
+<p>Errors use Poppy's error format.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>home_not_found</code></td>
+<td>404</td>
+<td>Unknown Home, or not published to this client.</td>
+</tr>
+<tr>
+<td><code>dates_unavailable</code></td>
+<td>409</td>
+<td>The Stay can no longer be held. The Quote's price is not changed.</td>
+</tr>
+<tr>
+<td><code>stay_invalid</code></td>
+<td>400</td>
+<td>Breaks <code>min_nights</code>, <code>max_nights</code>, <code>max_guests</code> or arrival or departure rules. The response says which.</td>
+</tr>
+<tr>
+<td><code>quote_expired</code></td>
+<td>409</td>
+<td>The Quote has passed <code>expires_at</code>. Get a new Quote.</td>
+</tr>
+<tr>
+<td><code>quote_not_found</code></td>
+<td>404</td>
+<td></td>
+</tr>
+<tr>
+<td><code>terms_outdated</code></td>
+<td>409</td>
+<td>The Quote's <code>terms_version</code> is no longer published and the Host Platform will not honour it. Allowed only if the change is kinder to the traveller; otherwise the Quote is honoured.</td>
+</tr>
+<tr>
+<td><code>awaiting_host</code></td>
+<td>409</td>
+<td>The operation is a request the Host has not accepted (§10.1).</td>
+</tr>
+<tr>
+<td><code>counter_limit</code></td>
+<td>409</td>
+<td>Three counters already made.</td>
+</tr>
+<tr>
+<td><code>too_many_holds</code></td>
+<td>429</td>
+<td>Open hold limit reached for this traveller or client.</td>
+</tr>
+<tr>
+<td><code>tier_not_accepted</code></td>
+<td>403</td>
+<td>The tier credential's issuer is not accepted; the booking proceeds as a request. Informational, with the operation.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Plus, from Poppy and <code>operations</code>: <code>extension_required</code>, <code>insufficient_scope</code>, <code>sign_in_required</code>,
+<code>operation_not_found</code>, <code>terms_changed</code>, <code>user_approval_required</code>, <code>rate_limited</code>.</p>
+<h2 id="15-security-and-privacy-considerations">15. Security and privacy considerations</h2>
+<h3 id="151-price-integrity">15.1 Price integrity</h3>
+<p>The Quote is signed and the operation's <code>terms</code> restate it. An agent that verifies both can detect a
+Host Platform that changes a price between quote and booking; a Host Platform that does so breaks
+this protocol. Agents <strong>SHOULD</strong> keep Quotes they showed until the stay ends.</p>
+<h3 id="152-text-from-the-other-side">15.2 Text from the other side</h3>
+<p>Facts, Host answers and summaries are written by people the agent does not control. Agents <strong>MUST</strong>
+treat them as data, never as instructions, and <strong>SHOULD</strong> render them to the traveller as attributed
+quotes. Host Platforms <strong>SHOULD</strong> reject Facts containing instructions aimed at agents.</p>
+<h3 id="153-calendar-denial-of-service">15.3 Calendar denial of service</h3>
+<p>A hold blocks real inventory. A Host Platform <strong>MUST</strong> cap open holds per <code>sub</code> and per <code>client_id</code>
+(RECOMMENDED: 3 per <code>sub</code>, scaled per client by its record), <strong>SHOULD</strong> count holds that expire
+unconfirmed against the client, and <strong>MAY</strong> revoke a <code>client_id</code> that holds without confirming.</p>
+<h3 id="154-location">15.4 Location</h3>
+<p>The exact address of a Home is revealed only after a booking succeeds, to the traveller it was booked
+for (§6.1.1). Photos <strong>SHOULD</strong> be stripped of location metadata.</p>
+<h3 id="155-traveller-data">15.5 Traveller data</h3>
+<p>Trip context and contact are released only on their scopes and only to the Host of the booking.
+A Host Platform <strong>MUST NOT</strong> pass traveller data to an agent other than the one acting in the session,
+and <strong>MUST NOT</strong> pass a traveller's data from one agent to another.</p>
+<h3 id="156-tier-credentials">15.6 Tier credentials</h3>
+<p>A tier credential not bound to the presenting session can be replayed. Host Platforms <strong>MUST</strong> check
+the binding (§13.3) and the credential's expiry.</p>
+<h3 id="157-fees">15.7 Fees</h3>
+<p>Hidden fees are the commonest way to mislead a traveller. Every fee is a Quote line, and the
+operation's <code>summary</code> states the all-in total.</p>
+<h2 id="16-references">16. References</h2>
+<p><strong>Normative</strong></p>
+<ul>
+<li>[POPPY] Personal Agent Protocol, draft 0.2. https://personalagentprotocol.org/docs/introduction</li>
+<li>[POPPY-OPS] Personal Agent Protocol, Operations extension, version 1.
+  https://personalagentprotocol.org/docs/0.2/extensions/operations</li>
+<li>[RFC2119] Key words for use in RFCs to Indicate Requirement Levels.</li>
+<li>[RFC8174] Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words.</li>
+<li>[RFC7515] JSON Web Signature. [RFC7517] JSON Web Key. [RFC8785] JSON Canonicalization Scheme.</li>
+<li>[VC-DATA-MODEL] W3C Verifiable Credentials Data Model 2.0.</li>
+</ul>
+<p><strong>Informative</strong></p>
+<ul>
+<li>[SCHEMA] schema.org <code>Accommodation</code>, <code>LodgingBusiness</code>.</li>
+<li>[ISO4217] Currency codes. [BCP47] Language tags.</li>
+</ul>
+<hr />
+<h2 id="appendix-a-a-complete-booking-end-to-end">Appendix A. A complete booking, end to end</h2>
+<ol>
+<li>Agent fetches <code>https://stay.livaround.com/.well-known/poppy.json</code>, sees <code>livstay.org/stays</code>
+   level 3 and <code>operations</code> version 1.</li>
+<li>Signed out, <code>GET /livstay/v0/homes?area=north-goa&amp;check_in=2026-12-27&amp;check_out=2027-01-03&amp;guests=6</code>.</li>
+<li>Agent reads three Homes' Facts and tells the traveller why Casa Mira fits, citing
+   <code>facts_version</code> 9.</li>
+<li><code>POST /homes/home_7Qp2/quotes</code> → <code>qt_P8m1</code>, total INR 1,29,500, expires in 24 h. The traveller
+   asks to think about it overnight.</li>
+<li>Next morning: <code>livstay:enquire</code>, a conversation: "Is the pool fenced? Our youngest is two." Host
+   Rhea answers in 40 minutes; answer signed.</li>
+<li>Traveller says book it. Agent signs the traveller in (Poppy), with <code>livstay:book</code> and
+   <code>livstay:share_trip_context</code>.</li>
+<li><code>POST /livstay/v0/bookings</code> with <code>qt_P8m1</code> → <code>202</code>, operation <code>bk_4Hn9</code> <code>proposed</code>, calendar
+   held 15 minutes.</li>
+<li>Agent shows the <code>summary</code>; checks <code>total</code> against the Quote; traveller approves.</li>
+<li><code>POST /poppy/operations/bk_4Hn9/confirm</code> <code>{ "revision": 1, "approved_by": "user" }</code> → <code>in_progress</code>;
+   booking conversation posts <code>payment_required</code> with a page URL.</li>
+<li>Traveller pays INR 38,850 on that page. Operation → <code>succeeded</code>; <code>result.data.livstay</code> carries the
+    address, the booking conversation and the Receipt.</li>
+<li>Twelve days before arrival the conversation posts <code>payment_due</code>; on the day, <code>check_in_details</code>.</li>
+</ol>
+<h2 id="appendix-b-how-livaround-implements-this-draft">Appendix B. How LivAround implements this draft</h2>
+<p>Informative. LivAround is the reference Host Platform.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>LivStay</th>
+<th>LivAround</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host Platform issuer</td>
+<td><code>stay.livaround.com</code>, one OAuth server per operator domain</td>
+</tr>
+<tr>
+<td>Home</td>
+<td><code>Property</code> (linked rooms are separate Homes; occupancy computed across the group)</td>
+</tr>
+<tr>
+<td>Facts</td>
+<td>Facts page on <code>booking.livaround.com</code>, host-reviewed</td>
+</tr>
+<tr>
+<td>Terms</td>
+<td><code>LivinbnbListingTerms</code> money subset; <code>decision_mode</code> from <code>decisionMode</code></td>
+</tr>
+<tr>
+<td>Protection</td>
+<td>Deposit ladder, evidence protocol, published claim rules; underwriter <code>host</code> in v1</td>
+</tr>
+<tr>
+<td>Enquiries, booking conversation</td>
+<td>The Masked Relay; Host replies over WhatsApp</td>
+</tr>
+<tr>
+<td><code>auto_counter</code></td>
+<td><code>AUTO_COUNTER_WITHIN_BOUNDS</code> with <code>autoCounterFloorPct</code> and <code>autoCounterMoves</code></td>
+</tr>
+<tr>
+<td>Tier credential</td>
+<td>livscore guest credential</td>
+</tr>
+<tr>
+<td>Fees</td>
+<td>Flat 5% <code>platform_fee</code> line; <code>agent_fee</code> as its own line</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="appendix-c-open-topics-on-the-path-to-10">Appendix C. Open topics on the path to 1.0</h2>
+<ul>
+<li><strong>Payments.</strong> Adopt Poppy's payment design when it exists (§11).</li>
+<li><strong>Push.</strong> Booking events need Poppy push notifications; until then, conversations.</li>
+<li><strong>Attachments.</strong> Receipts and check-in packs as Poppy attachments when defined.</li>
+<li><strong>Multi-home stays.</strong> One booking across linked Homes (a villa and its cottage).</li>
+<li><strong>Points and exchange.</strong> A member-authenticated extension for swaps and points, if ever.</li>
+<li><strong>Search.</strong> Whether <code>GET /homes</code> needs a shared query vocabulary across Host Platforms.</li>
+<li><strong>Directory.</strong> How agents find Host Platforms beyond domains they already know.</li>
+<li><strong>Governance.</strong> Moving the spec to a neutral home once there are independent implementers.</li>
+</ul><nav class="pager" aria-label="Pages"><a href="introduction.html"><small>Previous</small>Introduction</a><a href="guide-host-platforms.html" style="text-align:right"><small>Next</small>Host platforms</a></nav></main></div>
+<footer class="foot"><div class="in"><span>LivStay · an open protocol started by LivAround Ltd</span><span><a href="license.html">Apache License 2.0</a> · <a href="https://github.com/livaroundltd/livstay">GitHub</a> · Examples are fictional</span></div></footer>
+</body></html>
