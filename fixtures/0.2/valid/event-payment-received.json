@@ -1,0 +1,15 @@
+{
+  "event_id": "evt_1",
+  "booking_id": "bkg_4Hn9",
+  "type": "payment_received",
+  "at": "2026-10-24T09:28:20Z",
+  "summary": "INR 38,850.00 received.",
+  "data": {
+    "amount": {
+      "amount": "38850.00",
+      "currency": "INR"
+    },
+    "reference": "pay_81kq"
+  },
+  "receipt": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3QtMjAyNi0xMCIsInR5cCI6ImxpdnN0YXktcmVjZWlwdCtqd3MifQ.eyJhY3Rpb24iOiJwYXltZW50X3JlY2VpdmVkIiwiYW1vdW50Ijp7ImFtb3VudCI6IjM4ODUwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiYm9va2luZ19pZCI6ImJrZ180SG45IiwiZXZlbnRfaWQiOiJldnRfMSIsImlhdCI6MTc5Mjc2MDkwMCwiaW5pdGlhdGVkX2J5IjoiaG9zdF9wbGF0Zm9ybSIsImlzcyI6Imh0dHBzOi8vc3RheS5leGFtcGxlIiwicmVjZWlwdF9pZCI6InJjcF85VHEyIiwicmVmZXJlbmNlIjoicGF5Xzgxa3EiLCJyZXZpc2lvbiI6IjAuMiIsInN1YiI6InVzcl84M2pkIn0._luvE-XGfjCTY5wzdDjIjrpb8mGTNR8mwQsAk8DRzNDp4uWRaF3YsFtwj5vEvlkkiQ-QRRnKYDgWpko-e3pBCg"
+}

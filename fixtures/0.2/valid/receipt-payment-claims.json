@@ -1,0 +1,16 @@
+{
+  "iss": "https://stay.example",
+  "revision": "0.2",
+  "receipt_id": "rcp_9Tq2",
+  "action": "payment_received",
+  "initiated_by": "host_platform",
+  "sub": "usr_83jd",
+  "booking_id": "bkg_4Hn9",
+  "event_id": "evt_1",
+  "amount": {
+    "amount": "38850.00",
+    "currency": "INR"
+  },
+  "reference": "pay_81kq",
+  "iat": 1792760900
+}

@@ -1,5 +1,7 @@
 # LivStay
 
+> **Superseded by [draft 0.2](livstay-0.2.md).** Kept for reference; do not implement.
+
 **An open protocol for personal agents to find, ask about and book independent homes.**
 
 Draft 0.1 · 23 October 2026 · Extension `livstay.org/stays`, version `"0"` · Builds on Personal

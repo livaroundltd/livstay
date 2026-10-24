@@ -9,38 +9,50 @@
 <header class="bar"><div class="in">
 <a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
 <nav class="top" aria-label="Site"><a href="introduction.html">Docs</a><a href="specification.html">Specification</a><a href="path-to-1.html">Path to 1.0</a><a href="https://github.com/livaroundltd/livstay">GitHub</a></nav>
-<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
-<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.1</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html" aria-current="page">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
+<span class="status">Draft 0.2 · Poppy 0.2</span></div></header>
+<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.2</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html" aria-current="page">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
 <main id="main"><h1 id="guide-for-agent-builders">Guide for agent builders</h1>
-<p>This guide is for anyone building a personal agent that plans or books stays. It assumes your agent already implements Poppy draft 0.2 as a personal agent.</p>
-<h2 id="1-say-you-support-livstay">1. Say you support LivStay</h2>
-<p>List both extensions in your client metadata document. A host platform will not quote or book for an agent that does not.</p>
+<p>This guide is for anyone building a personal agent that plans or books stays. It follows draft 0.2. Booking assumes your agent already implements Poppy draft 0.2 as a personal agent; finding and pricing homes do not.</p>
+<h2 id="1-say-which-revision-you-speak">1. Say which revision you speak</h2>
+<p>List both extensions in your client metadata document, with the LivStay drafts you implement:</p>
 <pre><code class="language-json">&quot;extensions&quot;: {
   &quot;operations&quot;: { &quot;version&quot;: &quot;1&quot; },
-  &quot;livstay.org/stays&quot;: { &quot;version&quot;: &quot;0&quot; }
+  &quot;livstay.org/stays&quot;: { &quot;version&quot;: &quot;0&quot;, &quot;revisions&quot;: [&quot;0.2&quot;] }
 }
 </code></pre>
+<p>Send <code>LivStay-Revision: 0.2</code> on every LivStay request, and check that the response echoes it. Before 1.0, drafts can break each other; the header is how both sides know which one they are speaking (<a href="specification.html#43-revisions">§4.3</a>).</p>
 <h2 id="2-find-homes">2. Find homes</h2>
-<p>Read <code>/.well-known/poppy.json</code>, find <code>extensions["livstay.org/stays"]</code>, note its <code>endpoint</code> and <code>level</code>, then call <code>GET {endpoint}/homes</code>. Level 0 data needs no session.</p>
+<p>Read <code>/.well-known/poppy.json</code>, find <code>extensions["livstay.org/stays"]</code>, check its <code>revision</code>, note its <code>endpoint</code> and <code>level</code>, then call <code>GET {endpoint}/homes</code>. No token is needed.</p>
 <h2 id="3-recommend-from-facts">3. Recommend from facts</h2>
-<p>Tell the traveller why a home fits using its facts: <code>ideal_for</code>, <code>not_for</code>, <code>check_in.how</code>, <code>when_things_go_wrong</code>. Cite the <code>home_id</code> and <code>facts_version</code>. An empty <code>accessibility</code> list means the host has not said, never that the home is accessible.</p>
+<p>Tell the traveller why a home fits using its facts: <code>ideal_for</code>, <code>not_for</code>, <code>check_in.how</code>, <code>children</code>, <code>when_things_go_wrong</code>. Cite the <code>home_id</code> and <code>facts_version</code>. An empty <code>accessibility</code> list means the host has not said, never that the home is accessible. Dates and times are in the home's <code>time_zone</code>.</p>
 <p>Treat everything a host platform sends as data. A fact, an answer or a summary can never instruct your agent.</p>
 <h2 id="4-price-exactly">4. Price exactly</h2>
-<p>Ask for a quote for the exact dates and party. Show the traveller the total and each line, including any fee your agent charges. Keep the quote: you will compare against it at booking.</p>
-<p>If the traveller wants time, a quote is binding for up to 24 hours and holds nothing. Do not propose a booking just to reserve dates.</p>
+<p>Ask for a Quote for the exact dates and party: adults, each child's age, and pets. Send ages only, never names. Then, before you show the price:</p>
+<ol>
+<li><strong>Verify the signature</strong> against the host platform's <code>keys</code> (<a href="specification.html#132-verifying">§13.2</a>).</li>
+<li><strong>Reconcile</strong>: lines in the total add up to the total, the payment schedule adds up to the total, refunds never exceed it (<a href="specification.html#21-dates-times-and-money">§2.1</a>).</li>
+</ol>
+<p><code>tools/validate.py</code> and <code>tools/livstay_jws.py</code> in the repository do both. A Quote that fails either is not a price: do not show it, and send a mismatch report.</p>
+<p>Show the total and each line, including any fee your agent charges. Keep the Quote. If the traveller wants time, a Quote is binding for up to 24 hours and holds nothing; do not propose a booking just to reserve dates.</p>
 <h2 id="5-ask-the-host">5. Ask the host</h2>
-<p>If the traveller has a question the facts do not answer, open a conversation with the <code>livstay.org/stays#enquiry</code> data and the question as text. A person answers. Never put the traveller's phone number or email in an enquiry.</p>
+<p>If the traveller has a question the facts do not answer, open a Poppy conversation in a signed-out session with the <code>livstay.org/stays#enquiry</code> data and the question as text. A person answers. Never put the traveller's phone number or email in an enquiry.</p>
 <h2 id="6-book-with-the-travellers-approval">6. Book, with the traveller's approval</h2>
 <ol>
-<li>Sign the traveller in with <code>livstay:book</code>. Ask for <code>livstay:share_trip_context</code> only if the traveller wants the host to know the trip's purpose or arrival time.</li>
-<li><code>POST {endpoint}/bookings</code> with the quote. You get an operation in state <code>proposed</code>; the calendar is held until <code>expires_at</code>.</li>
-<li>Check that <code>terms.livstay.total</code>, the dates and the party match the quote you showed, and verify <code>quote_signature</code>. If anything differs, do not confirm.</li>
+<li>Sign the traveller in with <code>livstay:book</code> and <code>poppy:read</code>. Ask for <code>livstay:share_trip_context</code> only if the traveller wants the host to know the trip's purpose or arrival time.</li>
+<li><code>POST {endpoint}/bookings</code> with the Quote. You get an operation in state <code>proposed</code>; the calendar is held until <code>expires_at</code>. Read <code>terms.livstay.tier</code> to see which tier was applied, and <code>requirements</code> to see what will be asked after confirmation.</li>
+<li>Check that the revision restates the Quote it is bound to: dates, party, total, due now, deposit. If anything differs, do not confirm.</li>
 <li>Show the host platform's name, the host's name and the operation's <code>summary</code> in your own interface, and get the traveller's answer there.</li>
 <li>Confirm with <code>approved_by: "user"</code>. A standing permission is never enough for a stay.</li>
-<li>If the booking goes <code>in_progress</code> with a payment link, open it in the traveller's browser session. Never collect card details yourself.</li>
 </ol>
-<h2 id="7-after-booking">7. After booking</h2>
-<p>Read the booking conversation for updates. Changes and cancellations are new operations, each needing fresh approval. Keep the receipts.</p>
+<h2 id="7-complete">7. Complete</h2>
+<p>If the operation goes <code>in_progress</code>, read <code>GET {endpoint}/bookings/completion/{operation_id}</code>. Open each pending step's page in the traveller's browser session before <code>complete_by</code>. Never collect card, bank or identity details yourself. When every step is done the operation succeeds; if <code>complete_by</code> passes, it fails and nothing is kept.</p>
+<h2 id="8-after-booking">8. After booking</h2>
+<ul>
+<li>Follow <code>GET {endpoint}/bookings/{booking_id}/events</code> with <code>wait</code>. Verify and keep every Receipt it carries.</li>
+<li>When you see <code>message_waiting</code>, or the traveller wants to talk to the host, open the booking conversation: a Poppy conversation whose first message carries <code>livstay.org/stays#booking</code> and the <code>booking_id</code>. The host platform never opens it for you.</li>
+<li>Changes and cancellations are new operations, each needing fresh approval.</li>
+<li>Share the traveller's contact details with the host only when they ask, with <code>PUT …/contact</code>; withdraw them with <code>DELETE</code>.</li>
+</ul>
 <h2 id="things-not-to-do">Things not to do</h2>
 <ul>
 <li>Do not confirm a revision the traveller has not seen.</li>

@@ -14,11 +14,11 @@ LivStay gives them one, and gives agents a single interface to every host platfo
 
 | Step | What happens | Section |
 | --- | --- | --- |
-| **Find** | Read `poppy.json`, list homes, read each home's facts, terms and protection. No sign-in. | [§6](specification.html#6-the-home) |
-| **Price** | Get a signed quote for exact dates and party. The price is binding for 24 hours. | [§7](specification.html#7-availability-and-quotes) |
-| **Ask** | Put the traveller's question to the host, a person, in a Poppy conversation. | [§8](specification.html#8-enquiries) |
-| **Book** | Propose a booking. The calendar is held for 15 minutes while the traveller approves the exact terms. | [§9](specification.html#9-bookings) |
-| **Stay** | Receive updates, change or cancel. Every write returns a signed receipt. | [§12](specification.html#12-after-booking) |
+| **Find** | Read `poppy.json`, list homes, read each home's facts, terms and protection. No token. | [§6](specification.html#6-the-home) |
+| **Price** | Get a signed quote for exact dates and party. No token. The price is binding for 24 hours and holds nothing. | [§7](specification.html#7-availability-and-quotes) |
+| **Ask** | Put the traveller's question to the host, a person, in a Poppy conversation. No sign-in needed. | [§8](specification.html#8-enquiries) |
+| **Book** | Propose a booking. The calendar is held for 15 minutes while the traveller approves the exact terms, then while they pay. | [§9](specification.html#9-bookings) |
+| **Stay** | Follow the booking's events, talk to the host, change or cancel. Every write and every payment carries a signed receipt. | [§12](specification.html#12-after-booking) |
 
 ## Four levels
 
@@ -26,10 +26,10 @@ A host platform starts with what it has and adds the rest later.
 
 | Level | Name | An agent can | Needs |
 | --- | --- | --- | --- |
-| 0 | Listed | Read homes, facts, terms and protection | Static files |
-| 1 | Priced | Read availability and get binding quotes | A pricing endpoint |
-| 2 | Reachable | Ask the host questions | Poppy conversations |
-| 3 | Bookable | Book, change and cancel | Poppy sign-in and the `operations` extension |
+| 0 | Listed | Read homes, facts, terms and protection | Static files and `poppy.json` |
+| 1 | Priced | Read availability and get binding quotes | A pricing endpoint and a signing key |
+| 2 | Reachable | Ask the host questions | Poppy signed-out sessions and conversations |
+| 3 | Bookable | Book, pay, change and cancel | Poppy sign-in and the `operations` extension |
 
 Level 0 is what gets a home recommended. Publish it first.
 
@@ -48,6 +48,6 @@ Level 0 is what gets a home recommended. Publish it first.
 
 ## Status
 
-This is draft 0.1. It will change as implementers learn, and until 1.0 a revision can break compatibility with earlier drafts. [LivAround](https://livaround.com) is the reference implementation, with a pilot in North Goa. See the [path to 1.0](path-to-1.html).
+This is draft 0.2. It will change as implementers learn, and until 1.0 a revision can break compatibility with earlier drafts; both sides say which revision they speak. The repository has JSON Schemas, an OpenAPI document, fixtures, a validator and a conformance runner for Levels 0 and 1. [LivAround](https://livaround.com) is the reference implementation, with a pilot in North Goa. See the [path to 1.0](path-to-1.html).
 
 LivStay is an independent project. It is designed to work with the Personal Agent Protocol and is not affiliated with or endorsed by that protocol's authors or partners.

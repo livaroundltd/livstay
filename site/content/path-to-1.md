@@ -6,6 +6,7 @@ LivStay is a draft. This page says how it becomes stable and what is deliberatel
 
 - Anyone can build against the draft and send feedback.
 - LivAround is implementing it as the reference host platform, with a pilot in North Goa.
+- Draft 0.2 adds JSON Schemas, an OpenAPI document, fixtures, a validator and a Level 0–1 conformance runner. Independent host platforms should start there.
 - We are looking for a second, independent host platform implementation and for agent builders to test against it.
 - The spec changes based on what implementers learn. Until 1.0, a revision can break compatibility with earlier drafts.
 - LivStay tracks the Personal Agent Protocol. When Poppy changes, LivStay follows.
@@ -26,6 +27,8 @@ LivStay is a draft. This page says how it becomes stable and what is deliberatel
 ## Open topics
 
 These are left out on purpose and are not complete:
+
+- **Conformance for Levels 2 and 3.** The runner covers Levels 0 and 1. Enquiries and bookings need a test personal agent with a Poppy client identity, sign-in and DPoP.
 
 - **Payments.** LivStay uses a hosted payment page until Poppy defines payments, then adopts that.
 - **Push.** Booking updates ride a conversation until Poppy defines push notifications.

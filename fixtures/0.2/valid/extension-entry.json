@@ -1,0 +1,8 @@
+{
+  "version": "0",
+  "revision": "0.2",
+  "endpoint": "https://stay.example/livstay/v0",
+  "level": 3,
+  "keys": "https://stay.example/.well-known/livstay-keys.json",
+  "terms_of_service": "https://stay.example/terms"
+}

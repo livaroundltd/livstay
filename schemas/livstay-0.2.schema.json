@@ -1,0 +1,1997 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://livstay.org/schemas/livstay-0.2.schema.json",
+  "title": "LivStay draft 0.2 objects",
+  "description": "Normative shapes for LivStay draft 0.2. Reference a definition as #/$defs/<Name>. Cross-field rules (reconciliation, \u00a72.1) are checked by tools/validate.py.",
+  "$defs": {
+    "Revision": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "Money": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "additionalProperties": false
+    },
+    "Party": {
+      "type": "object",
+      "properties": {
+        "adults": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "age": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 17
+              }
+            },
+            "required": [
+              "age"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "pets": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "adults",
+        "children",
+        "pets"
+      ],
+      "additionalProperties": false
+    },
+    "ExtensionEntry": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "0"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "revisions_supported": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Revision"
+          },
+          "minItems": 1
+        },
+        "endpoint": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "keys": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "terms_of_service": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "facts_site": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        }
+      },
+      "required": [
+        "version",
+        "revision",
+        "endpoint",
+        "level"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "level": {
+                "minimum": 1
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "keys"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "level": {
+                "const": 3
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "terms_of_service"
+            ]
+          }
+        }
+      ]
+    },
+    "ClientExtensionEntry": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "0"
+        },
+        "revisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Revision"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "version",
+        "revisions"
+      ]
+    },
+    "Host": {
+      "type": "object",
+      "properties": {
+        "display_name": {
+          "type": "string"
+        },
+        "host_since": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "response_time_p50_minutes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "homes_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "display_name",
+        "host_since",
+        "languages"
+      ]
+    },
+    "Facts": {
+      "type": "object",
+      "properties": {
+        "facts_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "summary": {
+          "type": "string"
+        },
+        "ideal_for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "not_for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessibility": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "check_in": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "until": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            },
+            "how": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "from",
+            "until",
+            "how"
+          ]
+        },
+        "check_out": {
+          "type": "object",
+          "properties": {
+            "by": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+            }
+          },
+          "required": [
+            "by"
+          ]
+        },
+        "included": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "not_included": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "power_backup": {
+          "type": "string"
+        },
+        "water_backup": {
+          "type": "string"
+        },
+        "internet": {
+          "type": "string"
+        },
+        "parking": {
+          "type": "string"
+        },
+        "pets": {
+          "type": "string"
+        },
+        "smoking": {
+          "type": "string"
+        },
+        "noise": {
+          "type": "string"
+        },
+        "children": {
+          "type": "string"
+        },
+        "house_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cancellation": {
+          "type": "string"
+        },
+        "when_things_go_wrong": {
+          "type": "string"
+        },
+        "faq": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q",
+              "a"
+            ]
+          }
+        }
+      },
+      "required": [
+        "facts_version",
+        "summary",
+        "ideal_for",
+        "not_for",
+        "accessibility",
+        "check_in",
+        "check_out",
+        "included",
+        "not_included",
+        "parking",
+        "pets",
+        "smoking",
+        "noise",
+        "children",
+        "house_rules",
+        "cancellation",
+        "when_things_go_wrong"
+      ]
+    },
+    "Terms": {
+      "type": "object",
+      "properties": {
+        "terms_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "decision_mode": {
+          "enum": [
+            "instant",
+            "request",
+            "auto_counter"
+          ]
+        },
+        "instant_min_tier": {
+          "enum": [
+            "new",
+            "verified",
+            "trusted",
+            "established"
+          ]
+        },
+        "id_required": {
+          "type": "boolean"
+        },
+        "min_nights": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_nights": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_guests": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "infant_max_age": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 17
+        },
+        "infants_count": {
+          "type": "boolean"
+        },
+        "max_infants": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "min_adult_age": {
+          "type": "integer",
+          "minimum": 18
+        },
+        "pets": {
+          "type": "object",
+          "properties": {
+            "allowed": {
+              "type": "boolean"
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "allowed",
+            "max"
+          ]
+        },
+        "discounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "weekly",
+                  "monthly",
+                  "early",
+                  "late"
+                ]
+              },
+              "percent": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "percent"
+            ]
+          }
+        },
+        "channel_adjustment_percent": {
+          "type": "integer",
+          "minimum": -100,
+          "maximum": 100
+        },
+        "cancellation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "until_days_before": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "refund_percent": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "until_days_before",
+              "refund_percent"
+            ]
+          },
+          "minItems": 1
+        },
+        "deposit": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "$ref": "#/$defs/Money"
+            },
+            "mode": {
+              "enum": [
+                "none",
+                "authorise",
+                "hold"
+              ]
+            },
+            "by_tier": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "new",
+                  "verified",
+                  "trusted",
+                  "established"
+                ]
+              },
+              "additionalProperties": {
+                "$ref": "#/$defs/Money"
+              }
+            }
+          },
+          "required": [
+            "amount",
+            "mode"
+          ]
+        },
+        "payment_schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "due": {
+                "enum": [
+                  "at_booking",
+                  "days_before_check_in"
+                ]
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "percent": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "due",
+              "percent"
+            ]
+          },
+          "minItems": 1
+        },
+        "taxes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "percent": {
+                "type": "integer"
+              },
+              "amount": {
+                "$ref": "#/$defs/Money"
+              },
+              "included": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "included"
+            ]
+          }
+        }
+      },
+      "required": [
+        "terms_version",
+        "decision_mode",
+        "id_required",
+        "min_nights",
+        "max_nights",
+        "max_guests",
+        "infant_max_age",
+        "infants_count",
+        "max_infants",
+        "pets",
+        "channel_adjustment_percent",
+        "cancellation",
+        "deposit",
+        "payment_schedule",
+        "taxes"
+      ]
+    },
+    "Protection": {
+      "type": "object",
+      "properties": {
+        "underwriter": {
+          "enum": [
+            "host",
+            "insurer"
+          ]
+        },
+        "insurer": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "policy_ref": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "policy_ref"
+          ]
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "rules_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "claim_response_hours": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "appeal": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "underwriter",
+        "evidence",
+        "rules_url",
+        "claim_response_hours",
+        "appeal"
+      ],
+      "if": {
+        "properties": {
+          "underwriter": {
+            "const": "insurer"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "insurer"
+        ]
+      }
+    },
+    "Home": {
+      "type": "object",
+      "properties": {
+        "home_id": {
+          "type": "string",
+          "pattern": "^home_[A-Za-z0-9_-]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "time_zone": {
+          "type": "string",
+          "pattern": "^[A-Za-z_]+(/[A-Za-z0-9_+-]+)+$|^UTC$"
+        },
+        "description": {
+          "type": "object"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            "lat": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "lng": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "precision_m": {
+              "type": "integer",
+              "minimum": 500
+            }
+          },
+          "required": [
+            "area",
+            "country",
+            "lat",
+            "lng",
+            "precision_m"
+          ]
+        },
+        "host": {
+          "$ref": "#/$defs/Host"
+        },
+        "facts": {
+          "$ref": "#/$defs/Facts"
+        },
+        "terms": {
+          "$ref": "#/$defs/Terms"
+        },
+        "protection": {
+          "$ref": "#/$defs/Protection"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+              },
+              "caption": {
+                "type": "string"
+              },
+              "taken_on": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            },
+            "required": [
+              "url",
+              "caption"
+            ]
+          },
+          "minItems": 1
+        },
+        "photos_updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "attestations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      },
+      "required": [
+        "home_id",
+        "name",
+        "url",
+        "time_zone",
+        "description",
+        "location",
+        "host",
+        "facts",
+        "terms",
+        "protection",
+        "photos",
+        "photos_updated_at",
+        "currency",
+        "updated_at"
+      ]
+    },
+    "HomesPage": {
+      "type": "object",
+      "properties": {
+        "homes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Home"
+          }
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "homes",
+        "next_cursor"
+      ]
+    },
+    "Availability": {
+      "type": "object",
+      "properties": {
+        "home_id": {
+          "type": "string"
+        },
+        "time_zone": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "days": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "available": {
+                "type": "boolean"
+              },
+              "min_nights": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "closed_to_arrival": {
+                "type": "boolean"
+              },
+              "closed_to_departure": {
+                "type": "boolean"
+              },
+              "nightly": {
+                "$ref": "#/$defs/Money"
+              }
+            },
+            "required": [
+              "date",
+              "available",
+              "min_nights",
+              "closed_to_arrival",
+              "closed_to_departure",
+              "nightly"
+            ]
+          }
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "ttl_seconds": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "home_id",
+        "time_zone",
+        "currency",
+        "days",
+        "generated_at",
+        "ttl_seconds"
+      ]
+    },
+    "QuoteRequest": {
+      "type": "object",
+      "properties": {
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "tier_credential": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "check_in",
+        "check_out",
+        "party"
+      ],
+      "additionalProperties": false
+    },
+    "Line": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "nights",
+            "discount",
+            "cleaning",
+            "extra_guest",
+            "pet_fee",
+            "channel_adjustment",
+            "tax",
+            "platform_fee",
+            "agent_fee",
+            "other"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "amount": {
+          "$ref": "#/$defs/Money"
+        },
+        "in_total": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "label",
+        "amount",
+        "in_total"
+      ],
+      "additionalProperties": false
+    },
+    "Quote": {
+      "type": "object",
+      "properties": {
+        "quote_id": {
+          "type": "string",
+          "pattern": "^qt_[A-Za-z0-9_-]+$"
+        },
+        "home_id": {
+          "type": "string"
+        },
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "time_zone": {
+          "type": "string"
+        },
+        "terms_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Line"
+          },
+          "minItems": 1
+        },
+        "total": {
+          "$ref": "#/$defs/Money"
+        },
+        "payment_schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "due_at": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "at_booking": {
+                "type": "boolean"
+              },
+              "amount": {
+                "$ref": "#/$defs/Money"
+              }
+            },
+            "required": [
+              "due_at",
+              "at_booking",
+              "amount"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "cancellation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "until": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "Z$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "refund": {
+                "$ref": "#/$defs/Money"
+              }
+            },
+            "required": [
+              "until",
+              "refund"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "deposit": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "$ref": "#/$defs/Money"
+            },
+            "mode": {
+              "enum": [
+                "none",
+                "authorise",
+                "hold"
+              ]
+            }
+          },
+          "required": [
+            "amount",
+            "mode"
+          ],
+          "additionalProperties": false
+        },
+        "assumed_tier": {
+          "enum": [
+            "new",
+            "verified",
+            "trusted",
+            "established"
+          ]
+        },
+        "instant": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "signature": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"
+        }
+      },
+      "required": [
+        "quote_id",
+        "home_id",
+        "check_in",
+        "check_out",
+        "party",
+        "time_zone",
+        "terms_version",
+        "currency",
+        "lines",
+        "total",
+        "payment_schedule",
+        "cancellation",
+        "deposit",
+        "assumed_tier",
+        "instant",
+        "created_at",
+        "expires_at",
+        "signature"
+      ],
+      "additionalProperties": false
+    },
+    "BookingRequest": {
+      "type": "object",
+      "properties": {
+        "quote_id": {
+          "type": "string"
+        },
+        "tier_credential": {
+          "type": "string"
+        },
+        "trip_context": {
+          "type": "object",
+          "properties": {
+            "purpose": {
+              "type": "string"
+            },
+            "arrival_notes": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "quote_id"
+      ],
+      "additionalProperties": false
+    },
+    "Tier": {
+      "type": "object",
+      "properties": {
+        "presented": {
+          "type": "boolean"
+        },
+        "accepted": {
+          "type": "boolean"
+        },
+        "applied": {
+          "enum": [
+            "new",
+            "verified",
+            "trusted",
+            "established"
+          ]
+        }
+      },
+      "required": [
+        "presented",
+        "accepted",
+        "applied"
+      ],
+      "additionalProperties": false
+    },
+    "LivstayTerms": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "action": {
+          "enum": [
+            "book",
+            "change",
+            "cancel"
+          ]
+        },
+        "quote_id": {
+          "type": "string"
+        },
+        "quote_signature": {
+          "type": "string"
+        },
+        "home_id": {
+          "type": "string"
+        },
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "total": {
+          "$ref": "#/$defs/Money"
+        },
+        "due_now": {
+          "$ref": "#/$defs/Money"
+        },
+        "deposit": {
+          "type": "object",
+          "properties": {
+            "amount": {
+              "$ref": "#/$defs/Money"
+            },
+            "mode": {
+              "enum": [
+                "none",
+                "authorise",
+                "hold"
+              ]
+            }
+          },
+          "required": [
+            "amount",
+            "mode"
+          ]
+        },
+        "terms_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tier": {
+          "$ref": "#/$defs/Tier"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "payment",
+              "identity_verification"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "awaiting": {
+          "enum": [
+            "traveller",
+            "host"
+          ]
+        },
+        "proposed_by": {
+          "enum": [
+            "traveller_agent",
+            "host",
+            "host_agent"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "counter_no": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "price_difference": {
+          "$ref": "#/$defs/Money"
+        },
+        "refund": {
+          "$ref": "#/$defs/Money"
+        }
+      },
+      "required": [
+        "revision",
+        "action",
+        "home_id",
+        "check_in",
+        "check_out",
+        "party",
+        "terms_version",
+        "awaiting",
+        "proposed_by"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "book",
+                  "change"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "quote_id",
+              "quote_signature",
+              "total",
+              "due_now",
+              "requirements"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "book"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "deposit",
+              "tier"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "change"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "price_difference"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "cancel"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "refund"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "proposed_by": {
+                "const": "host_agent"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "BookingOperation": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "in_progress",
+            "succeeded",
+            "failed",
+            "cancelled",
+            "expired"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "terms": {
+          "type": "object",
+          "properties": {
+            "livstay": {
+              "$ref": "#/$defs/LivstayTerms"
+            }
+          },
+          "required": [
+            "livstay"
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "user_approval_required": {
+          "type": "boolean"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "confirmation": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "result": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "operation_id",
+        "revision",
+        "state",
+        "summary",
+        "terms",
+        "confirmation",
+        "result"
+      ]
+    },
+    "Completion": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string"
+        },
+        "complete_by": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "payment",
+                  "identity_verification"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "done",
+                  "failed"
+                ]
+              },
+              "url": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "amount": {
+                "$ref": "#/$defs/Money"
+              }
+            },
+            "required": [
+              "type",
+              "status",
+              "url"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "operation_id",
+        "complete_by",
+        "requirements"
+      ]
+    },
+    "BookingResult": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "booking_id": {
+          "type": "string",
+          "pattern": "^bkg_"
+        },
+        "home_id": {
+          "type": "string"
+        },
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "lat": {
+              "type": "number"
+            },
+            "lng": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "address",
+            "lat",
+            "lng"
+          ]
+        },
+        "check_in_instructions": {
+          "type": "string"
+        },
+        "receipt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "revision",
+        "booking_id",
+        "home_id",
+        "check_in",
+        "check_out",
+        "party",
+        "location",
+        "check_in_instructions",
+        "receipt"
+      ]
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^evt_"
+        },
+        "booking_id": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "booked",
+            "action_needed",
+            "payment_due",
+            "payment_received",
+            "refund_issued",
+            "deposit_authorised",
+            "deposit_captured",
+            "deposit_released",
+            "changed",
+            "cancelled_by_traveller",
+            "cancelled_by_host",
+            "check_in_details",
+            "checked_in",
+            "checked_out",
+            "claim_opened",
+            "claim_decided",
+            "message_waiting",
+            "contact_shared",
+            "contact_revoked"
+          ]
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        },
+        "receipt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "booking_id",
+        "type",
+        "at",
+        "summary"
+      ],
+      "if": {
+        "properties": {
+          "type": {
+            "enum": [
+              "booked",
+              "payment_received",
+              "refund_issued",
+              "deposit_authorised",
+              "deposit_captured",
+              "deposit_released",
+              "changed",
+              "cancelled_by_traveller",
+              "cancelled_by_host",
+              "claim_opened",
+              "claim_decided",
+              "contact_shared",
+              "contact_revoked"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "receipt"
+        ]
+      }
+    },
+    "EventsPage": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Event"
+          }
+        },
+        "cursor": {
+          "type": "string"
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "events",
+        "cursor",
+        "has_more"
+      ]
+    },
+    "ContactRequest": {
+      "type": "object",
+      "properties": {
+        "share": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "phone",
+              "email"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "share"
+      ],
+      "additionalProperties": false
+    },
+    "ContactState": {
+      "type": "object",
+      "properties": {
+        "shared": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "phone",
+              "email"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "host_contact": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "phone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "email": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "phone",
+            "email"
+          ]
+        },
+        "receipt": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "shared"
+      ]
+    },
+    "ReceiptClaims": {
+      "type": "object",
+      "properties": {
+        "iss": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^(https://|http://(localhost|127\\.0\\.0\\.1)[:/])"
+        },
+        "revision": {
+          "$ref": "#/$defs/Revision"
+        },
+        "receipt_id": {
+          "type": "string",
+          "pattern": "^rcp_"
+        },
+        "action": {
+          "enum": [
+            "propose",
+            "confirm",
+            "counter",
+            "change",
+            "cancel",
+            "share_contact",
+            "revoke_contact",
+            "booked",
+            "action_needed",
+            "payment_due",
+            "payment_received",
+            "refund_issued",
+            "deposit_authorised",
+            "deposit_captured",
+            "deposit_released",
+            "changed",
+            "cancelled_by_traveller",
+            "cancelled_by_host",
+            "check_in_details",
+            "checked_in",
+            "checked_out",
+            "claim_opened",
+            "claim_decided",
+            "message_waiting",
+            "contact_shared",
+            "contact_revoked"
+          ]
+        },
+        "initiated_by": {
+          "enum": [
+            "traveller_agent",
+            "host",
+            "host_agent",
+            "host_platform"
+          ]
+        },
+        "sub": {
+          "type": "string"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "booking_id": {
+          "type": "string"
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "revision_no": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "terms_hash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "approved_by": {
+          "enum": [
+            "user",
+            "standing_permission",
+            null
+          ]
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "amount": {
+          "$ref": "#/$defs/Money"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "iat": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "iss",
+        "revision",
+        "receipt_id",
+        "action",
+        "initiated_by",
+        "sub",
+        "iat"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "propose",
+                  "confirm",
+                  "counter",
+                  "change",
+                  "cancel"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "operation_id",
+              "revision_no",
+              "terms_hash",
+              "confirmed",
+              "approved_by"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confirmed": {
+                "const": false
+              }
+            },
+            "required": [
+              "confirmed"
+            ]
+          },
+          "then": {
+            "properties": {
+              "approved_by": {
+                "const": null
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "initiated_by": {
+                "const": "traveller_agent"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "client_id",
+              "scopes"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "payment_received",
+                  "refund_issued",
+                  "deposit_authorised",
+                  "deposit_captured",
+                  "deposit_released"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "amount",
+              "reference",
+              "event_id"
+            ]
+          }
+        }
+      ]
+    },
+    "CounterRequest": {
+      "type": "object",
+      "properties": {
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        },
+        "total": {
+          "$ref": "#/$defs/Money"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "ChangeRequest": {
+      "type": "object",
+      "properties": {
+        "check_in": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "check_out": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "party": {
+          "$ref": "#/$defs/Party"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "minProperties": 1
+    },
+    "MismatchReport": {
+      "type": "object",
+      "properties": {
+        "facts_version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "quote_id": {
+          "type": "string"
+        },
+        "field": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": [
+        "field",
+        "description"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "facts_version"
+          ]
+        },
+        {
+          "required": [
+            "quote_id"
+          ]
+        }
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "error"
+      ]
+    }
+  }
+}

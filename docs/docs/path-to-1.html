@@ -9,14 +9,15 @@
 <header class="bar"><div class="in">
 <a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
 <nav class="top" aria-label="Site"><a href="introduction.html">Docs</a><a href="specification.html">Specification</a><a href="path-to-1.html" aria-current="page">Path to 1.0</a><a href="https://github.com/livaroundltd/livstay">GitHub</a></nav>
-<span class="status">Draft 0.1 · Poppy 0.2</span></div></header>
-<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.1</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html" aria-current="page">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
+<span class="status">Draft 0.2 · Poppy 0.2</span></div></header>
+<div class="layout"><aside class="rail"><nav aria-label="Documentation"><p class="grp">Overview</p><ul><li><a href="introduction.html">Introduction</a></li><li><a href="specification.html">Specification 0.2</a></li></ul><p class="grp">Guides</p><ul><li><a href="guide-host-platforms.html">Host platforms</a></li><li><a href="guide-agents.html">Agent builders</a></li></ul><p class="grp">Project</p><ul><li><a href="path-to-1.html" aria-current="page">Path to 1.0</a></li><li><a href="license.html">License</a></li></ul></nav></aside>
 <main id="main"><h1 id="path-to-10">Path to 1.0</h1>
 <p>LivStay is a draft. This page says how it becomes stable and what is deliberately unfinished.</p>
 <h2 id="how-we-get-there">How we get there</h2>
 <ul>
 <li>Anyone can build against the draft and send feedback.</li>
 <li>LivAround is implementing it as the reference host platform, with a pilot in North Goa.</li>
+<li>Draft 0.2 adds JSON Schemas, an OpenAPI document, fixtures, a validator and a Level 0–1 conformance runner. Independent host platforms should start there.</li>
 <li>We are looking for a second, independent host platform implementation and for agent builders to test against it.</li>
 <li>The spec changes based on what implementers learn. Until 1.0, a revision can break compatibility with earlier drafts.</li>
 <li>LivStay tracks the Personal Agent Protocol. When Poppy changes, LivStay follows.</li>
@@ -37,7 +38,12 @@
 <h2 id="open-topics">Open topics</h2>
 <p>These are left out on purpose and are not complete:</p>
 <ul>
-<li><strong>Payments.</strong> LivStay uses a hosted payment page until Poppy defines payments, then adopts that.</li>
+<li>
+<p><strong>Conformance for Levels 2 and 3.</strong> The runner covers Levels 0 and 1. Enquiries and bookings need a test personal agent with a Poppy client identity, sign-in and DPoP.</p>
+</li>
+<li>
+<p><strong>Payments.</strong> LivStay uses a hosted payment page until Poppy defines payments, then adopts that.</p>
+</li>
 <li><strong>Push.</strong> Booking updates ride a conversation until Poppy defines push notifications.</li>
 <li><strong>Attachments.</strong> Receipts and check-in packs as attachments, when Poppy defines them.</li>
 <li><strong>Multi-home stays.</strong> One booking across linked homes, such as a villa and its cottage.</li>

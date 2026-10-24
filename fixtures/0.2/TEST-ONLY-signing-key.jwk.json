@@ -1,0 +1,11 @@
+{
+  "kty": "EC",
+  "crv": "P-256",
+  "kid": "test-2026-10",
+  "use": "sig",
+  "alg": "ES256",
+  "x": "MZjAospn2jK5SK_-HUhXKgGleOgYV30pHLVNciSYtx0",
+  "y": "15F2Dm8Oh23RIfZ0ZXhfpAE0n443IVNjLA4JMvngZKk",
+  "d": "ViCCq8DgFjLtU4LvQED8yd1x_D20RC3Rz8QNk-aCkZ4",
+  "_warning": "TEST KEY. Published on purpose so anyone can reproduce the fixtures. Never use it to sign anything real."
+}

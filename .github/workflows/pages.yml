@@ -1,7 +1,7 @@
-name: Site is up to date
+name: Checks
 
-# GitHub Pages serves docs/ from main. This check fails if docs/ was not
-# rebuilt after a change to site/ or spec/.
+# GitHub Pages serves docs/ from main. These checks keep docs/, the schemas, the
+# OpenAPI document and the fixtures consistent with their sources and with each other.
 on:
   push:
     branches: [main]
@@ -11,13 +11,30 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install markdown==3.10.3
-      - run: python3 tools/build_site.py
-      - run: git diff --exit-code -- docs || (echo "docs/ is stale; run python3 tools/build_site.py and commit" && exit 1)
+      - run: pip install markdown==3.10.3 jsonschema==4.26.0 cryptography==50.0.1 pyyaml==6.0.3 openapi-spec-validator==0.9.0
+      - name: Generated files are up to date
+        run: |
+          python3 tools/make_schema.py
+          python3 tools/make_openapi.py
+          python3 tools/build_site.py
+          git diff --exit-code -- docs schemas openapi || (echo "Regenerate with tools/make_*.py and tools/build_site.py, then commit" && exit 1)
+      - name: OpenAPI document is valid
+        run: python3 -c "from openapi_spec_validator import validate; from openapi_spec_validator.readers import read_from_filename; import os; d,_=read_from_filename('openapi/livstay-0.2.yaml'); validate(d, base_uri='file://'+os.path.abspath('openapi/livstay-0.2.yaml'))"
+      - name: Fixtures behave as their manifest says
+        run: python3 tools/validate.py
+      - name: Unit tests
+        run: |
+          python3 tests/test_find_stay.py
+          python3 tests/test_reconcile.py
+      - name: Conformance runner passes against the mock host
+        run: |
+          python3 tools/mock_host.py 8765 &
+          for i in $(seq 1 20); do curl -sf localhost:8765/.well-known/poppy.json >/dev/null && break; sleep 0.5; done
+          python3 tools/conformance.py http://localhost:8765

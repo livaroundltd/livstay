@@ -100,7 +100,7 @@ footer .wrap{padding-block:32px;flex-direction:row;justify-content:space-between
 <nav class="top band"><div class="wrap">
   <a class="mark" href="#top"><i aria-hidden="true"></i>LivStay</a>
   <div class="navlinks"><a href="#how">How it works</a><a href="#hosts">For hosts</a><a href="docs/introduction.html">Docs</a><a href="docs/specification.html">Specification</a><a href="docs/path-to-1.html">Path to 1.0</a></div>
-  <span class="status">Spec v0.1 · draft</span>
+  <span class="status">Spec v0.2 · draft</span>
 </div></nav>
 
 <header class="band" id="top"><div class="wrap">
@@ -194,15 +194,14 @@ footer .wrap{padding-block:32px;flex-direction:row;justify-content:space-between
   <span class="k">"protocol_version"</span>: <span class="s">"0.2"</span>,
   <span class="k">"apis"</span>: [{ <span class="k">"type"</span>: <span class="s">"mcp"</span>, <span class="k">"url"</span>: <span class="s">"https://stays.example/livstay/v0/mcp"</span> }],
   <span class="k">"auth"</span>: { <span class="k">"custom_scopes"</span>: {
-    <span class="k">"livstay:enquire"</span>: <span class="s">"Ask hosts questions about a stay"</span>,
-    <span class="k">"livstay:book"</span>: <span class="s">"Book stays you approve"</span> } },
+    <span class="k">"livstay:book"</span>: <span class="s">"Book, change and cancel stays you approve"</span> } },
   <span class="k">"extensions"</span>: {
     <span class="k">"operations"</span>: { <span class="k">"version"</span>: <span class="s">"1"</span>, <span class="k">"endpoint"</span>: <span class="s">"https://stays.example/poppy/operations"</span> },
-    <span class="k">"livstay.org/stays"</span>: { <span class="k">"version"</span>: <span class="s">"0"</span>, <span class="k">"endpoint"</span>: <span class="s">"https://stays.example/livstay/v0"</span>, <span class="k">"level"</span>: 3 }
+    <span class="k">"livstay.org/stays"</span>: { <span class="k">"version"</span>: <span class="s">"0"</span>, <span class="k">"revision"</span>: <span class="s">"0.2"</span>, <span class="k">"endpoint"</span>: <span class="s">"https://stays.example/livstay/v0"</span>, <span class="k">"level"</span>: 3 }
   }
 }</pre>
   </div>
-  <p class="muted">LivStay draft 0.1 is written as an extension to Personal Agent Protocol draft 0.2: identity, sessions and conversations are Poppy’s, and every booking is a Poppy operation that the traveller approves. It is designed to work with that protocol. It is an independent project, not affiliated with or endorsed by that protocol’s authors or partners.</p>
+  <p class="muted">LivStay draft 0.2 is written as an extension to Personal Agent Protocol draft 0.2: identity, sessions and conversations are Poppy’s, and every booking is a Poppy operation that the traveller approves. It is designed to work with that protocol. It is an independent project, not affiliated with or endorsed by that protocol’s authors or partners.</p>
 </div></section>
 
 <section class="band alt" id="status" aria-labelledby="status-h"><div class="wrap">
@@ -223,7 +222,7 @@ footer .wrap{padding-block:32px;flex-direction:row;justify-content:space-between
 
 <footer class="band"><div class="wrap">
   <span>LivStay · an open standard started by LivAround Ltd</span>
-  <span><a href="docs/license.html">Apache License 2.0</a> · <a href="docs/specification.html">Draft 0.1</a> · <a href="https://github.com/livaroundltd/livstay">GitHub</a></span>
+  <span><a href="docs/license.html">Apache License 2.0</a> · <a href="docs/specification.html">Draft 0.2</a> · <a href="https://github.com/livaroundltd/livstay">GitHub</a></span>
 </div></footer>
 
 <script>

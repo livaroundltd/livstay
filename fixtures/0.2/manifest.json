@@ -1,0 +1,201 @@
+{
+  "revision": "0.2",
+  "keys": "keys.json",
+  "quote": "valid/quote.json",
+  "fixtures": [
+    {
+      "file": "valid/extension-entry.json",
+      "def": "ExtensionEntry",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/client-extension-entry.json",
+      "def": "ClientExtensionEntry",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/home.json",
+      "def": "Home",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/homes-page.json",
+      "def": "HomesPage",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/availability.json",
+      "def": "Availability",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/quote-request.json",
+      "def": "QuoteRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/quote.json",
+      "def": "Quote",
+      "expect": "valid",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "valid/booking-request.json",
+      "def": "BookingRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/booking-operation-proposed.json",
+      "def": "BookingOperation",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/completion.json",
+      "def": "Completion",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/receipt-confirm-claims.json",
+      "def": "ReceiptClaims",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/receipt-payment-claims.json",
+      "def": "ReceiptClaims",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/booking-result.json",
+      "def": "BookingResult",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/event-payment-received.json",
+      "def": "Event",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/events-page.json",
+      "def": "EventsPage",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/contact-request.json",
+      "def": "ContactRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/contact-state.json",
+      "def": "ContactState",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/receipts.jws.json",
+      "def": null,
+      "expect": "valid",
+      "jws_map_typ": "livstay-receipt+jws"
+    },
+    {
+      "file": "invalid/quote-lines-do-not-sum.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/quote-wrong-precision.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/quote-tampered-after-signing.json",
+      "def": "Quote",
+      "expect": "signature",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/receipt-approval-without-confirmation.json",
+      "def": "ReceiptClaims",
+      "expect": "schema"
+    },
+    {
+      "file": "invalid/extension-level-1-without-keys.json",
+      "def": "ExtensionEntry",
+      "expect": "schema"
+    },
+    {
+      "file": "invalid/party-without-adults.json",
+      "def": "QuoteRequest",
+      "expect": "schema"
+    },
+    {
+      "file": "invalid/money-event-without-receipt.json",
+      "def": "Event",
+      "expect": "schema"
+    },
+    {
+      "file": "invalid/home-without-time-zone.json",
+      "def": "Home",
+      "expect": "schema"
+    },
+    {
+      "file": "invalid/quote-cancellation-out-of-order.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/booking-due-now-wrong-currency.json",
+      "def": "BookingOperation",
+      "expect": "quote_binding"
+    },
+    {
+      "file": "invalid/quote-negative-deposit.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/quote-negative-instalment.json",
+      "def": "Quote",
+      "expect": "reconcile",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "invalid/booking-other-home.json",
+      "def": "BookingOperation",
+      "expect": "quote_binding"
+    },
+    {
+      "file": "valid/booking-operation-cancel.json",
+      "def": "BookingOperation",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/quote-sek.json",
+      "def": "Quote",
+      "expect": "valid",
+      "jws_typ": "livstay-quote+jws"
+    },
+    {
+      "file": "valid/counter-request.json",
+      "def": "CounterRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/change-request.json",
+      "def": "ChangeRequest",
+      "expect": "valid"
+    },
+    {
+      "file": "valid/mismatch-report.json",
+      "def": "MismatchReport",
+      "expect": "valid"
+    },
+    {
+      "file": "invalid/booking-terms-differ-from-quote.json",
+      "def": "BookingOperation",
+      "expect": "quote_binding"
+    }
+  ]
+}
