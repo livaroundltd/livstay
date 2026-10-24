@@ -547,9 +547,13 @@ A traveller who wants time to decide uses a Quote (24 hours, binding price, no h
 - The `summary` **MUST** state the Home, dates, party, total, what is due now, the cancellation
   terms in dated form, the deposit, and the Host Platform and Host names. A traveller who reads only
   the `summary` **MUST** have everything needed to decide.
-- `terms.livstay.total` **MUST** equal the Quote's `total`. An agent **SHOULD** verify
-  `quote_signature` and compare `total`, `check_in`, `check_out` and `guests` against the Quote it
-  showed, and **MUST NOT** confirm if they differ.
+- Every revision is bound to exactly one Quote, named by `terms.livstay.quote_id` and
+  `terms.livstay.quote_signature`. For revision 1 it is the Quote the booking was proposed from; a
+  counter revision carries a new Quote for its own terms (§10.2). `terms.livstay.total`,
+  `check_in`, `check_out` and `guests` **MUST** equal that Quote's.
+- Before confirming, an agent **SHOULD** verify the revision's `quote_signature`, and **MUST NOT**
+  confirm if the revision's terms differ from its Quote, or if the Quote differs from the one the
+  traveller was shown for this revision.
 - The agent confirms with `approved_by: "user"` as the `operations` extension defines.
 
 ### 9.4 Trip context
@@ -612,6 +616,7 @@ A counter is a new revision of the same operation. Each counter revision **MUST*
 | `terms.livstay.proposed_by` | `host`, `host_agent` or `traveller_agent`. |
 | `terms.livstay.reason` | Plain language. REQUIRED when `proposed_by` is `host_agent`: which of the Host's rules produced this counter. |
 | `terms.livstay.counter_no` | 1, 2 or 3. |
+| `terms.livstay.quote_id`, `terms.livstay.quote_signature` | A new Quote (§7.2) the Host Platform issues for this revision's Stay and total. Its `expires_at` is no earlier than the revision's. It replaces the earlier Quote for this operation only. |
 
 Rules:
 
@@ -624,7 +629,8 @@ Rules:
   carrying the changed `check_in`, `check_out`, `guests` or a requested `total`, and a `note`. The
   Host Platform answers with the operation, unchanged or as a new revision with `proposed_by:
   "traveller_agent"` and `awaiting: "host"`.
-- Every revision needs the traveller's fresh approval before confirmation (§9.3).
+- Every revision needs the traveller's fresh approval before confirmation (§9.3), and is checked
+  against its own Quote, never the one the operation started from.
 
 ### 10.3 Countering within bounds
 
