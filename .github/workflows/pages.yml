@@ -29,6 +29,8 @@ jobs:
         run: python3 -c "from openapi_spec_validator import validate; from openapi_spec_validator.readers import read_from_filename; import os; d,_=read_from_filename('openapi/livstay-0.2.yaml'); validate(d, base_uri='file://'+os.path.abspath('openapi/livstay-0.2.yaml'))"
       - name: Fixtures behave as their manifest says
         run: python3 tools/validate.py
+      - name: Stay selection unit tests
+        run: python3 tests/test_find_stay.py
       - name: Conformance runner passes against the mock host
         run: |
           python3 tools/mock_host.py 8765 &

@@ -46,6 +46,26 @@ def schema(cid, title, defname, obj):
     return check(cid, title, not errs, "; ".join(errs[:3]))
 
 
+def find_stay(days, terms):
+    """First bookable (check_in, check_out) in the window, trying every permitted length (§6.3, §7.1).
+
+    A stay arriving on days[i] for n nights is bookable when: the arrival day is not
+    closed_to_arrival; nights i..i+n-1 are available; n is at least the arrival day's and the
+    Home's min_nights and at most the Home's max_nights; and the departure day days[i+n] is in
+    the window and not closed_to_departure.
+    """
+    for i, d in enumerate(days):
+        if d["closed_to_arrival"] or not d["available"]:
+            continue
+        lo = max(d["min_nights"], terms["min_nights"])
+        for n in range(lo, terms["max_nights"] + 1):
+            if i + n >= len(days) or not days[i + n - 1]["available"]:
+                break
+            if not days[i + n]["closed_to_departure"]:
+                return d["date"], days[i + n]["date"]
+    return None
+
+
 def main(origin):
     origin = origin.rstrip("/")
     local = origin.startswith("http://localhost") or origin.startswith("http://127.0.0.1")
@@ -98,17 +118,7 @@ def main(origin):
     s, _, av = http("GET", f"{ep}/homes/{home['home_id']}/availability?from={start}&to={start + dt.timedelta(days=90)}")
     if not schema("L1.3", "availability matches Availability", "Availability", av if s == 200 else {}):
         return
-    days, stay = av["days"], None
-    for i, d in enumerate(days):
-        n = max(d["min_nights"], home["terms"]["min_nights"])
-        if n > home["terms"]["max_nights"]:
-            continue
-        run = days[i:i + n]
-        dep = days[i + n] if i + n < len(days) else None
-        if (len(run) == n and all(x["available"] for x in run) and not d["closed_to_arrival"]
-                and dep is not None and not dep["closed_to_departure"]):
-            stay = (d["date"], str(dt.date.fromisoformat(d["date"]) + dt.timedelta(days=n)))
-            break
+    stay = find_stay(av["days"], home["terms"])
     if not check("L1.4", "an available stay exists in the next 90 days", stay):
         return
     body = {"check_in": stay[0], "check_out": stay[1], "party": {"adults": 1, "children": [], "pets": 0}}  # 1 adult fits every Home (max_guests >= 1)
