@@ -94,12 +94,63 @@ nav.top .wrap{padding-block:18px;flex-direction:row;align-items:center;justify-c
 .contact{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .contact code{font-family:var(--mono);font-size:15px;padding:10px 14px;border:1px solid var(--rule);border-radius:10px;user-select:all}
 button.copy{font:inherit;font-size:14px;min-height:44px;padding:0 16px;border-radius:10px;border:1.5px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer}
+/* journey band: a traveller's assistant, the host's WhatsApp, the signed quote. The three cards are
+   specimens of other surfaces, so they keep their own light colours in both themes. */
+.journey{background:var(--panel);color:var(--panel-fg);position:relative;overflow:hidden}
+.journey .wrap{position:relative;gap:48px}
+.journey .eyebrow{color:var(--sun)}
+.journey h2 .soft{display:block;color:var(--panel-muted)}
+.j-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 56px}
+.j-head p{max-width:42ch;color:var(--panel-muted);font-size:18px}
+.j-rings{position:absolute;right:-220px;top:-240px;width:760px;height:auto;pointer-events:none;opacity:.9}
+.j-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;position:relative}
+@media (max-width:900px){.j-grid{grid-template-columns:minmax(0,1fr)}}
+.j-step{display:flex;flex-direction:column;gap:18px;min-width:0}
+.j-label{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.16em}
+.j-num{width:44px;height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex:none;color:#0B2A3B}
+.j-step:nth-child(1) .j-num{background:#93B2FB} .j-step:nth-child(1) .j-label{color:#BCD0FD}
+.j-step:nth-child(2) .j-num{background:#FFB547} .j-step:nth-child(2) .j-label{color:#FFD58A}
+.j-step:nth-child(3) .j-num{background:#FF9B7E} .j-step:nth-child(3) .j-label{color:#FFBDA8}
+.j-card{flex:1;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px;background:#FFFFFF;color:#0B2A3B;box-shadow:0 24px 60px rgba(0,0,0,.28);font-size:15px;line-height:1.45}
+.j-card .top{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid #E2EAF1;font-size:14px;font-weight:700}
+.j-card .top small{display:block;font-weight:400;font-size:12px;color:#4D6C8E}
+.j-ico{width:28px;height:28px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.j-me{align-self:flex-end;max-width:86%;background:#0B2A3B;color:#FFFFFF;border-radius:16px 16px 4px 16px;padding:12px 14px}
+.j-ai{max-width:92%;background:#F5F8FB;border:1px solid #E2EAF1;border-radius:16px 16px 16px 4px;padding:12px 14px}
+.j-home{margin-top:auto;border:1px solid #E2EAF1;border-radius:14px;overflow:hidden}
+.j-home .pic{height:84px;background:#DBE7FE;display:flex;align-items:flex-end;padding:10px}
+.j-home .meta{padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.j-home .meta span{font-size:13px;color:#4D6C8E}
+.j-tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px}
+.j-card.wa{background:#ECE5DD}
+.j-card.wa .top{border-bottom-color:#D6CCC1}
+.j-card.wa .top small{color:#4F5F52}
+.j-in{max-width:90%;background:#FFFFFF;border-radius:4px 14px 14px 14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.j-in .from{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#4D6C8E}
+.j-out{align-self:flex-end;max-width:90%;background:#D9FDD3;border-radius:14px 4px 14px 14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.j-out .t{align-self:flex-end;font-family:var(--mono);font-size:11px;color:#4D6C8E}
+.j-signed{margin-top:auto;display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:14px;padding:12px 14px}
+.j-signed small{display:block;font-size:12px;color:#4D6C8E}
+.j-q{margin:0;display:flex;flex-direction:column;gap:8px;font-size:14px;font-variant-numeric:tabular-nums}
+.j-q div{display:flex;justify-content:space-between;gap:12px}
+.j-q dt{color:#32547A} .j-q dd{margin:0}
+.j-q .off{color:#0A7F59}
+.j-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:12px;border-top:1px solid #E2EAF1;font-weight:700}
+.j-total b{font-size:24px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.j-approve{margin-top:auto;min-height:48px;border-radius:14px;background:#2563EB;color:#FFFFFF;font-weight:700;display:flex;align-items:center;justify-content:center}
+.j-step > p{color:var(--panel-muted);font-size:16px}
+.j-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px 32px;padding-top:28px;border-top:1px solid #1F4260}
+.j-foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 28px;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--panel-muted)}
+.j-foot li::before{content:"●";margin-right:8px}
+.j-foot li:nth-child(1)::before{color:#93B2FB} .j-foot li:nth-child(2)::before{color:#FFB547} .j-foot li:nth-child(3)::before{color:#FF9B7E}
+.journey .btn.light{background:#FFFFFF;color:#0B2A3B}
+.journey .btn.line{border:1.5px solid rgba(255,255,255,.4);color:#FFFFFF}
 footer .wrap{padding-block:32px;flex-direction:row;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:14px;color:var(--muted)}
 </style>
 
 <nav class="top band"><div class="wrap">
   <a class="mark" href="#top"><i aria-hidden="true"></i>LivStay</a>
-  <div class="navlinks"><a href="#how">How it works</a><a href="#hosts">For hosts</a><a href="docs/introduction.html">Docs</a><a href="docs/specification.html">Specification</a><a href="docs/path-to-1.html">Path to 1.0</a></div>
+  <div class="navlinks"><a href="#journey">See it</a><a href="#how">How it works</a><a href="#hosts">For hosts</a><a href="docs/introduction.html">Docs</a><a href="docs/specification.html">Specification</a><a href="docs/path-to-1.html">Path to 1.0</a></div>
   <span class="status">Spec v0.2 · draft</span>
 </div></nav>
 
@@ -128,6 +179,69 @@ footer .wrap{padding-block:32px;flex-direction:row;justify-content:space-between
     </article>
   </div>
 </div></header>
+
+<section class="band journey" id="journey" aria-labelledby="journey-h">
+  <svg class="j-rings" viewBox="0 0 900 900" fill="none" aria-hidden="true">
+    <circle cx="450" cy="450" r="170" stroke="#6389F7" stroke-opacity=".22"/>
+    <circle cx="450" cy="450" r="290" stroke="#6389F7" stroke-opacity=".14"/>
+    <circle cx="450" cy="450" r="420" stroke="#6389F7" stroke-opacity=".08"/>
+    <circle cx="450" cy="160" r="9" fill="#FFB547"/>
+    <circle cx="712" cy="580" r="7" fill="#FF9B7E"/>
+  </svg>
+  <div class="wrap">
+    <div class="j-head">
+      <div style="display:flex;flex-direction:column;gap:18px;max-width:640px;min-width:0">
+        <p class="eyebrow">What it looks like</p>
+        <h2 id="journey-h">Recommended, asked, booked.<span class="soft">With the host the whole way.</span></h2>
+      </div>
+      <p>The traveller talks to their own assistant. The host answers on WhatsApp. The booking is a signed price on the host’s rules that the traveller approves.</p>
+    </div>
+    <ol class="j-grid">
+      <li class="j-step">
+        <div class="j-label"><span class="j-num">01</span>RECOMMENDED</div>
+        <div class="j-card">
+          <div class="top"><span class="j-ico" style="background:#EEF4FF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg></span>The traveller’s AI assistant</div>
+          <div class="j-me">A villa in North Goa for 4 adults and 2 kids, 27 Dec to 3 Jan. Quiet, safe pool.</div>
+          <div class="j-ai">Casa Mira in Assagao fits: fenced pool, cot on request, quiet after 10pm. Rhea, the host, usually replies in 10 minutes.</div>
+          <div class="j-home"><div class="pic"><span class="j-tag" style="background:#FFB547;color:#0B2A3B">AGENT-BOOKABLE</span></div><div class="meta"><b>Casa Mira · Assagao</b><span>Cited from the host’s facts</span></div></div>
+        </div>
+        <p>Facts the host wrote and signed tell an agent who the home suits, and who it doesn’t.</p>
+      </li>
+      <li class="j-step">
+        <div class="j-label"><span class="j-num">02</span>ASKED</div>
+        <div class="j-card wa">
+          <div class="top"><span class="j-ico" style="background:#25D366;border-radius:999px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg></span><div>Casa Mira · guest enquiry<small>WhatsApp · on Rhea’s phone</small></div></div>
+          <div class="j-in"><span class="from">FROM A TRAVELLER’S ASSISTANT</span><span>Is the pool fenced? Their youngest is one.</span></div>
+          <div class="j-out"><span>Yes, fenced with a locked gate. I’ll have the cot and high chair ready.</span><span class="t">10:42 ✓✓</span></div>
+          <div class="j-signed"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A7F59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b style="font-size:14px">Answered by the host, signed</b><small>The assistant can quote it back</small></div></div>
+        </div>
+        <p>Enquiries reach a person, not a bot. The answer comes back signed.</p>
+      </li>
+      <li class="j-step">
+        <div class="j-label"><span class="j-num">03</span>BOOKED</div>
+        <div class="j-card">
+          <div class="top" style="justify-content:space-between;border-bottom-style:dashed"><span>Quote · 7 nights</span><span class="j-tag" style="color:#4D6C8E;padding:0;font-weight:400">27 DEC – 3 JAN</span></div>
+          <dl class="j-q">
+            <div><dt>7 nights</dt><dd>₹1,26,000.00</dd></div>
+            <div><dt>Weekly stay, 10% off</dt><dd class="off">−₹12,600.00</dd></div>
+            <div><dt>Cleaning</dt><dd>₹3,500.00</dd></div>
+            <div><dt>Child aged 7</dt><dd>₹2,800.00</dd></div>
+            <div><dt>GST</dt><dd>₹6,633.00</dd></div>
+          </dl>
+          <div class="j-total"><span>Total</span><b>₹1,26,333.00</b></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="j-tag" style="background:#EEF4FF;color:#1E4FBF">PRICE HELD 24 H</span><span class="j-tag" style="background:#E7F8F1;color:#0A6B4B">SIGNED</span></div>
+          <p style="font-size:13px;color:#4D6C8E">Every fee the traveller pays is its own line. A fee the host pays their platform is not on the quote.</p>
+          <div class="j-approve" aria-hidden="true">Traveller approves</div>
+        </div>
+        <p>The booking holds the dates for 15 minutes and waits for the traveller’s own yes.</p>
+      </li>
+    </ol>
+    <div class="j-foot">
+      <ul><li>The host’s terms on every agent</li><li>The guest stays the host’s</li><li>Signed at every step</li></ul>
+      <div class="cta"><a class="btn light" href="docs/specification.html">Read the specification</a><a class="btn line" href="#status">Join the pilot</a></div>
+    </div>
+  </div>
+</section>
 
 <section class="band alt" aria-labelledby="why-h"><div class="wrap">
   <p class="eyebrow">Why now</p>
