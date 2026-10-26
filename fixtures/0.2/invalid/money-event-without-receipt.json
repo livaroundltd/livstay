@@ -3,10 +3,10 @@
   "booking_id": "bkg_4Hn9",
   "type": "payment_received",
   "at": "2026-10-24T09:28:20Z",
-  "summary": "INR 38,850.00 received.",
+  "summary": "INR 37,899.90 received.",
   "data": {
     "amount": {
-      "amount": "38850.00",
+      "amount": "37899.90",
       "currency": "INR"
     },
     "reference": "pay_81kq"

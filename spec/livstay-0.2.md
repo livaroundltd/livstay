@@ -500,9 +500,11 @@ The response is `201` with a Quote. A Quote **does not** block the calendar; it 
 the traveller's tier at booking is at least `assumed_tier`. If the dates are not available, the
 proposal fails with `dates_unavailable`; the price never changes.
 
-**Fees are lines.** Any fee the Host Platform or an agent charges **MUST** appear as its own line.
-The `agent_fee` line, if any, is set by the agent's agreement with the Host Platform and **MUST** be
-shown to the traveller before approval.
+**Fees are lines.** Any fee the traveller pays to the Host Platform or to an agent **MUST** appear as
+its own line. The `agent_fee` line, if any, is set by the agent's agreement with the Host Platform and
+**MUST** be shown to the traveller before approval. A fee charged to the Host, such as a platform's
+commission deducted from the payout, is not a Quote line, because the traveller does not pay it; use
+`platform_fee` only for a fee the traveller pays.
 
 **Retention.** A Host Platform **MUST** keep every Quote it issued for at least 30 days after
 `expires_at`, and every Quote a booking references for the life of that booking's Receipts (§13.4).
@@ -588,7 +590,7 @@ On success the Host Platform responds `202` with an operation in state `proposed
     "operation_id": "bk_4Hn9",
     "revision": 1,
     "state": "proposed",
-    "summary": "Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,29,500.00 including taxes and fees; INR 38,850.00 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card, released 3 days after check-out. You will be asked to verify your identity. Booked with LivAround for host Rhea.",
+    "summary": "Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,26,333.00 including taxes, no guest fees; INR 37,899.90 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card, released 3 days after check-out. You will be asked to verify your identity. Booked with LivAround for host Rhea.",
     "terms": {
       "livstay": {
         "revision": "0.2",
@@ -599,8 +601,8 @@ On success the Host Platform responds `202` with an operation in state `proposed
         "check_in": "2026-12-27",
         "check_out": "2027-01-03",
         "party": { "adults": 4, "children": [{ "age": 7 }, { "age": 1 }], "pets": 0 },
-        "total": { "amount": "129500.00", "currency": "INR" },
-        "due_now": { "amount": "38850.00", "currency": "INR" },
+        "total": { "amount": "126333.00", "currency": "INR" },
+        "due_now": { "amount": "37899.90", "currency": "INR" },
         "deposit": { "amount": { "amount": "15000.00", "currency": "INR" }, "mode": "authorise" },
         "terms_version": 12,
         "tier": { "presented": true, "accepted": true, "applied": "trusted" },
@@ -702,7 +704,7 @@ moves the operation to `in_progress` and creates a **completion record**:
   "complete_by": "2026-10-24T10:42:00Z",
   "requirements": [
     { "type": "payment", "status": "pending", "url": "https://stay.livaround.com/pay/bk_4Hn9",
-      "amount": { "amount": "38850.00", "currency": "INR" } },
+      "amount": { "amount": "37899.90", "currency": "INR" } },
     { "type": "identity_verification", "status": "done", "url": null }
   ]
 }
@@ -1141,7 +1143,7 @@ A Host Platform claims a level only if its responses validate against the schema
    with `LivStay-Revision: 0.2`.
 3. The agent reads three Homes' Facts and tells the traveller why Casa Mira fits, citing
    `facts_version` 9.
-4. With no token, `POST /homes/home_7Qp2/quotes` → `qt_P8m1`, total INR 1,29,500.00, expires in 24
+4. With no token, `POST /homes/home_7Qp2/quotes` → `qt_P8m1`, total INR 1,26,333.00, expires in 24
    hours. The agent verifies the signature and reconciles the lines. The traveller wants to sleep on
    it.
 5. Next morning, in a signed-out Session, the agent opens an enquiry: "Is the pool fenced? Our
@@ -1154,7 +1156,7 @@ A Host Platform claims a level only if its responses validate against the schema
 9. `POST /poppy/operations/bk_4Hn9/confirm` `{ "revision": 1, "approved_by": "user" }` →
    `in_progress`. `GET /livstay/v0/bookings/completion/bk_4Hn9` → `complete_by` in 60 minutes, two
    pending steps with page URLs.
-10. The traveller verifies identity and pays INR 38,850.00 in their browser Session. The operation
+10. The traveller verifies identity and pays INR 37,899.90 in their browser Session. The operation
     → `succeeded`; `result.data.livstay` carries `bkg_4Hn9`, the address and a Receipt. The feed shows
     `payment_received` with its Receipt, then `booked`.
 11. A week later the feed shows `message_waiting`. The agent opens the booking conversation and reads
@@ -1176,7 +1178,7 @@ Informative. LivAround is the reference Host Platform.
 | Enquiries, booking conversation | The Masked Relay; Host replies over WhatsApp |
 | `auto_counter` | `AUTO_COUNTER_WITHIN_BOUNDS` with `autoCounterFloorPct` and `autoCounterMoves` |
 | Tier credential | livscore guest credential |
-| Fees | Flat 5% `platform_fee` line; `agent_fee` as its own line |
+| Fees | Flat 5% charged to the host and deducted from the payout, so it is never a Quote line; no guest fee; `agent_fee`, if an agent charges one, as its own line |
 
 ## Appendix C. Open topics on the path to 1.0
 

@@ -1090,9 +1090,11 @@ publish) is reported through Poppy's own <code>feedback</code> endpoint with <co
 <code>deposit</code> for any booking proposed from it before <code>expires_at</code>, if the dates are still available and
 the traveller's tier at booking is at least <code>assumed_tier</code>. If the dates are not available, the
 proposal fails with <code>dates_unavailable</code>; the price never changes.</p>
-<p><strong>Fees are lines.</strong> Any fee the Host Platform or an agent charges <strong>MUST</strong> appear as its own line.
-The <code>agent_fee</code> line, if any, is set by the agent's agreement with the Host Platform and <strong>MUST</strong> be
-shown to the traveller before approval.</p>
+<p><strong>Fees are lines.</strong> Any fee the traveller pays to the Host Platform or to an agent <strong>MUST</strong> appear as
+its own line. The <code>agent_fee</code> line, if any, is set by the agent's agreement with the Host Platform and
+<strong>MUST</strong> be shown to the traveller before approval. A fee charged to the Host, such as a platform's
+commission deducted from the payout, is not a Quote line, because the traveller does not pay it; use
+<code>platform_fee</code> only for a fee the traveller pays.</p>
 <p><strong>Retention.</strong> A Host Platform <strong>MUST</strong> keep every Quote it issued for at least 30 days after
 <code>expires_at</code>, and every Quote a booking references for the life of that booking's Receipts (§13.4).
 <code>GET {endpoint}/quotes/{quote_id}</code> (public) returns a kept Quote.</p>
@@ -1181,7 +1183,7 @@ Session receives <code>sign_in_required</code>.</p>
     &quot;operation_id&quot;: &quot;bk_4Hn9&quot;,
     &quot;revision&quot;: 1,
     &quot;state&quot;: &quot;proposed&quot;,
-    &quot;summary&quot;: &quot;Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,29,500.00 including taxes and fees; INR 38,850.00 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card, released 3 days after check-out. You will be asked to verify your identity. Booked with LivAround for host Rhea.&quot;,
+    &quot;summary&quot;: &quot;Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,26,333.00 including taxes, no guest fees; INR 37,899.90 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card, released 3 days after check-out. You will be asked to verify your identity. Booked with LivAround for host Rhea.&quot;,
     &quot;terms&quot;: {
       &quot;livstay&quot;: {
         &quot;revision&quot;: &quot;0.2&quot;,
@@ -1192,8 +1194,8 @@ Session receives <code>sign_in_required</code>.</p>
         &quot;check_in&quot;: &quot;2026-12-27&quot;,
         &quot;check_out&quot;: &quot;2027-01-03&quot;,
         &quot;party&quot;: { &quot;adults&quot;: 4, &quot;children&quot;: [{ &quot;age&quot;: 7 }, { &quot;age&quot;: 1 }], &quot;pets&quot;: 0 },
-        &quot;total&quot;: { &quot;amount&quot;: &quot;129500.00&quot;, &quot;currency&quot;: &quot;INR&quot; },
-        &quot;due_now&quot;: { &quot;amount&quot;: &quot;38850.00&quot;, &quot;currency&quot;: &quot;INR&quot; },
+        &quot;total&quot;: { &quot;amount&quot;: &quot;126333.00&quot;, &quot;currency&quot;: &quot;INR&quot; },
+        &quot;due_now&quot;: { &quot;amount&quot;: &quot;37899.90&quot;, &quot;currency&quot;: &quot;INR&quot; },
         &quot;deposit&quot;: { &quot;amount&quot;: { &quot;amount&quot;: &quot;15000.00&quot;, &quot;currency&quot;: &quot;INR&quot; }, &quot;mode&quot;: &quot;authorise&quot; },
         &quot;terms_version&quot;: 12,
         &quot;tier&quot;: { &quot;presented&quot;: true, &quot;accepted&quot;: true, &quot;applied&quot;: &quot;trusted&quot; },
@@ -1357,7 +1359,7 @@ moves the operation to <code>in_progress</code> and creates a <strong>completion
   &quot;complete_by&quot;: &quot;2026-10-24T10:42:00Z&quot;,
   &quot;requirements&quot;: [
     { &quot;type&quot;: &quot;payment&quot;, &quot;status&quot;: &quot;pending&quot;, &quot;url&quot;: &quot;https://stay.livaround.com/pay/bk_4Hn9&quot;,
-      &quot;amount&quot;: { &quot;amount&quot;: &quot;38850.00&quot;, &quot;currency&quot;: &quot;INR&quot; } },
+      &quot;amount&quot;: { &quot;amount&quot;: &quot;37899.90&quot;, &quot;currency&quot;: &quot;INR&quot; } },
     { &quot;type&quot;: &quot;identity_verification&quot;, &quot;status&quot;: &quot;done&quot;, &quot;url&quot;: null }
   ]
 }
@@ -2115,7 +2117,7 @@ issued. Keys <strong>SHOULD</strong> be held in a hardware or managed key servic
    with <code>LivStay-Revision: 0.2</code>.</li>
 <li>The agent reads three Homes' Facts and tells the traveller why Casa Mira fits, citing
    <code>facts_version</code> 9.</li>
-<li>With no token, <code>POST /homes/home_7Qp2/quotes</code> → <code>qt_P8m1</code>, total INR 1,29,500.00, expires in 24
+<li>With no token, <code>POST /homes/home_7Qp2/quotes</code> → <code>qt_P8m1</code>, total INR 1,26,333.00, expires in 24
    hours. The agent verifies the signature and reconciles the lines. The traveller wants to sleep on
    it.</li>
 <li>Next morning, in a signed-out Session, the agent opens an enquiry: "Is the pool fenced? Our
@@ -2128,7 +2130,7 @@ issued. Keys <strong>SHOULD</strong> be held in a hardware or managed key servic
 <li><code>POST /poppy/operations/bk_4Hn9/confirm</code> <code>{ "revision": 1, "approved_by": "user" }</code> →
    <code>in_progress</code>. <code>GET /livstay/v0/bookings/completion/bk_4Hn9</code> → <code>complete_by</code> in 60 minutes, two
    pending steps with page URLs.</li>
-<li>The traveller verifies identity and pays INR 38,850.00 in their browser Session. The operation
+<li>The traveller verifies identity and pays INR 37,899.90 in their browser Session. The operation
     → <code>succeeded</code>; <code>result.data.livstay</code> carries <code>bkg_4Hn9</code>, the address and a Receipt. The feed shows
     <code>payment_received</code> with its Receipt, then <code>booked</code>.</li>
 <li>A week later the feed shows <code>message_waiting</code>. The agent opens the booking conversation and reads
@@ -2180,7 +2182,7 @@ issued. Keys <strong>SHOULD</strong> be held in a hardware or managed key servic
 </tr>
 <tr>
 <td>Fees</td>
-<td>Flat 5% <code>platform_fee</code> line; <code>agent_fee</code> as its own line</td>
+<td>Flat 5% charged to the host and deducted from the payout, so it is never a Quote line; no guest fee; <code>agent_fee</code>, if an agent charges one, as its own line</td>
 </tr>
 </tbody>
 </table></div>
