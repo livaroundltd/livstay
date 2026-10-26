@@ -2,7 +2,7 @@
   "operation_id": "bk_7Cx2",
   "revision": 1,
   "state": "proposed",
-  "summary": "Cancel Casa Mira, 27 Dec to 3 Jan. Refund INR 64,750.00 to your card within 5 days.",
+  "summary": "Cancel Casa Mira, 27 Dec to 3 Jan. Refund INR 63,166.50 to your card within 5 days.",
   "terms": {
     "livstay": {
       "revision": "0.2",
@@ -26,7 +26,7 @@
       "awaiting": "traveller",
       "proposed_by": "traveller_agent",
       "refund": {
-        "amount": "64750.00",
+        "amount": "63166.50",
         "currency": "INR"
       }
     }

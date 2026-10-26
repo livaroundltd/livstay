@@ -89,13 +89,12 @@ q = {"quote_id": "qt_P8m1", "home_id": "home_7Qp2", "check_in": "2026-12-27", "c
                {"kind": "discount", "label": "Weekly stay, 10% off nights", "amount": M("-12600.00"), "in_total": True},
                {"kind": "cleaning", "label": "Cleaning", "amount": M("3500.00"), "in_total": True},
                {"kind": "extra_guest", "label": "Child aged 7, 7 nights", "amount": M("2800.00"), "in_total": True},
-               {"kind": "tax", "label": "GST", "amount": M("6633.00"), "in_total": True},
-               {"kind": "platform_fee", "label": "LivAround fee", "amount": M("3167.00"), "in_total": True}],
-     "total": M("129500.00"),
-     "payment_schedule": [{"due_at": None, "at_booking": True, "amount": M("38850.00")},
-                          {"due_at": "2026-12-13T08:30:00Z", "at_booking": False, "amount": M("90650.00")}],
-     "cancellation": [{"until": "2026-12-13T08:30:00Z", "refund": M("129500.00")},
-                      {"until": "2026-12-20T08:30:00Z", "refund": M("64750.00")},
+               {"kind": "tax", "label": "GST", "amount": M("6633.00"), "in_total": True}],
+     "total": M("126333.00"),
+     "payment_schedule": [{"due_at": None, "at_booking": True, "amount": M("37899.90")},
+                          {"due_at": "2026-12-13T08:30:00Z", "at_booking": False, "amount": M("88433.10")}],
+     "cancellation": [{"until": "2026-12-13T08:30:00Z", "refund": M("126333.00")},
+                      {"until": "2026-12-20T08:30:00Z", "refund": M("63166.50")},
                       {"until": None, "refund": M("0.00")}],
      "deposit": {"amount": M("15000.00"), "mode": "authorise"}, "assumed_tier": "trusted", "instant": True,
      "created_at": "2026-10-24T09:00:00Z", "expires_at": "2026-10-25T09:00:00Z"}
@@ -106,16 +105,16 @@ put("valid", "booking-request", {"quote_id": "qt_P8m1", "trip_context": {"purpos
     "arrival_notes": "landing 23:40"}}, "BookingRequest")
 lt = {"revision": "0.2", "action": "book", "quote_id": "qt_P8m1", "quote_signature": quote["signature"],
       "home_id": "home_7Qp2", "check_in": "2026-12-27", "check_out": "2027-01-03", "party": PARTY,
-      "total": M("129500.00"), "due_now": M("38850.00"), "deposit": {"amount": M("15000.00"), "mode": "authorise"},
+      "total": M("126333.00"), "due_now": M("37899.90"), "deposit": {"amount": M("15000.00"), "mode": "authorise"},
       "terms_version": 12, "tier": {"presented": True, "accepted": True, "applied": "trusted"},
       "requirements": ["payment", "identity_verification"], "awaiting": "traveller", "proposed_by": "traveller_agent"}
 op = {"operation_id": "bk_4Hn9", "revision": 1, "state": "proposed",
-      "summary": "Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,29,500.00 including taxes and fees; INR 38,850.00 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card. You will be asked to verify your identity. Booked with Example Stays for host Rhea.",
+      "summary": "Casa Mira, Assagao: 27 Dec 2026 to 3 Jan 2027, 4 adults, a 7-year-old and an infant. Total INR 1,26,333.00 including taxes, no guest fees; INR 37,899.90 now, the rest by 13 Dec. Free cancellation until 13 Dec, half back until 20 Dec, then none. Deposit INR 15,000.00 authorised on your card. You will be asked to verify your identity. Booked with Example Stays for host Rhea.",
       "terms": {"livstay": lt}, "expires_at": "2026-10-24T09:20:00Z", "user_approval_required": True,
       "url": "https://stays.example/b/bk_4Hn9", "confirmation": None, "result": None}
 put("valid", "booking-operation-proposed", op, "BookingOperation")
 put("valid", "completion", {"operation_id": "bk_4Hn9", "complete_by": "2026-10-24T10:21:00Z",
-    "requirements": [{"type": "payment", "status": "pending", "url": "https://stays.example/pay/bk_4Hn9", "amount": M("38850.00")},
+    "requirements": [{"type": "payment", "status": "pending", "url": "https://stays.example/pay/bk_4Hn9", "amount": M("37899.90")},
                      {"type": "identity_verification", "status": "done", "url": None}]}, "Completion")
 
 rc = {"iss": ISS, "revision": "0.2", "receipt_id": "rcp_9Tq1", "action": "confirm", "initiated_by": "traveller_agent",
@@ -125,7 +124,7 @@ rc = {"iss": ISS, "revision": "0.2", "receipt_id": "rcp_9Tq1", "action": "confir
 put("valid", "receipt-confirm-claims", rc, "ReceiptClaims")
 r_confirm = sign(rc, priv, "livstay-receipt+jws")
 rp = {"iss": ISS, "revision": "0.2", "receipt_id": "rcp_9Tq2", "action": "payment_received", "initiated_by": "host_platform",
-      "sub": "usr_83jd", "booking_id": "bkg_4Hn9", "event_id": "evt_1", "amount": M("38850.00"),
+      "sub": "usr_83jd", "booking_id": "bkg_4Hn9", "event_id": "evt_1", "amount": M("37899.90"),
       "reference": "pay_81kq", "iat": 1792760900}
 put("valid", "receipt-payment-claims", rp, "ReceiptClaims")
 r_pay = sign(rp, priv, "livstay-receipt+jws")
@@ -134,7 +133,7 @@ put("valid", "booking-result", {"revision": "0.2", "booking_id": "bkg_4Hn9", "ho
     "location": {"address": "House 14, Mapusa Road, Assagao, Goa 403507", "lat": 15.5931, "lng": 73.7902},
     "check_in_instructions": "Sent on 26 Dec.", "receipt": r_confirm}, "BookingResult")
 ev = {"event_id": "evt_1", "booking_id": "bkg_4Hn9", "type": "payment_received", "at": "2026-10-24T09:28:20Z",
-      "summary": "INR 38,850.00 received.", "data": {"amount": M("38850.00"), "reference": "pay_81kq"}, "receipt": r_pay}
+      "summary": "INR 37,899.90 received.", "data": {"amount": M("37899.90"), "reference": "pay_81kq"}, "receipt": r_pay}
 put("valid", "event-payment-received", ev, "Event")
 put("valid", "events-page", {"events": [ev], "cursor": "evt_1", "has_more": False}, "EventsPage")
 put("valid", "contact-request", {"share": ["phone"]}, "ContactRequest")
@@ -146,7 +145,7 @@ manifest.append({"file": "valid/receipts.jws.json", "def": None, "expect": "vali
 # invalid
 bad = copy.deepcopy(q); bad["lines"][2]["amount"] = M("3600.00"); bad["quote_id"] = "qt_Bad1"
 put("invalid", "quote-lines-do-not-sum", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
-bad = copy.deepcopy(q); bad["payment_schedule"][0]["amount"] = M("38850.0"); bad["quote_id"] = "qt_Bad2"
+bad = copy.deepcopy(q); bad["payment_schedule"][0]["amount"] = M("37899.9"); bad["quote_id"] = "qt_Bad2"
 put("invalid", "quote-wrong-precision", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
 bad = copy.deepcopy(quote); bad["total"] = M("119500.00")
 put("invalid", "quote-tampered-after-signing", bad, "Quote", "signature", "livstay-quote+jws")
@@ -160,19 +159,19 @@ put("invalid", "home-without-time-zone", bad, "Home", "schema")
 bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad3"
 bad["cancellation"][0]["until"], bad["cancellation"][1]["until"] = bad["cancellation"][1]["until"], bad["cancellation"][0]["until"]
 put("invalid", "quote-cancellation-out-of-order", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
-bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["due_now"] = {"amount": "38850.00", "currency": "USD"}
+bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["due_now"] = {"amount": "37899.90", "currency": "USD"}
 put("invalid", "booking-due-now-wrong-currency", bad_op, "BookingOperation", "quote_binding")
 bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad4"; bad["deposit"]["amount"] = M("-15000.00")
 put("invalid", "quote-negative-deposit", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
 bad = copy.deepcopy(q); bad["quote_id"] = "qt_Bad5"
-bad["payment_schedule"][0]["amount"], bad["payment_schedule"][1]["amount"] = M("-1.00"), M("129501.00")
+bad["payment_schedule"][0]["amount"], bad["payment_schedule"][1]["amount"] = M("-1.00"), M("126334.00")
 put("invalid", "quote-negative-instalment", dict(bad, signature=sign(bad, priv, "livstay-quote+jws")), "Quote", "reconcile", "livstay-quote+jws")
 bad_op = copy.deepcopy(op); bad_op["terms"]["livstay"]["home_id"] = "home_other"
 put("invalid", "booking-other-home", bad_op, "BookingOperation", "quote_binding")
 cancel_op = copy.deepcopy(op); cl = cancel_op["terms"]["livstay"]
 for k in ("quote_id", "quote_signature", "total", "due_now", "deposit", "tier", "requirements"):
     cl.pop(k)
-cl.update(action="cancel", refund=M("64750.00")); cancel_op.update(operation_id="bk_7Cx2", summary="Cancel Casa Mira, 27 Dec to 3 Jan. Refund INR 64,750.00 to your card within 5 days.")
+cl.update(action="cancel", refund=M("63166.50")); cancel_op.update(operation_id="bk_7Cx2", summary="Cancel Casa Mira, 27 Dec to 3 Jan. Refund INR 63,166.50 to your card within 5 days.")
 put("valid", "booking-operation-cancel", cancel_op, "BookingOperation")
 bad = copy.deepcopy(q); bad["quote_id"] = "qt_Sek1"; bad["currency"] = "SEK"
 for l in bad["lines"]: l["amount"]["currency"] = "SEK"

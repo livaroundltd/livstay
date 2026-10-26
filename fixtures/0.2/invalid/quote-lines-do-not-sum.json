@@ -63,19 +63,10 @@
         "currency": "INR"
       },
       "in_total": true
-    },
-    {
-      "kind": "platform_fee",
-      "label": "LivAround fee",
-      "amount": {
-        "amount": "3167.00",
-        "currency": "INR"
-      },
-      "in_total": true
     }
   ],
   "total": {
-    "amount": "129500.00",
+    "amount": "126333.00",
     "currency": "INR"
   },
   "payment_schedule": [
@@ -83,7 +74,7 @@
       "due_at": null,
       "at_booking": true,
       "amount": {
-        "amount": "38850.00",
+        "amount": "37899.90",
         "currency": "INR"
       }
     },
@@ -91,7 +82,7 @@
       "due_at": "2026-12-13T08:30:00Z",
       "at_booking": false,
       "amount": {
-        "amount": "90650.00",
+        "amount": "88433.10",
         "currency": "INR"
       }
     }
@@ -100,14 +91,14 @@
     {
       "until": "2026-12-13T08:30:00Z",
       "refund": {
-        "amount": "129500.00",
+        "amount": "126333.00",
         "currency": "INR"
       }
     },
     {
       "until": "2026-12-20T08:30:00Z",
       "refund": {
-        "amount": "64750.00",
+        "amount": "63166.50",
         "currency": "INR"
       }
     },
@@ -130,5 +121,5 @@
   "instant": true,
   "created_at": "2026-10-24T09:00:00Z",
   "expires_at": "2026-10-25T09:00:00Z",
-  "signature": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3QtMjAyNi0xMCIsInR5cCI6ImxpdnN0YXktcXVvdGUrandzIn0.eyJhc3N1bWVkX3RpZXIiOiJ0cnVzdGVkIiwiY2FuY2VsbGF0aW9uIjpbeyJyZWZ1bmQiOnsiYW1vdW50IjoiMTI5NTAwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwidW50aWwiOiIyMDI2LTEyLTEzVDA4OjMwOjAwWiJ9LHsicmVmdW5kIjp7ImFtb3VudCI6IjY0NzUwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwidW50aWwiOiIyMDI2LTEyLTIwVDA4OjMwOjAwWiJ9LHsicmVmdW5kIjp7ImFtb3VudCI6IjAuMDAiLCJjdXJyZW5jeSI6IklOUiJ9LCJ1bnRpbCI6bnVsbH1dLCJjaGVja19pbiI6IjIwMjYtMTItMjciLCJjaGVja19vdXQiOiIyMDI3LTAxLTAzIiwiY3JlYXRlZF9hdCI6IjIwMjYtMTAtMjRUMDk6MDA6MDBaIiwiY3VycmVuY3kiOiJJTlIiLCJkZXBvc2l0Ijp7ImFtb3VudCI6eyJhbW91bnQiOiIxNTAwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sIm1vZGUiOiJhdXRob3Jpc2UifSwiZXhwaXJlc19hdCI6IjIwMjYtMTAtMjVUMDk6MDA6MDBaIiwiaG9tZV9pZCI6ImhvbWVfN1FwMiIsImluc3RhbnQiOnRydWUsImxpbmVzIjpbeyJhbW91bnQiOnsiYW1vdW50IjoiMTI2MDAwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJuaWdodHMiLCJsYWJlbCI6IjcgbmlnaHRzIn0seyJhbW91bnQiOnsiYW1vdW50IjoiLTEyNjAwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJkaXNjb3VudCIsImxhYmVsIjoiV2Vla2x5IHN0YXksIDEwJSBvZmYgbmlnaHRzIn0seyJhbW91bnQiOnsiYW1vdW50IjoiMzYwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sImluX3RvdGFsIjp0cnVlLCJraW5kIjoiY2xlYW5pbmciLCJsYWJlbCI6IkNsZWFuaW5nIn0seyJhbW91bnQiOnsiYW1vdW50IjoiMjgwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sImluX3RvdGFsIjp0cnVlLCJraW5kIjoiZXh0cmFfZ3Vlc3QiLCJsYWJlbCI6IkNoaWxkIGFnZWQgNywgNyBuaWdodHMifSx7ImFtb3VudCI6eyJhbW91bnQiOiI2NjMzLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJ0YXgiLCJsYWJlbCI6IkdTVCJ9LHsiYW1vdW50Ijp7ImFtb3VudCI6IjMxNjcuMDAiLCJjdXJyZW5jeSI6IklOUiJ9LCJpbl90b3RhbCI6dHJ1ZSwia2luZCI6InBsYXRmb3JtX2ZlZSIsImxhYmVsIjoiTGl2QXJvdW5kIGZlZSJ9XSwicGFydHkiOnsiYWR1bHRzIjo0LCJjaGlsZHJlbiI6W3siYWdlIjo3fSx7ImFnZSI6MX1dLCJwZXRzIjowfSwicGF5bWVudF9zY2hlZHVsZSI6W3siYW1vdW50Ijp7ImFtb3VudCI6IjM4ODUwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiYXRfYm9va2luZyI6dHJ1ZSwiZHVlX2F0IjpudWxsfSx7ImFtb3VudCI6eyJhbW91bnQiOiI5MDY1MC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sImF0X2Jvb2tpbmciOmZhbHNlLCJkdWVfYXQiOiIyMDI2LTEyLTEzVDA4OjMwOjAwWiJ9XSwicXVvdGVfaWQiOiJxdF9CYWQxIiwidGVybXNfdmVyc2lvbiI6MTIsInRpbWVfem9uZSI6IkFzaWEvS29sa2F0YSIsInRvdGFsIjp7ImFtb3VudCI6IjEyOTUwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn19.Ibv2y1kQJX23OggZyRPRGJMh4rfIyYFJVw8_9o2Ck0Xy_5iKzunQpa_3mRb2sanKs9sNluFdl1GF0NJlUEHsFg"
+  "signature": "eyJhbGciOiJFUzI1NiIsImtpZCI6InRlc3QtMjAyNi0xMCIsInR5cCI6ImxpdnN0YXktcXVvdGUrandzIn0.eyJhc3N1bWVkX3RpZXIiOiJ0cnVzdGVkIiwiY2FuY2VsbGF0aW9uIjpbeyJyZWZ1bmQiOnsiYW1vdW50IjoiMTI2MzMzLjAwIiwiY3VycmVuY3kiOiJJTlIifSwidW50aWwiOiIyMDI2LTEyLTEzVDA4OjMwOjAwWiJ9LHsicmVmdW5kIjp7ImFtb3VudCI6IjYzMTY2LjUwIiwiY3VycmVuY3kiOiJJTlIifSwidW50aWwiOiIyMDI2LTEyLTIwVDA4OjMwOjAwWiJ9LHsicmVmdW5kIjp7ImFtb3VudCI6IjAuMDAiLCJjdXJyZW5jeSI6IklOUiJ9LCJ1bnRpbCI6bnVsbH1dLCJjaGVja19pbiI6IjIwMjYtMTItMjciLCJjaGVja19vdXQiOiIyMDI3LTAxLTAzIiwiY3JlYXRlZF9hdCI6IjIwMjYtMTAtMjRUMDk6MDA6MDBaIiwiY3VycmVuY3kiOiJJTlIiLCJkZXBvc2l0Ijp7ImFtb3VudCI6eyJhbW91bnQiOiIxNTAwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sIm1vZGUiOiJhdXRob3Jpc2UifSwiZXhwaXJlc19hdCI6IjIwMjYtMTAtMjVUMDk6MDA6MDBaIiwiaG9tZV9pZCI6ImhvbWVfN1FwMiIsImluc3RhbnQiOnRydWUsImxpbmVzIjpbeyJhbW91bnQiOnsiYW1vdW50IjoiMTI2MDAwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJuaWdodHMiLCJsYWJlbCI6IjcgbmlnaHRzIn0seyJhbW91bnQiOnsiYW1vdW50IjoiLTEyNjAwLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJkaXNjb3VudCIsImxhYmVsIjoiV2Vla2x5IHN0YXksIDEwJSBvZmYgbmlnaHRzIn0seyJhbW91bnQiOnsiYW1vdW50IjoiMzYwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sImluX3RvdGFsIjp0cnVlLCJraW5kIjoiY2xlYW5pbmciLCJsYWJlbCI6IkNsZWFuaW5nIn0seyJhbW91bnQiOnsiYW1vdW50IjoiMjgwMC4wMCIsImN1cnJlbmN5IjoiSU5SIn0sImluX3RvdGFsIjp0cnVlLCJraW5kIjoiZXh0cmFfZ3Vlc3QiLCJsYWJlbCI6IkNoaWxkIGFnZWQgNywgNyBuaWdodHMifSx7ImFtb3VudCI6eyJhbW91bnQiOiI2NjMzLjAwIiwiY3VycmVuY3kiOiJJTlIifSwiaW5fdG90YWwiOnRydWUsImtpbmQiOiJ0YXgiLCJsYWJlbCI6IkdTVCJ9XSwicGFydHkiOnsiYWR1bHRzIjo0LCJjaGlsZHJlbiI6W3siYWdlIjo3fSx7ImFnZSI6MX1dLCJwZXRzIjowfSwicGF5bWVudF9zY2hlZHVsZSI6W3siYW1vdW50Ijp7ImFtb3VudCI6IjM3ODk5LjkwIiwiY3VycmVuY3kiOiJJTlIifSwiYXRfYm9va2luZyI6dHJ1ZSwiZHVlX2F0IjpudWxsfSx7ImFtb3VudCI6eyJhbW91bnQiOiI4ODQzMy4xMCIsImN1cnJlbmN5IjoiSU5SIn0sImF0X2Jvb2tpbmciOmZhbHNlLCJkdWVfYXQiOiIyMDI2LTEyLTEzVDA4OjMwOjAwWiJ9XSwicXVvdGVfaWQiOiJxdF9CYWQxIiwidGVybXNfdmVyc2lvbiI6MTIsInRpbWVfem9uZSI6IkFzaWEvS29sa2F0YSIsInRvdGFsIjp7ImFtb3VudCI6IjEyNjMzMy4wMCIsImN1cnJlbmN5IjoiSU5SIn19.JgNNKWJ9yBE-TngeojuBcucDs3kIdKcYygQqCQARWJMqKaUwsl82kQdOwAMAtvEAxdV4RTiPe3D0TDy-JZbPfw"
 }
