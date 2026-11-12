@@ -25,7 +25,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset
 .bar{border-bottom:1px solid var(--rule);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .bar .in{max-width:1240px;margin:0 auto;padding-block:14px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .mark{font-family:var(--display);font-weight:700;font-size:22px;color:var(--fg);text-decoration:none;display:flex;align-items:center;gap:10px}
-.mark i{width:13px;height:13px;border-radius:50%;background:var(--sun);display:inline-block}
+.mark .logo{display:block;height:28px;width:auto}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mark .logo rect:first-of-type{fill:#12314A}}
+:root[data-theme="dark"] .mark .logo rect:first-of-type{fill:#12314A}
 .top{display:flex;gap:18px;flex-wrap:wrap;font-size:15px}
 .top a{color:var(--fg);text-decoration:none}
 .top a[aria-current]{color:var(--accent);font-weight:700}

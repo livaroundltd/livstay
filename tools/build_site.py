@@ -10,6 +10,8 @@ shutil.rmtree(OUT,ignore_errors=True); os.makedirs(O)
 for f in ('index.html','style.css','CNAME'):
     shutil.copy(os.path.join(ROOT,'site',f),os.path.join(OUT,f))
 open(os.path.join(OUT,'.nojekyll'),'w').close()
+shutil.copytree(os.path.join(ROOT,'site','brand'),os.path.join(OUT,'brand'))
+LOGO=open(os.path.join(ROOT,'site','brand','_inline-logo.html')).read().strip()
 SRC={'specification':os.path.join(ROOT,'spec','livstay-0.2.md')}
 def source(slug): return SRC.get(slug,os.path.join(ROOT,'site','content',slug+'.md'))
 REPO='https://github.com/livaroundltd/livstay'
@@ -50,9 +52,9 @@ for i,(slug,title,grp) in enumerate(pages):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="canonical" href="https://livstay.org/docs/{slug}.html">
-<link rel="stylesheet" href="../style.css"></head><body>
+<link rel="stylesheet" href="../style.css"><link rel="icon" href="../brand/favicon.svg" type="image/svg+xml"><link rel="icon" href="../brand/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="../brand/apple-touch-icon.png"><meta property="og:image" content="https://livstay.org/brand/livstay-logo-1260.png"></head><body>
 <header class="bar"><div class="in">
-<a class="mark" href="../index.html"><i aria-hidden="true"></i>LivStay</a>
+<a class="mark" href="../index.html">{LOGO}</a>
 <nav class="top" aria-label="Site"><a href="introduction.html"{topcur('introduction')}>Docs</a><a href="specification.html"{topcur('specification')}>Specification</a><a href="path-to-1.html"{topcur('path-to-1')}>Path to 1.0</a><a href="{REPO}">GitHub</a></nav>
 <span class="status">Draft 0.2 · Poppy 0.2</span></div></header>
 <div class="layout"><aside class="rail"><nav aria-label="Documentation">{''.join(rail)}</nav></aside>
