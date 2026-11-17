@@ -1,13 +1,13 @@
 """Build the livstay.org static site into docs/ (served by GitHub Pages from main /docs).
 
 Usage: python3 tools/build_site.py   (needs: pip install markdown)
-Sources: site/index.html, site/style.css, site/CNAME, site/content/*.md, spec/livstay-0.2.md
+Sources: site/index.html, site/free.html, site/style.css, site/CNAME, site/content/*.md, spec/livstay-0.2.md
 """
 import re, markdown, html, os, shutil
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT=os.path.join(ROOT,'docs'); O=os.path.join(OUT,'docs')
 shutil.rmtree(OUT,ignore_errors=True); os.makedirs(O)
-for f in ('index.html','style.css','CNAME'):
+for f in ('index.html','free.html','style.css','CNAME'):
     shutil.copy(os.path.join(ROOT,'site',f),os.path.join(OUT,f))
 open(os.path.join(OUT,'.nojekyll'),'w').close()
 shutil.copytree(os.path.join(ROOT,'site','brand'),os.path.join(OUT,'brand'))
