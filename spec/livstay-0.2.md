@@ -1166,19 +1166,21 @@ A Host Platform claims a level only if its responses validate against the schema
 
 ## Appendix B. How LivAround implements this draft
 
-Informative. LivAround is the reference Host Platform.
+Informative. LivAround is the reference Host Platform. At the time of writing it serves Levels 0 and 1 and hands a booking off to the Home's booking page with the Quote; Levels 2 and 3 are not built. The example in §4.1 shows a Level 3 platform and is illustrative.
 
 | LivStay | LivAround |
 | --- | --- |
-| Host Platform issuer | `stay.livaround.com`, one OAuth server per operator domain |
+| LivStay endpoint (Levels 0–1) | `booking.livaround.com`: `poppy.json`, the keys and `/livstay/v0` are served from the same origin as every Home's booking page, which is also `facts_site` |
+| Host Platform issuer (Levels 2–3, not yet built) | One OAuth server per operator domain |
 | Home | `Property` (linked rooms are separate Homes; occupancy computed across the group) |
-| Facts | Facts page on `booking.livaround.com`, host-reviewed |
-| Terms | `LivinbnbListingTerms` money subset; `decision_mode` from `decisionMode` |
+| Home `url` and Facts | The Home's direct booking page on `booking.livaround.com`. A Home is published by the rule that publishes that page, plus the host's agent switch; the page carries the same Facts, Terms and Protection (§6.5) |
+| Terms | `PropertyTerms` (the host's money terms); `decision_mode` from `decisionMode` |
 | Protection | Deposit ladder, evidence protocol, published claim rules; underwriter `host` in v1 |
 | Enquiries, booking conversation | The Masked Relay; Host replies over WhatsApp |
 | `auto_counter` | `AUTO_COUNTER_WITHIN_BOUNDS` with `autoCounterFloorPct` and `autoCounterMoves` |
 | Tier credential | livscore guest credential |
-| Fees | Flat 5% charged to the host and deducted from the payout, so it is never a Quote line; no guest fee; `agent_fee`, if an agent charges one, as its own line |
+| Payment | On the host's own payment account, on the booking page (§11). The Host Platform does not hold the traveller's money |
+| Fees | Flat 5% charged to the host, so it is never a Quote line; no guest fee; `agent_fee`, if an agent charges one, as its own line |
 
 ## Appendix C. Open topics on the path to 1.0
 
