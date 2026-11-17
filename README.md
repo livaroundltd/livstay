@@ -33,7 +33,7 @@ LivStay is an extension of the [Personal Agent Protocol](https://personalagentpr
 | `tools/conformance.py` | Level 0 and 1 checks against a live host platform |
 | `tools/mock_host.py` | A one-file Level 1 host platform for local testing |
 | `tools/livstay_jws.py` | Canonical JSON, ES256 signing and verification |
-| `site/` | Sources for livstay.org: the home page, styles and docs content |
+| `site/` | Sources for livstay.org: the home page, the hosts' page at `/free`, styles and docs content |
 | `tools/build_site.py` | Renders `site/` and `spec/` into `docs/` |
 | `docs/` | The built site, served by GitHub Pages from `main` → `/docs`. Generated: edit `site/` or `spec/` and rebuild, never edit `docs/` by hand |
 | `.github/workflows/pages.yml` | Checks generated files, fixtures and the conformance runner |

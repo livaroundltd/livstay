@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LivStay Free: your Airbnb home, bookable by AI assistants</title>
+<meta name="description" content="Paste your Airbnb listing link and get a direct booking page, a listing AI assistants can book, and a home swap listing. No subscription. 5% only when a guest books.">
+<meta property="og:title" content="LivStay Free: your Airbnb home, bookable by AI assistants">
+<meta property="og:description" content="Paste your Airbnb listing link and get a direct booking page, a listing AI assistants can book, and a home swap listing. No subscription. 5% only when a guest books.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://livstay.org/free">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0B2A3B">
+<link rel="canonical" href="https://livstay.org/free">
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml"><link rel="icon" href="brand/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<meta property="og:image" content="https://livstay.org/brand/livstay-logo-1260.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Horizon tokens: docs/design/handoffs/2026-04-21-livaround-design-system/01-design-system/colors_and_type.css */
+:root{
+  color-scheme:light;
+  --brand-50:#EEF4FF;--brand-100:#DBE7FE;--brand-200:#BCD0FD;--brand-400:#6389F7;--brand-600:#2563EB;--brand-700:#1E4FBF;
+  --sun-50:#FFF7E6;--sun-100:#FFEBBF;--sun-300:#FFC866;--sun-500:#FFB547;--sun-700:#B5781E;
+  --coral-50:#FFF1ED;--coral-500:#FF7A59;--coral-700:#B8472C;
+  --ink:#0B2A3B;--slate-900:#12314A;--slate-800:#1F4260;--slate-700:#32547A;--slate-600:#4D6C8E;--slate-500:#6C88A5;
+  --slate-400:#91A6BE;--slate-300:#B6C4D3;--slate-200:#E2EAF1;--slate-100:#EEF2F7;--slate-50:#F5F8FB;--sand:#FAFBFD;--paper:#FFFFFF;
+  --success:#10B981;--success-bg:#DCFCE7;--success-fg:#047857;
+  --r-md:10px;--r-lg:14px;--r-xl:20px;--r-2xl:28px;--r-pill:9999px;
+  --shadow-sm:0 1px 2px rgba(11,42,59,.05),0 2px 6px rgba(11,42,59,.06);
+  --shadow-md:0 4px 12px rgba(11,42,59,.08),0 2px 4px rgba(11,42,59,.05);
+  --shadow-lg:0 16px 40px rgba(11,42,59,.12),0 4px 12px rgba(11,42,59,.06);
+  --sans:'DM Sans',ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --display:var(--sans);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+/* livstay.org sets its headings in Fraunces; everything else is shared. */
+[data-site="livstay"]{--display:'Fraunces',Georgia,serif}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--brand-600);text-decoration:none}
+a:hover{color:var(--brand-700)}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--brand-400);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-500)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h2{font-family:var(--display);font-size:clamp(28px,3.4vw,38px);font-weight:700;letter-spacing:-.02em;line-height:1.15;margin-top:10px;text-wrap:balance}
+.sub{color:var(--slate-700);font-size:18px;max-width:620px;margin-top:14px}
+section{padding:88px 0}
+
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 16px/1 var(--sans);border-radius:var(--r-lg);padding:15px 22px;border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:background-color 180ms var(--ease),border-color 180ms var(--ease),color 180ms var(--ease)}
+.btn-sun{background:var(--sun-500);color:var(--ink)}
+.btn-sun:hover{background:var(--sun-300);color:var(--ink)}
+.btn-primary{background:var(--brand-600);color:#fff}
+.btn-primary:hover{background:var(--brand-700);color:#fff}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+.btn-ghost:hover{border-color:#fff;color:#fff}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:40;background:rgba(11,42,59,.94);backdrop-filter:blur(10px)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.logo:hover{color:#fff}
+.logo svg{width:30px;height:30px;flex:none}
+.logo .tag{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);background:var(--sun-500);border-radius:var(--r-pill);padding:3px 8px}
+.logo .mark-full{height:30px;width:auto;display:block;color:#fff}
+.logo .mark-full rect:first-of-type{fill:#12314A}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{color:var(--slate-300);font-size:14.5px;font-weight:500}
+.nav-links a:hover{color:#fff}
+.nav-links a.nav-cta{background:var(--sun-500);color:var(--ink);font-weight:700;font-size:14px;padding:9px 16px;border-radius:var(--r-md)}
+@media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;position:relative;overflow:hidden;padding:76px 0 92px}
+.hero::before{content:"";position:absolute;right:-240px;top:-200px;width:780px;height:780px;border-radius:50%;border:1.5px solid rgba(99,137,247,.22);box-shadow:0 0 0 120px rgba(99,137,247,.05),0 0 0 260px rgba(99,137,247,.03);pointer-events:none}
+.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center}
+.hero .eyebrow{color:var(--sun-500)}
+.hero h1{font-family:var(--display);font-size:clamp(36px,4.8vw,56px);font-weight:700;letter-spacing:-.025em;line-height:1.06;margin-top:14px;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--sun-500)}
+.lede{color:var(--slate-300);font-size:18.5px;margin:20px 0 28px;max-width:540px}
+.lede b{color:#fff;font-weight:600}
+.paste{display:flex;gap:8px;background:#fff;border-radius:18px;padding:7px;max-width:540px;box-shadow:0 18px 44px rgba(0,0,0,.3)}
+.paste label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.paste input{flex:1;min-width:0;border:0;background:transparent;font:500 15px var(--mono);color:var(--ink);padding:0 12px}
+.paste input::placeholder{color:var(--slate-400)}
+.paste input:focus-visible{outline:none}
+.paste:focus-within{box-shadow:0 0 0 4px rgba(99,137,247,.45),0 18px 44px rgba(0,0,0,.3)}
+.paste-err{margin-top:10px;font-size:14px;color:#FFBDA8;max-width:540px}
+.final .paste-err{margin-left:auto;margin-right:auto}
+.hero-alt{margin-top:12px;font-size:14px;color:var(--slate-400)}
+.hero-alt a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.trust{display:flex;gap:10px 20px;flex-wrap:wrap;margin-top:26px;padding:0;list-style:none}
+.trust li{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-300);display:flex;align-items:center;gap:8px}
+.trust li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sun-500)}
+
+/* hero visual: an assistant finds, quotes and books the home */
+.agent{background:var(--slate-900);border:1px solid var(--slate-800);border-radius:22px;padding:18px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.agent-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--slate-800)}
+.agent-head span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-400)}
+.agent-head .live{color:var(--success);display:flex;align-items:center;gap:6px}
+.agent-head .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--success)}
+.thread{display:flex;flex-direction:column;gap:12px;padding-top:16px}
+.bub{max-width:90%;padding:11px 14px;border-radius:14px;font-size:14.5px;line-height:1.45}
+.bub .who{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-400);margin-bottom:3px}
+.bub.you{align-self:flex-end;background:var(--slate-800);color:var(--slate-100);border-bottom-right-radius:4px}
+.bub.ai{align-self:flex-start;background:#fff;color:var(--ink);border-bottom-left-radius:4px;max-width:96%}
+.bub.ai .who{color:var(--slate-500)}
+.home{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;margin-top:10px;border:1px solid var(--slate-200);border-radius:var(--r-lg);padding:10px}
+.home .ph{border-radius:var(--r-md);background:linear-gradient(160deg,#FFDB8A 0%,#FF9B7E 45%,#3E68F0 100%);position:relative;min-height:84px}
+.home .ph::after{content:"";position:absolute;left:14px;right:14px;bottom:0;height:42%;background:rgba(11,42,59,.55);clip-path:polygon(0 100%,0 45%,50% 0,100% 45%,100% 100%)}
+.home h3{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.home p{font-size:12.5px;color:var(--slate-600)}
+.quote{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:6px;flex-wrap:wrap}
+.quote .amt{font-family:var(--mono);font-weight:600;font-size:17px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:var(--r-pill);padding:3px 8px}
+.pill.ok{background:var(--success-bg);color:var(--success-fg)}
+.pill.blue{background:var(--brand-50);color:var(--brand-700)}
+.pill.sun{background:var(--sun-50);color:var(--sun-700);border:1px solid var(--sun-300)}
+.booklink{display:block;margin-top:10px;text-align:center;background:var(--brand-600);color:#fff;font-weight:600;font-size:14px;border-radius:var(--r-md);padding:9px}
+.ping{margin-top:14px;padding:12px 14px;border-radius:var(--r-lg);background:rgba(255,181,71,.1);border:1px solid rgba(255,181,71,.45);display:flex;gap:12px;align-items:flex-start}
+.ping .dot{flex:none;width:32px;height:32px;border-radius:var(--r-md);background:var(--sun-500);color:var(--ink);display:grid;place-items:center;font-weight:700}
+.ping b{display:block;color:#fff;font-size:14.5px;font-weight:600}
+.ping span{font-family:var(--mono);font-size:11.5px;color:var(--sun-300)}
+.step-in{opacity:0;transform:translateY(8px);transition:opacity 450ms var(--ease),transform 450ms var(--ease)}
+.step-in.show{opacity:1;transform:none}
+
+/* three outputs */
+.fan{margin-top:44px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.card{background:var(--paper);border:1px solid var(--slate-200);border-radius:var(--r-xl);padding:26px;box-shadow:var(--shadow-sm)}
+.card .ic{width:44px;height:44px;border-radius:var(--r-lg);display:grid;place-items:center;margin-bottom:16px}
+.card .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic.sun{background:var(--sun-50);color:var(--sun-700)}
+.ic.blue{background:var(--brand-50);color:var(--brand-700)}
+.ic.coral{background:var(--coral-50);color:var(--coral-700)}
+.card h3{font-size:20px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.card p{color:var(--slate-700);font-size:15px;margin-top:8px}
+.card .eyebrow{display:block;margin-bottom:6px}
+.source{margin:44px auto 0;max-width:560px;text-align:center}
+.source .url{display:inline-flex;align-items:center;gap:10px;max-width:100%;background:var(--paper);border:1px solid var(--slate-300);border-radius:var(--r-pill);padding:10px 18px;font-family:var(--mono);font-size:14px;color:var(--slate-700);box-shadow:var(--shadow-md)}
+.source .url span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.source .url::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--coral-500)}
+.source .stem{width:1.5px;height:34px;background:var(--slate-300);margin:0 auto}
+.source + .fan{margin-top:0;position:relative;padding-top:22px}
+.source + .fan::before{content:"";position:absolute;top:0;left:16.6%;right:16.6%;height:22px;border:1.5px solid var(--slate-300);border-bottom:0;border-radius:14px 14px 0 0}
+
+/* shift: before / after */
+.band{background:var(--slate-50);border-top:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200)}
+.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:44px}
+.col{border-radius:var(--r-xl);padding:28px}
+.col.before{background:var(--paper);border:1px solid var(--slate-200)}
+.col.after{background:var(--sun-50);border:1.5px solid var(--sun-500)}
+.col.after .eyebrow{color:var(--sun-700)}
+.col ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:13px}
+.col li{position:relative;padding-left:26px;font-size:15.5px;color:var(--slate-700)}
+.col.after li{color:var(--slate-900)}
+.col.before li::before{content:"";position:absolute;left:2px;top:.72em;width:12px;height:1.5px;background:var(--slate-400)}
+.col.after li::before{content:"";position:absolute;left:3px;top:.3em;width:6px;height:11px;border:solid var(--success-fg);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+
+/* calculator */
+.calc{margin-top:44px;background:var(--ink);color:#fff;border-radius:var(--r-2xl);padding:44px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;align-items:center}
+.calc h3{font-family:var(--display);font-size:26px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.calc p{color:var(--slate-300);font-size:15px;margin-top:10px}
+.field{margin-top:24px}
+.field label{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--slate-300)}
+.field label b{font-family:var(--mono);font-size:16px;color:var(--sun-500);font-weight:600}
+input[type=range]{width:100%;margin-top:10px;accent-color:var(--sun-500)}
+.out{background:var(--slate-900);border:1px solid var(--slate-800);border-radius:var(--r-xl);padding:26px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--slate-800);font-size:15px;color:var(--slate-300)}
+.row span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;color:#fff;white-space:nowrap}
+.row.muted span:last-child{color:var(--slate-400)}
+.total{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:18px}
+.total span:first-child{font-weight:600}
+.total .big{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:clamp(28px,3.6vw,38px);font-weight:600;color:var(--sun-500);white-space:nowrap}
+.total .big.neg{color:var(--coral-500)}
+.guest{margin-top:12px;font-size:14px;color:var(--slate-300)}
+.guest b{color:#fff;font-family:var(--mono);font-weight:600}
+.note{margin-top:16px;font-size:12.5px;color:var(--slate-400)}
+
+/* steps */
+.steps{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;counter-reset:s}
+.step{background:var(--paper);border:1px solid var(--slate-200);border-radius:var(--r-xl);padding:22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+.step .n{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--brand-700)}
+.step h3{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-top:8px;line-height:1.25}
+.step p{color:var(--slate-700);font-size:14.5px;margin-top:8px}
+.step .ui{margin-top:auto;padding-top:16px}
+.mini{border:1px solid var(--slate-200);background:var(--slate-50);border-radius:var(--r-md);padding:10px 12px;font-family:var(--mono);font-size:11.5px;color:var(--slate-700);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.mini + .mini{margin-top:6px}
+.mini b{color:var(--ink);font-weight:600}
+.mini span{white-space:nowrap}
+.mini .tick{color:var(--success-fg)}
+.golive{margin-top:18px;border-radius:var(--r-xl);background:var(--brand-50);border:1px solid var(--brand-200);padding:22px 26px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.golive h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.golive p{color:var(--slate-700);font-size:15px;margin-top:4px;max-width:640px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips span{font-size:13.5px;font-weight:500;color:var(--slate-700);background:var(--paper);border:1px solid var(--slate-200);border-radius:var(--r-pill);padding:6px 12px}
+.chips .lab{border:0;background:none;padding-left:0;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-500);align-self:center}
+
+/* included */
+.plan{margin-top:44px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:20px;align-items:start}
+.plan .card h3{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price{font-family:var(--mono);font-size:44px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-top:14px}
+.price small{font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:0;color:var(--slate-600);margin-left:8px}
+.list{list-style:none;margin:20px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px}
+.list li{position:relative;padding-left:24px;font-size:15px;color:var(--slate-900)}
+.list li::before{content:"";position:absolute;left:3px;top:.3em;width:6px;height:11px;border:solid var(--success-fg);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.pro{background:var(--slate-50)}
+.pro .list{grid-template-columns:1fr}
+.pro .list li{color:var(--slate-700)}
+.pro .list li::before{border:0;width:10px;height:10px;top:.45em;left:1px;transform:none;background:linear-gradient(var(--slate-400),var(--slate-400)) center/100% 1.5px no-repeat,linear-gradient(var(--slate-400),var(--slate-400)) center/1.5px 100% no-repeat}
+
+/* fine print */
+.fine{margin-top:44px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.fine .card h3{font-size:17px;color:var(--brand-700)}
+.fine .card p{font-size:14.5px}
+
+/* faq */
+.faq{max-width:760px;margin:44px auto 0}
+details{background:var(--paper);border:1px solid var(--slate-200);border-radius:var(--r-lg);margin-bottom:10px}
+summary{padding:18px 22px;font-weight:600;font-size:16px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;border-radius:var(--r-lg)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--mono);font-size:18px;color:var(--slate-400)}
+details[open] summary::after{content:"\2212"}
+details p{padding:0 22px 18px;color:var(--slate-700);font-size:15px}
+
+/* final */
+.final{background:var(--ink);color:#fff;text-align:center;padding:96px 0}
+.final .eyebrow{color:var(--sun-500)}
+.final p{color:var(--slate-300);font-size:18px;margin:16px auto 30px;max-width:540px}
+.final .paste{margin:0 auto}
+footer{background:var(--ink);border-top:1px solid var(--slate-800);padding:26px 0;color:var(--slate-400);font-size:13px}
+.foot{display:flex;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+footer a{color:var(--slate-300)}
+
+@media(max-width:980px){
+  .hero-in,.calc,.plan{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero{padding:56px 0 68px}
+}
+@media(max-width:760px){
+  .wrap{padding:0 16px}
+  section{padding:64px 0}
+  .fan,.cmp,.fine,.steps,.list{grid-template-columns:minmax(0,1fr)}
+  .source + .fan{padding-top:0}.source + .fan::before,.source .stem{display:none}.source{margin-bottom:20px}
+  .calc{padding:28px 20px;gap:28px}
+  .paste{flex-direction:column;border-radius:var(--r-xl)}
+  .paste input{padding:12px}
+  .final{padding:72px 0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important}
+  .step-in{opacity:1;transform:none}
+}
+</style>
+</head>
+<body data-site="livstay">
+
+<nav class="top" aria-label="Main">
+  <div class="wrap nav-in">
+    <a class="logo" href="./" aria-label="LivStay home">
+      <svg class="mark-full" viewBox="0 0 210 64" height="32" role="img" aria-label="LivStay"><title>LivStay</title><rect width="64" height="64" rx="16" fill="#0B2A3B"/><circle cx="32" cy="32" r="22" fill="none" stroke="#6389F7" stroke-width="1.5" stroke-opacity="0.7"/><path d="M22 30L32 22L42 30V40H22Z" fill="#FFFFFF"/><rect x="29" y="33" width="6" height="7" rx="1" fill="#FFB547"/><circle cx="47.556" cy="16.444" r="4" fill="#6389F7"/><path fill="currentColor" d="M86.64 46.5V17.7H92.04V46.5ZM96.44000000000001 46.5V26.34H101.84V46.5ZM99.16000000000001 23.58Q97.72000000000001 23.58 96.78 22.72Q95.84 21.86 95.84 20.54Q95.84 19.22 96.78 18.36Q97.72000000000001 17.5 99.16000000000001 17.5Q100.64 17.5 101.58000000000001 18.36Q102.52000000000001 19.22 102.52000000000001 20.54Q102.52000000000001 21.86 101.58000000000001 22.72Q100.64 23.58 99.16000000000001 23.58ZM111.68 46.5 104.28 26.34H109.96000000000001L114.96000000000001 41.42L119.96000000000001 26.34H125.6L118.24 46.5ZM136.12 46.98Q133.36 46.98 131.32 46.099999999999994Q129.28 45.22 128.12 43.66Q126.96000000000001 42.1 126.80000000000001 40.14H132.16Q132.36 40.9 132.84000000000003 41.519999999999996Q133.32000000000002 42.14 134.12 42.5Q134.92000000000002 42.86 136.04000000000002 42.86Q137.12 42.86 137.8 42.56Q138.48000000000002 42.26 138.82 41.739999999999995Q139.16 41.22 139.16 40.66Q139.16 39.82 138.68 39.36Q138.20000000000002 38.9 137.28000000000003 38.620000000000005Q136.36 38.34 135.04000000000002 38.06Q133.60000000000002 37.78 132.22000000000003 37.36Q130.84 36.94 129.76 36.3Q128.68 35.66 128.04000000000002 34.66Q127.4 33.66 127.4 32.18Q127.4 30.38 128.36 28.96Q129.32000000000002 27.54 131.16000000000003 26.7Q133.0 25.86 135.60000000000002 25.86Q139.24 25.86 141.36 27.5Q143.48000000000002 29.14 143.88 32.019999999999996H138.8Q138.56 31.1 137.74 30.560000000000002Q136.92000000000002 30.02 135.56 30.02Q134.12 30.02 133.36 30.54Q132.60000000000002 31.060000000000002 132.60000000000002 31.9Q132.60000000000002 32.46 133.10000000000002 32.900000000000006Q133.60000000000002 33.34 134.52 33.64Q135.44 33.94 136.76000000000002 34.22Q139.08 34.7 140.84000000000003 35.32Q142.60000000000002 35.94 143.60000000000002 37.08Q144.60000000000002 38.22 144.60000000000002 40.38Q144.60000000000002 42.3 143.56 43.8Q142.52 45.3 140.62 46.14Q138.72 46.98 136.12 46.98ZM157.24 46.5Q155.12 46.5 153.54000000000002 45.84Q151.96 45.18 151.08 43.64Q150.20000000000002 42.1 150.20000000000002 39.42V30.86H146.76000000000002V26.34H150.20000000000002L150.8 20.86H155.60000000000002V26.34H160.92000000000002V30.86H155.60000000000002V39.5Q155.60000000000002 40.86 156.20000000000002 41.379999999999995Q156.8 41.9 158.24 41.9H160.88V46.5ZM171.28 46.98Q168.76 46.98 167.12 46.16Q165.48 45.34 164.7 43.96Q163.92000000000002 42.58 163.92000000000002 40.9Q163.92000000000002 39.06 164.86 37.66Q165.8 36.26 167.7 35.459999999999994Q169.6 34.66 172.48000000000002 34.66H177.48000000000002Q177.48000000000002 33.18 177.08 32.2Q176.68 31.22 175.84 30.74Q175.0 30.259999999999998 173.6 30.259999999999998Q172.08 30.259999999999998 171.02 30.919999999999998Q169.96 31.58 169.72 32.94H164.48Q164.68 30.78 165.9 29.200000000000003Q167.12 27.62 169.14 26.740000000000002Q171.16 25.86 173.64000000000001 25.86Q176.48000000000002 25.86 178.56 26.82Q180.64000000000001 27.78 181.76 29.58Q182.88 31.38 182.88 34.019999999999996V46.5H178.32L177.72 43.42Q177.28 44.22 176.68 44.86Q176.08 45.5 175.28000000000003 45.980000000000004Q174.48000000000002 46.46 173.48000000000002 46.72Q172.48000000000002 46.98 171.28 46.98ZM172.56 42.82Q173.6 42.82 174.42000000000002 42.44Q175.24 42.06 175.84 41.400000000000006Q176.44 40.74 176.78 39.879999999999995Q177.12 39.019999999999996 177.24 38.019999999999996V37.980000000000004H173.12Q171.88 37.980000000000004 171.1 38.28Q170.32 38.58 169.95999999999998 39.14Q169.6 39.7 169.6 40.42Q169.6 41.22 169.95999999999998 41.739999999999995Q170.32 42.26 171.0 42.54Q171.68 42.82 172.56 42.82ZM189.48 55.3 194.36 44.26H193.16L185.08 26.34H190.96L196.72 39.34L201.92000000000002 26.34H207.64L195.2 55.3Z"/></svg>
+      <span class="tag">Free</span>
+    </a>
+    <div class="nav-links">
+      <a href="#get">What you get</a>
+      <a href="#maths">The maths</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">Questions</a>
+      <a href="docs/specification.html">Specification</a>
+      <a href="https://dashboard.livaround.com/login">Sign in</a>
+      <a class="nav-cta" href="https://dashboard.livaround.com/signup?plan=free&amp;utm_source=livstay.org&amp;utm_medium=landing&amp;utm_campaign=livstay-free&amp;utm_content=nav">Start free</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-in">
+    <div>
+      <div class="eyebrow">LivStay Free · for Airbnb hosts</div>
+      <h1>Your Airbnb home, bookable by <em>AI assistants</em>. Free.</h1>
+      <p class="lede">Paste your listing link. Keep Airbnb, and add a direct booking page, a listing AI assistants can book, and a home swap listing. <b>No subscription. 5% only when a guest books.</b></p>
+      <form class="paste" action="https://dashboard.livaround.com/signup" method="get" data-content="hero">
+        <input type="hidden" name="plan" value="free">
+        <label for="url1">Your Airbnb listing link</label>
+        <input id="url1" name="listing" type="text" inputmode="url" placeholder="airbnb.co.in/rooms/…" autocomplete="off" aria-describedby="url1-err">
+        <button class="btn btn-sun" type="submit">Get my free page</button>
+      </form>
+      <p class="paste-err" id="url1-err" role="alert" hidden>That does not look like an Airbnb listing link. It should contain airbnb and /rooms/.</p>
+      <p class="hero-alt">No link to hand? <a href="https://dashboard.livaround.com/signup?plan=free&amp;utm_source=livstay.org&amp;utm_medium=landing&amp;utm_campaign=livstay-free&amp;utm_content=hero-no-link">Create your account first</a></p>
+      <ul class="trust">
+        <li>Free forever</li>
+        <li>No card</li>
+        <li>Any number of homes</li>
+        <li>Stays in sync with Airbnb</li>
+      </ul>
+    </div>
+
+    <div class="agent" aria-label="Example: a traveller's AI assistant finds and books a home through LivStay">
+      <div class="agent-head"><span>A traveller's AI assistant</span><span class="live">LivStay</span></div>
+      <div class="thread">
+        <div class="bub you step-in"><span class="who">Traveller</span>Find us a villa in Assagao with a pool. Four of us, 12 to 15 December.</div>
+        <div class="bub ai step-in"><span class="who">Assistant</span>Villa Sussegad fits. Private pool, sleeps six, pets allowed. I have a price straight from the host:
+          <div class="home">
+            <div class="ph" aria-hidden="true"></div>
+            <div>
+              <h3>Villa Sussegad</h3>
+              <p>Assagao, Goa · 3 nights · 4 guests</p>
+              <div class="quote"><span class="amt">₹28,500</span><span class="pill ok">Signed quote</span></div>
+              <p>Free cancellation until 7 Dec</p>
+            </div>
+          </div>
+          <span class="booklink">Book with the host</span>
+        </div>
+      </div>
+      <div class="ping step-in">
+        <div class="dot" aria-hidden="true">₹</div>
+        <div><b>New booking · Villa Sussegad · 12 to 15 Dec</b><span>Found by an AI assistant · Airbnb calendar blocked</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="get">
+  <div class="wrap">
+    <div class="eyebrow">What you get</div>
+    <h2>One link in. Three ways to get booked.</h2>
+    <p class="sub">Your photos, description, amenities, house rules and Airbnb rating come across. You check them, and the home is ready for all three.</p>
+
+    <div class="source" aria-hidden="true">
+      <div class="url"><span>airbnb.co.in/rooms/4821…</span></div>
+      <div class="stem"></div>
+    </div>
+    <div class="fan">
+      <div class="card">
+        <div class="ic sun"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15v4M17 17h4"/></svg></div>
+        <span class="eyebrow">LivStay</span>
+        <h3>A home AI assistants can book</h3>
+        <p>LivStay is the open protocol assistants use to read a home's facts, check live availability and get a price they can trust. Yours is on it, with instant booking.</p>
+      </div>
+      <div class="card">
+        <div class="ic blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></div>
+        <span class="eyebrow">Direct</span>
+        <h3>Your own booking page</h3>
+        <p>One link for your Instagram bio, WhatsApp replies and returning guests. They pay online and the dates block on Airbnb. You set the price, below what Airbnb shows.</p>
+      </div>
+      <div class="card">
+        <div class="ic coral"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3l4 4-4 4"/><path d="M3 7h18"/><path d="M7 21l-4-4 4-4"/><path d="M21 17H3"/></svg></div>
+        <span class="eyebrow">livswap</span>
+        <h3>A home swap listing</h3>
+        <p>One tap starts a livswap listing from the same home. Trade your empty weeks for a stay in another host's place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="eyebrow">Why now</div>
+    <h2>Travellers have started asking an assistant where to stay.</h2>
+    <p class="sub">An assistant can only book what it can read and price. Today that leaves most independent homes out of the answer.</p>
+    <div class="cmp">
+      <div class="col before">
+        <div class="eyebrow">On Airbnb alone</div>
+        <ul>
+          <li>Guests find you in one place, and pay that place's price</li>
+          <li>A repeat guest books through Airbnb again, and you both pay the fees again</li>
+          <li>An assistant cannot check your dates or get a price from you</li>
+          <li>Building a booking site means a subscription before your first booking</li>
+        </ul>
+      </div>
+      <div class="col after">
+        <div class="eyebrow">Airbnb plus LivStay Free</div>
+        <ul>
+          <li>Airbnb keeps working exactly as it does now</li>
+          <li>Repeat guests and your own followers book direct, for less</li>
+          <li>Assistants can find your home, quote it and send the guest to pay</li>
+          <li>Nothing to pay until a booking arrives</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="maths">
+  <div class="wrap">
+    <div class="eyebrow">The maths</div>
+    <h2>The guest pays less. You keep more.</h2>
+    <p class="sub">Around 15% of what a guest pays on Airbnb goes to Airbnb. A LivStay booking costs 5%, plus the card processing fee. The difference is yours to share with the guest.</p>
+    <div class="calc">
+      <div>
+        <h3>Try it on one stay</h3>
+        <p>Set what a guest pays for the stay on Airbnb, and how far below it you price direct.</p>
+        <div class="field">
+          <label for="amt">Guest pays on Airbnb <b id="amtOut">₹30,000</b></label>
+          <input id="amt" type="range" min="5000" max="200000" step="1000" value="30000">
+        </div>
+        <div class="field">
+          <label for="off">Your direct price is lower by <b id="offOut">5%</b></label>
+          <input id="off" type="range" min="0" max="10" step="1" value="5">
+        </div>
+      </div>
+      <div class="out" aria-live="polite">
+        <div class="row"><span>Guest pays direct</span><span id="rGuest">₹28,500</span></div>
+        <div class="row"><span>LivStay fee, 5%</span><span id="rFee">−₹1,425</span></div>
+        <div class="row"><span>Card processing, about 2.4%</span><span id="rProc">−₹684</span></div>
+        <div class="row"><span>You keep, direct</span><span id="rKeep">₹26,391</span></div>
+        <div class="row muted"><span>You keep, same stay on Airbnb</span><span id="rAir">₹25,350</span></div>
+        <div class="total"><span id="rLabel">Extra in your pocket</span><span class="big" id="rDiff">+₹1,041</span></div>
+        <p class="guest">And the guest saves <b id="rSave">₹1,500</b>.</p>
+        <p class="note">Illustrative, before taxes. Airbnb figure uses its 15.5% host-only fee; split-fee listings come out about the same.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="band">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Four short steps, then go live.</h2>
+    <p class="sub">Nothing to build and nothing to type out again. Stop at any step and pick it up later.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="n">STEP 1</div>
+        <h3>Paste your Airbnb link</h3>
+        <p>We read the listing and copy your photos into our storage. You check each detail and fix anything.</p>
+        <div class="ui"><div class="mini"><b>24 photos</b><span class="tick">Saved</span></div><div class="mini"><b>Details</b><span class="tick">Confirmed</span></div></div>
+      </div>
+      <div class="step">
+        <div class="n">STEP 2</div>
+        <h3>Link your calendars</h3>
+        <p>Paste Airbnb's calendar link, and add ours to Airbnb. A booking on either side blocks the other.</p>
+        <div class="ui"><div class="mini"><b>Airbnb → LivStay</b><span class="tick">In sync</span></div><div class="mini"><b>LivStay → Airbnb</b><span class="tick">In sync</span></div></div>
+      </div>
+      <div class="step">
+        <div class="n">STEP 3</div>
+        <h3>Set your direct price</h3>
+        <p>Pick how far below your Airbnb rate you want to be. That is the price guests and assistants see.</p>
+        <div class="ui"><div class="mini"><b>Airbnb rate</b><span>₹10,000</span></div><div class="mini"><b>Direct, 5% lower</b><span>₹9,500</span></div></div>
+      </div>
+      <div class="step">
+        <div class="n">STEP 4</div>
+        <h3>Set up getting paid</h3>
+        <p>Connect your Razorpay account, or open one there, so guests pay you directly. Then choose one of three cancellation policies.</p>
+        <div class="ui"><div class="mini"><b>Razorpay</b><span class="tick">Connected</span></div><div class="mini"><b>Cancellation</b><span>Moderate</span></div></div>
+      </div>
+    </div>
+    <div class="golive">
+      <div>
+        <h3>Go live</h3>
+        <p>You get your booking page link, and the home is published to LivStay once its facts are filled in. Add another home whenever you like.</p>
+      </div>
+      <a class="btn btn-primary" href="#start">Start with your link</a>
+    </div>
+    <div class="chips" aria-label="What comes across from Airbnb">
+      <span class="lab">Comes across</span>
+      <span>Photos</span><span>Title and description</span><span>Amenities</span><span>House rules</span><span>Check-in times</span><span>Sleeps and rooms</span><span>Location</span><span>Rating and review count</span>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <div class="eyebrow">The offer</div>
+    <h2>Free means free. Here is exactly what is in it.</h2>
+    <div class="plan">
+      <div class="card">
+        <h3>LivStay Free <span class="pill sun">No subscription</span></h3>
+        <div class="price">₹0<small>a month, for any number of homes</small></div>
+        <ul class="list">
+          <li>Import from your Airbnb link</li>
+          <li>Two-way calendar sync with Airbnb</li>
+          <li>A booking page for each home</li>
+          <li>Instant booking and online payment</li>
+          <li>Published to LivStay for AI assistants</li>
+          <li>A livswap listing, if you want one</li>
+          <li>Three cancellation policies to pick from</li>
+          <li>Booking confirmation by email</li>
+        </ul>
+        <p style="margin-top:22px;padding-top:18px;border-top:1px solid var(--slate-200);color:var(--slate-700);font-size:15px"><b style="color:var(--ink)">5% of each booking</b> made through LivStay or your booking page. Your Airbnb bookings are untouched.</p>
+      </div>
+      <div class="card pro">
+        <h3>When you outgrow it <span class="pill blue">Pro</span></h3>
+        <p>LivAround Pro runs the whole operation, from $10 per active home a month.</p>
+        <ul class="list">
+          <li>3.5% on direct bookings, or none on your own payment gateway</li>
+          <li>Guest inbox and WhatsApp</li>
+          <li>Cleaning, staff and smart locks</li>
+          <li>Pricing tools and a calendar editor</li>
+          <li>Your own domain and branding</li>
+        </ul>
+        <p style="margin-top:18px"><a href="https://livaround.com/run">See everything in Pro</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="eyebrow">The fine print, up front</div>
+    <h2>Four things to know before you start.</h2>
+    <div class="fine">
+      <div class="card"><h3>We earn only when you do</h3><p>The 5% comes out of a booking's payment when one arrives through LivStay or your booking page. No setup fee, no monthly fee, and no fee on anything you earn on Airbnb.</p></div>
+      <div class="card"><h3>Guests pay into your own Razorpay account</h3><p>Razorpay takes our 5% and its own processing fee out of the payment, and settles the rest to your bank on its normal schedule. There is no bill to pay later. A new Razorpay account needs their usual checks before it can take money.</p></div>
+      <div class="card"><h3>Your calendar is yours to keep true</h3><p>We sync with Airbnb about every half hour, and a direct booking blocks your dates at once. If the same dates sell twice in between, the direct guest is refunded from your account.</p></div>
+      <div class="card"><h3>India first</h3><p>At launch, LivStay Free takes payments in rupees through Razorpay, for homes in India. Other countries will follow.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Questions hosts ask</div>
+    <h2 style="text-align:center">Before you paste the link</h2>
+    <div class="faq">
+      <details><summary>Do I have to leave Airbnb?</summary><p>No. Your listing, your reviews and your Airbnb bookings stay as they are. LivStay Free adds more ways to get booked and keeps the two calendars in step.</p></details>
+      <details><summary>Is it really free?</summary><p>Yes. There is no subscription, no card to enter and no limit on homes. When a booking arrives through LivStay or your booking page, 5% comes out of that payment. You are never sent a bill.</p></details>
+      <details><summary>How does an AI assistant book my home?</summary><p>It reads your home's facts, rules and cancellation terms through LivStay, checks your dates and gets a signed price. The traveller then pays on your booking page. Nothing is booked without them paying.</p></details>
+      <details><summary>What happens to my reviews?</summary><p>Your Airbnb rating and review count come across with the listing and show on your booking page.</p></details>
+      <details><summary>When do I get paid?</summary><p>The guest pays into your own Razorpay account at booking. Razorpay takes out our 5% and its processing fee, and settles the rest to your bank on its normal schedule.</p></details>
+      <details><summary>Do I need a Razorpay account?</summary><p>Yes, your own. If you have one, connecting it takes a minute. If not, you can open one during setup; Razorpay asks for your PAN and bank details and checks them before your first payment.</p></details>
+      <details><summary>Can a guest cancel?</summary><p>You choose one of three policies, flexible, moderate or strict, and the guest sees it before they pay. Refunds follow the policy you picked.</p></details>
+      <details><summary>What is not included?</summary><p>The tools for running a stay: guest messaging, cleaning and staff, smart locks, pricing tools and your own domain. Those are in LivAround Pro, and you can move up at any time.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final" id="start">
+  <div class="wrap">
+    <div class="eyebrow">LivStay Free</div>
+    <h2>Your listing is already written.<br>Put it to work in more places.</h2>
+    <p>Paste your Airbnb link and check what comes across. You are live when the four steps are done.</p>
+    <form class="paste" action="https://dashboard.livaround.com/signup" method="get" data-content="final">
+        <input type="hidden" name="plan" value="free">
+        <label for="url2">Your Airbnb listing link</label>
+        <input id="url2" name="listing" type="text" inputmode="url" placeholder="airbnb.co.in/rooms/…" autocomplete="off" aria-describedby="url2-err">
+        <button class="btn btn-sun" type="submit">Get my free page</button>
+      </form>
+      <p class="paste-err" id="url2-err" role="alert" hidden>That does not look like an Airbnb listing link. It should contain airbnb and /rooms/.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>LivStay is an open protocol. LivStay Free is run by LivAround Ltd.</span>
+    <span><a href="https://livaround.com/privacy">Privacy</a> · <a href="mailto:hello@livaround.com">hello@livaround.com</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // The paste box. A listing link rides to signup so the host does not paste it twice.
+  var AIRBNB_LISTING = /^(https?:\/\/)?([a-z0-9-]+\.)*airbnb\.[a-z.]{2,8}\/rooms\/[^\s]+$/i;
+  document.querySelectorAll('form.paste').forEach(function (f) {
+    var input = f.querySelector('input[name=listing]'), err = document.getElementById(input.id + '-err');
+    input.addEventListener('input', function () { err.hidden = true; input.removeAttribute('aria-invalid'); });
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = input.value.trim();
+      if (v && !AIRBNB_LISTING.test(v)) { err.hidden = false; input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
+      var u = new URL(f.action);
+      u.searchParams.set('plan', 'free');
+      u.searchParams.set('utm_source', 'livstay.org');
+      u.searchParams.set('utm_medium', 'landing');
+      u.searchParams.set('utm_campaign', 'livstay-free');
+      u.searchParams.set('utm_content', f.dataset.content);
+      if (v) u.searchParams.set('listing', /^https?:\/\//i.test(v) ? v : 'https://' + v);
+      window.location.href = u.toString();
+    });
+  });
+
+  // Hero thread reveals once, in order.
+  var steps = document.querySelectorAll('.step-in');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  steps.forEach(function (el, i) {
+    if (reduced) { el.classList.add('show'); return; }
+    setTimeout(function () { el.classList.add('show'); }, 400 + i * 900);
+  });
+
+  // The maths. Airbnb take 15.5% of what the guest pays; LivStay 5%; processing about 2.4%.
+  var AIRBNB = 0.155, FEE = 0.05, PROC = 0.024;
+  var inr = function (n) { return '₹' + Math.round(Math.abs(n)).toLocaleString('en-IN'); };
+  var $ = function (id) { return document.getElementById(id); };
+  function calc() {
+    var a = +$('amt').value, off = +$('off').value;
+    var guest = a * (1 - off / 100), fee = guest * FEE, proc = guest * PROC;
+    var keep = guest - fee - proc, air = a * (1 - AIRBNB), diff = keep - air;
+    $('amtOut').textContent = inr(a);
+    $('offOut').textContent = off + '%';
+    $('rGuest').textContent = inr(guest);
+    $('rFee').textContent = '−' + inr(fee);
+    $('rProc').textContent = '−' + inr(proc);
+    $('rKeep').textContent = inr(keep);
+    $('rAir').textContent = inr(air);
+    $('rDiff').textContent = (diff >= 0 ? '+' : '−') + inr(diff);
+    $('rDiff').classList.toggle('neg', diff < 0);
+    $('rLabel').textContent = diff >= 0 ? 'Extra in your pocket' : 'Less than on Airbnb';
+    $('rSave').textContent = inr(a - guest);
+  }
+  $('amt').addEventListener('input', calc);
+  $('off').addEventListener('input', calc);
+  calc();
+})();
+</script>
+</body>
+</html>
